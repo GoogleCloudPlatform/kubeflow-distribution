@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patchesStrategicMerge:
+- iap-ingress-config.yaml
+- service-accounts.yaml
+resources:
+- ../../../upstream/manifests/gcp/iap-ingress/v3 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}
+- ../../../upstream/manifests/istio/iap-gateway/base # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}

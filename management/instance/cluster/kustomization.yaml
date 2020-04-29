@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: HOST_PROJECT # {"type":"string","x-kustomize":{"setter":{"name":"gcloud.core.project","value":"HOST_PROJECT"}}}
+resources:
+- ../../upstream/management/cluster
+patchesStrategicMerge:
+- cluster.yaml
+- nodepool.yaml

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "ns1" # {"$ref":"#/definitions/io.k8s.cli.setters.namespace"}
+  annotations:
+    cnrm.cloud.google.com/project-id: "gcp-project" # {"$ref":"#/definitions/io.k8s.cli.setters.managed-project"}
+    gke.io/cluster: gke://gcp-project/us-central1-f/management # {"$ref":"#/definitions/io.k8s.cli.substitutions.gke-cluster-annotation"}

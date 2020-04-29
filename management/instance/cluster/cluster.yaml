@@ -1,0 +1,16 @@
+# This is a patch for the management cluster.
+# It is used to define user specific values.
+apiVersion: identity.cnrm.cloud.google.com/v1alpha2
+kind: IdentityNamespace
+metadata:
+  name: default
+---
+# TODO(jlewi): Use a regional cluster? There should no longer be any cost savings to using zonal
+apiVersion: container.cnrm.cloud.google.com/v1alpha2
+kind: ContainerCluster
+metadata:
+  clusterName: "HOST_PROJECT/us-central1/MANAGEMENT-NAME" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"HOST_PROJECT"},{"name":"name","value":"MANAGEMENT-NAME"},{"name":"location","value":"us-central1"}]}}
+  name: MANAGEMENT-NAME # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"MANAGEMENT-NAME"}}}
+spec:
+  # Use a regional cluster. Regional offer higher availability and the cluster management fee is the same.
+  location: us-central1 # {"type":"string","x-kustomize":{"setter":{"name":"location","value":"us-central1"}}}

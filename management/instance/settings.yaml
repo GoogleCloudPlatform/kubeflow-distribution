@@ -1,0 +1,6 @@
+# The purpose of this file is to store values in setters
+# so its easy to get them using yq for use in Make.
+# TODO(jlewi): File a feature request to have kpt list-setters return the value
+project: HOST_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"HOST_PROJECT"}]}}
+name: MANAGEMENT-NAME # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"MANAGEMENT-NAME"}]}}
+location: us-central1 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"us-central1"}]}}
