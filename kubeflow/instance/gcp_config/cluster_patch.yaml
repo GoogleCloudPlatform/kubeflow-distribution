@@ -1,0 +1,15 @@
+# Define a patch to define user specific values for the cluster
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  clusterName: "PROJECT/us-central1/KUBEFLOW-NAME" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"},{"name":"name","value":"KUBEFLOW-NAME"},{"name":"location","value":"us-central1"}]}}
+  labels:
+    mesh_id: "PROJECT_us-central1_KUBEFLOW-NAME" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"},{"name":"name","value":"KUBEFLOW-NAME"},{"name":"location","value":"us-central1"}]}}
+  name: KUBEFLOW-NAME # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"KUBEFLOW-NAME"}}}
+spec:
+  location: us-central1 # {"type":"string","x-kustomize":{"setBy":"kpt","setter":{"name":"location","value":"us-central1"}}}
+  workloadIdentityConfig:
+    identityNamespace: PROJECT.svc.id.goog # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
+  nodeConfig:
+    serviceAccountRef:
+      name: KUBEFLOW-NAME-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}

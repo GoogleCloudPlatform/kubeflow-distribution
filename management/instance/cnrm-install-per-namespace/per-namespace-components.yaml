@@ -1,0 +1,173 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+    iam.gke.io/gcp-service-account: MANAGED-GSA-NAME@MANAGED_PROJECT.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"},{"name":"managed_gsa_name","value":"MANAGED-GSA-NAME"}]}}
+  labels:
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+  labels:
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-admin-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cnrm-admin
+subjects:
+- kind: ServiceAccount
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+  labels:
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-manager-ns-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cnrm-manager-ns-role
+subjects:
+- kind: ServiceAccount
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+  labels:
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-manager-ns-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cnrm-manager-ns-role
+subjects:
+- kind: ServiceAccount
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+  labels:
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-manager-cluster-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cnrm-manager-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+    prometheus.io/port: "8888"
+    prometheus.io/scrape: "true"
+  labels:
+    cnrm.cloud.google.com/monitored: "true"
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+spec:
+  ports:
+  - name: controller-manager
+    port: 443
+  - name: metrics
+    port: 8888
+  selector:
+    cnrm.cloud.google.com/component: cnrm-controller-manager
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.7.1
+  labels:
+    cnrm.cloud.google.com/component: cnrm-controller-manager
+    cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  namespace: cnrm-system
+spec:
+  selector:
+    matchLabels:
+      cnrm.cloud.google.com/component: cnrm-controller-manager
+      cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+      cnrm.cloud.google.com/system: "true"
+  serviceName: cnrm-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+  template:
+    metadata:
+      annotations:
+        cnrm.cloud.google.com/version: 1.7.1
+      labels:
+        cnrm.cloud.google.com/component: cnrm-controller-manager
+        cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+        cnrm.cloud.google.com/system: "true"
+    spec:
+      containers:
+      - args:
+        - --scoped-namespace=HOST_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"host_project","value":"HOST_PROJECT"}]}}
+        - --stderrthreshold=INFO
+        - --prometheus-scrape-endpoint=:8888
+        command:
+        - /configconnector/manager
+        image: gcr.io/cnrm-eap/controller:f190973
+        imagePullPolicy: Always
+        name: manager
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/ready
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        resources:
+          limits:
+            cpu: 100m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        securityContext:
+          privileged: false
+          runAsNonRoot: true
+          runAsUser: 1000
+      serviceAccountName: cnrm-controller-manager-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
+      terminationGracePeriodSeconds: 10

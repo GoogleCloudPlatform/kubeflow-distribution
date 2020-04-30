@@ -1,0 +1,16 @@
+# This package defines the overlays of all GCP infra
+# config
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# namespace should match the project.
+# This assumes we are running CNRM in namespace mode and namespaces match project names.
+namespace: PROJECT # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
+commonLabels:
+  kf-name: jlewi-dev
+resources:
+- ../../upstream/manifests/gcp/v2/cnrm # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcp_manifests_path","value":"../../upstream/manifests"}]}}
+- iam_policy.yaml
+patchesStrategicMerge:
+- cluster_patch.yaml
+# TODO(jlewi): Base package doesn't currently include the node pool
+# - nodepool_patch.yaml

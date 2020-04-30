@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  admin: jlewi@google.com
+  gcp-sa: jl-stack-0409-204015-user@jlewi-dev.iam.gserviceaccount.com
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: profiles-config

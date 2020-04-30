@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  appName: KUBEFLOW-NAME # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
+  hostname: KUBEFLOW-NAME.endpoints.PROJECT.cloud.goog # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"},{"name":"gcloud.core.project","value":"PROJECT"}]}}
+  ipName: KUBEFLOW-NAME-ip # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
+  project: "PROJECT" # {"type":"string","x-kustomize":{"setBy":"kpt","setter":{"name":"gcloud.core.project","value":"PROJECT"}}}
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: iap-ingress-config

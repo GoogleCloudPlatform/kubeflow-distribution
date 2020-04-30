@@ -1,0 +1,25 @@
+# kf-admin binding in namespace kubeflow
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: KUBEFLOW-NAME-admin-wi # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"},{"name":"gcloud.core.project","value":"jlewi-dev"}]}}
+spec:
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: KUBEFLOW-NAME-admin # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"},{"name":"gcloud.core.project","value":"jlewi-dev"}]}}
+  member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kf-admin] # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
+  role: roles/iam.workloadIdentityUser
+---
+# kf-admin binding in namespace istio-system
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: KUBEFLOW-NAME-admin-istio-wi # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"},{"name":"gcloud.core.project","value":"jlewi-dev"}]}}
+spec:
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: KUBEFLOW-NAME-admin # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"},{"name":"gcloud.core.project","value":"jlewi-dev"}]}}
+  member: serviceAccount:PROJECT.svc.id.goog[istio-system/kf-admin] # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
+  role: roles/iam.workloadIdentityUser
