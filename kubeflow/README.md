@@ -45,7 +45,7 @@ one if you haven't already.
 1. Fetch Kubeflow manifests
 
    ```
-   make pkg-get
+   make get-pkg
    ```
 
   * This generates an error per [GoogleContainerTools/kpt#539](https://github.com/GoogleContainerTools/kpt/issues/539) but it looks like
@@ -65,10 +65,13 @@ one if you haven't already.
    be used to create CNRM resources for your Kubeflow deployment.
 
    ```
-   kpt cfg set mgmt-ctxt
+   kpt cfg set instance mgmt-ctxt ${MANAGEMENT_CONTEXT}
    ```
 
    * Follow the [instructions](../README.md) to create a kubecontext for your managment context
+
+   * **Important** The context must set the namespace to the namespace in your CNRM cluster where you are creating
+     CNRM resources for the managed project. 
 
 1. Pick a name for the Kubeflow deployment
 
