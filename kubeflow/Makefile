@@ -5,6 +5,8 @@
 MGMTCTXT=$(shell yq r ./instance/settings.yaml mgmt-ctxt)
 # The name of the context for your Kubeflow cluster
 NAME=$(shell yq r ./instance/settings.yaml name)
+PROJECT=$(shell yq r ./instance/settings.yaml project)
+
 KFCTXT=$(NAME)
 
 # Path to kustomize directories
@@ -20,7 +22,7 @@ MANIFESTS_DIR=./upstream/manifests
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/jlewi/manifests.git@blueprints
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 
 # Print out the context
 .PHONY: echo
@@ -29,7 +31,7 @@ echo-ctxt:
 	@echo KFCTXT=$(KFCTXT)
 
 # Get packages
-.PHONY: get-packages
+.PHONY: get-pkg
 get-pkg:
 	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
 	# to a specific version
@@ -80,7 +82,7 @@ apply-kubeflow: hydrate-kubeflow
 # TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
 # be available before continuing?
 .PHONY: apply
-apply: clean-build check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
+apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
@@ -134,6 +136,11 @@ clean-build:
 .PHONY: hydrate
 hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
 	
+
+# Make sure the name isn't too long.
+.PHONY: check-name
+check-name:
+	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
 .PHONY: check-iap 
 check-iap:

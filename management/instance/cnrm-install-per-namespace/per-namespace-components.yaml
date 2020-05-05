@@ -24,7 +24,7 @@ metadata:
     cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
     cnrm.cloud.google.com/system: "true"
   name: cnrm-admin-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
-  namespace: cnrm-system
+  namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -43,7 +43,7 @@ metadata:
     cnrm.cloud.google.com/scoped-namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
     cnrm.cloud.google.com/system: "true"
   name: cnrm-manager-ns-binding-MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
-  namespace: cnrm-system
+  namespace: MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -143,7 +143,7 @@ spec:
     spec:
       containers:
       - args:
-        - --scoped-namespace=HOST_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"host_project","value":"HOST_PROJECT"}]}}
+        - --scoped-namespace=MANAGED_PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"managed_project","value":"MANAGED_PROJECT"}]}}
         - --stderrthreshold=INFO
         - --prometheus-scrape-endpoint=:8888
         command:
