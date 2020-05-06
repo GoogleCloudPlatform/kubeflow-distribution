@@ -8,6 +8,8 @@
 # TODO(jlewi): Support zonal clusters as well
 set -x 
 
+# Default namespace to kubeflow
+NAMESPACE=${NAMESPACE:-kubeflow}
 echo Checking if context ${NAME} exists 
 
 kubectl config use-context ${NAME}
@@ -29,4 +31,4 @@ gcloud --project=${PROJECT} container clusters get-credentials \
 kubectl config rename-context $(kubectl config current-context) ${NAME}
 
 # Set the namespace to the host project
-kubectl config set-context --current --namespace=kubeflow
+kubectl config set-context --current --namespace=${NAMESPACE}

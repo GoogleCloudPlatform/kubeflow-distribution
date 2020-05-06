@@ -45,10 +45,15 @@ get-pkg:
 	# https://github.com/GoogleContainerTools/kpt/issues/539
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
 		
-.PHONY: hydrate
+.PHONY: apply-gcp
 apply-gcp: hydrate-gcp
 	# Apply management resources
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
+
+.PHONY: apply-services
+apply-services: hydrate-gcp
+	# Apply management resources
+	anthoscli apply --project=$(PROJECT) -f ./instance/gcp_config/enable-services.yaml
 
 .PHONY: apply-asm
 apply-asm: hydrate-asm

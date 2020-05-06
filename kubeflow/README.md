@@ -22,6 +22,15 @@ one if you haven't already.
    gcloud components update
    ```
 
+1. Install [yq](https://github.com/mikefarah/yq)
+
+   ```
+   GO111MODULE=on go get github.com/mikefarah/yq/v3
+   ```
+
+   * If you don't have go installed you can download
+     a binary from [yq's GitHub releases](https://github.com/mikefarah/yq/releases).
+
 1. Follow these [instructions](https://cloud.google.com/service-mesh/docs/gke-install-new-cluster#download_the_installation_file) to
    install istioctl
 
@@ -121,6 +130,24 @@ one if you haven't already.
 
    * TODO(jlewi): Add link for instructions on creating an OAuth client id
 
+1. Enable services
+
+   ```
+   make apply-services
+   ```
+
+   * **Important** This command will likely fail and you will need to rerun multiple times. This is
+     because this function tries to enable a bunch of services sequentially. However,
+     some of the services can't be enabled until previous services have been fully enabled which 
+     takes time.
+
+   * Retryable errors will look like the following but could mention different services and projects.
+
+     ```
+     Unexpected error: error reconciling objects: error reconciling CloudService:kubeflow-ci-deployment/mesh: error polling for operation: googleapi: Error 404: Request for host 'serviceusage.mtls.googleapis.com' and path '/v1/operations/acf.df31bb9e-783d-4c85-a02e-6a436b2af941?alt=json&prettyPrint=false' cannot be resolved. Please double check your request., notFound
+     ```
+
+
 1. Deploy Kubeflow
 
    ```
@@ -131,8 +158,37 @@ one if you haven't already.
 
 1. 502s and backend unhealthy
 
-   * This is often the result of cont configuring ASM correctly (i.e. not specifying the correct
+    * This is often the result of cont configuring ASM correctly (i.e. not specifying the correct
      ServiceMessh or cluster name)   
 
-  * This usually manifests as the istio proxy in the istio ingressgateway from not being able to start
-    causing the health check failure. 
+    * This usually manifests as the istio proxy in the istio ingressgateway from not being able to start
+      causing the health check failure. To troubleshoot
+
+      1. Get the pods for the istio-ingressgateway
+      
+         ```
+         kubectl -n istio-system get pods -l app=istio-ingressgateway
+         ```
+
+         * Are all containers in the pod started?
+
+      1. Look at the logs for the pods
+
+         ```
+         kubectl -n istio-system log ${INGRESS_GATEWAY_POD} -c istio-proxy
+         ```
+
+    * Another common cause is failing to enable the ASM services. This will manifest with an error
+      like the following in the istio ingress logs.
+
+      ```
+      [Envoy (Epoch 0)] [2020-05-06 01:06:09.078][17][warning][config] [bazel-out/k8-opt/bin/external/envoy/source/common/config/_virtual_includes/grpc_stream_lib/common/config/grpc_stream.h:91] gRPC config stream closed: 7, Anthos Service Mesh Certificate Authority API has not been used in project 29647740582 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/meshca.googleapis.com/overview?project=29647740582 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry
+      ```
+
+    * To enable the services
+
+      ```
+      make apply-services
+      ```
+
+      * For more info refer to the instructions about enabling services. 
