@@ -91,7 +91,7 @@ to manage GCP infrastructure using GitOps.
 1. Install the CNRM system components
 
    ```
-   make install-kcc
+   make apply-kcc
    ```
 
 ### Setup KCC Namespace For Each Project
