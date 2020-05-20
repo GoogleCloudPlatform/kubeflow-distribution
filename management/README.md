@@ -59,16 +59,16 @@ to manage GCP infrastructure using GitOps.
 1. Set the name for the management resources in the upstream kustomize package
 
    ```
-   kpt cfg set ./upstream name $(MGMT_NAME)   
+   kpt cfg set ./upstream name ${MGMT_NAME}
    ```
 
 1. Set the same names in the instance kustomize package defining patches
 
    ```   
    
-   kpt cfg set ./instance name $(MGMT_NAME)   
-   kpt cfg set ./instance location $(LOCATION)
-   kpt cfg set ./instance gcloud.core.project $(PROJECT)   
+   kpt cfg set ./instance name ${MGMT_NAME} 
+   kpt cfg set ./instance location ${LOCATION}
+   kpt cfg set ./instance gcloud.core.project ${PROJECT}
    ```
 
    * This directory defines kustomize overlays applied to `upstream/management`
