@@ -109,6 +109,7 @@ one if you haven't already.
    kpt cfg set ./upstream/manifests/gcp  name ${KFNAME}
    kpt cfg set ./upstream/manifests/gcp gcloud.core.project ${MANAGED_PROJECT}   
    kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone ${ZONE}
+   kpt cfg set ./upstream/manifests/gcp location ${LOCATION}
 
    kpt cfg set ./instance name ${KFNAME}   
    kpt cfg set ./instance location ${LOCATION}
