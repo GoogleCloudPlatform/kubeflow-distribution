@@ -16,6 +16,8 @@ KF_DIR=./instance/kustomize
 APP_DIR=.
 MANIFESTS_DIR=./upstream/manifests
 
+ACM_KF_REPO=acm-repo
+
 # TODO(https://github.com/GoogleContainerTools/kpt/issues/539): 
 # Using a subdirectory fo the current directory breaks our ability to run kpt set .
 # So as a hack we use a $(BUILD_DIR)/ directory in the parent directory.
@@ -129,6 +131,20 @@ hydrate-kubeflow:
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller	
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+
+#*****************************************************************************************
+# Hydrate ACM repos
+# These commands copy the configs to the appropriate acm repo
+acm-gcp: hydrate-gcp	
+	cp -r $(BUILD_DIR)/gcp_config $(ACM_MGMT_REPO)/namespaces/$(PROJECT)
+
+acm-kubeflow: hydrate-asm hydrate-kubeflow
+	rm -rf $(ACM_KF_REPO)	
+	mkdir -p $(ACM_KF_REPO)
+	find $(BUILD_DIR) -name "*.yaml" -not -path  "*/gcp_config/**" -exec cp {} $(ACM_KF_REPO)/ ";"
+
+#*****************************************************************************************
+
 .PHONY: clean-build
 clean-build:
 	# Delete build because we want to prune any resources which are no longer defined in the manifests
