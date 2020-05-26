@@ -111,12 +111,12 @@ For each project you want to setup follow the instructions below.
 1. Create a copy of the per namespace/project resources
 
    ```
-   cp -r ./instance/install-per-project ./instance/cnrm-install-${MANAGED_PROJECT}
+   cp -r ./instance/cnrm-install-per-namespace ./instance/cnrm-install-${MANAGED_PROJECT}
    ```
 1. Set the project to be mananged
 
    ```
-   kpt cfg set cnrm-install-${MANAGED_PROJECT} managed_project ${MANAGED_PROJECT}
+   kpt cfg set ./instance/cnrm-install-${MANAGED_PROJECT} managed_project ${MANAGED_PROJECT}
    ```
 
 1. Set the host project where kcc is running
@@ -124,7 +124,7 @@ For each project you want to setup follow the instructions below.
    ```
    kpt cfg set instance/cnrm-install-${MANAGED_PROJECT} managed_gsa_name ${MANAGED_GSA_NAME}
    kpt cfg set instance/cnrm-install-${MANAGED_PROJECT} host_project ${HOST_PROJECT}
-   kpt cfg set instance/cnrm-install-${MANAGED_PROJECt} host_id_pool ${HOST_PROJECT}.svc.id.goog
+   kpt cfg set instance/cnrm-install-${MANAGED_PROJECT} host_id_pool ${HOST_PROJECT}.svc.id.goog
    ```
 
    * **MANAGED_SA_NAME** Name for the Google Service Account (GSA) to create to be used
@@ -135,7 +135,7 @@ For each project you want to setup follow the instructions below.
 
 
    ```
-   kubectl --context=$(MGMTCTXT) apply -f ./instance/cnrm-install-${PROJECT}/per-namespace-components.yaml
+   kubectl --context=${MGMTCTXT} apply -f ./instance/cnrm-install-${PROJECT}/per-namespace-components.yaml
    ```
 
 1. Create the GSA and workload identity binding
