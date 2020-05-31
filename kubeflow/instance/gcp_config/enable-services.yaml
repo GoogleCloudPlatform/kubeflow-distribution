@@ -1,3 +1,5 @@
+# TODO(jlewi): I think we can delete this because we shouldbe using CNRM to enable services now
+# and this should be in the base package.
 # GKE
 apiVersion: cnrm.cloud.google.com/v1alpha1
 kind: CloudService

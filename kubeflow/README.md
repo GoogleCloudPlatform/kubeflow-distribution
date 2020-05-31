@@ -39,12 +39,15 @@ one if you haven't already.
 1. Fetch the blueprint
 
    ```
-   kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/kubeflow@master ./
+   kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/kubeflow@master ./${PKGNAME}
    ```
+
+   * You can choose any name you would like for the directory ${PKGNAME}
+
 1. Change to the kubeflow directory
 
    ```
-   cd kubeflow
+   cd ${PKGNAME}
    ```
 
 1. Fetch Kubeflow manifests
@@ -64,92 +67,92 @@ one if you haven't already.
     Error: resources must be annotated with config.kubernetes.io/index to be written to files
     ```
 
-## Deploy Kubeflow
+## Configure Kubeflow
 
-1. Set the name of the KUBECONFIG context for the management cluster; this kubecontext will
-   be used to create CNRM resources for your Kubeflow deployment.
+There are certain parameters that you must define in order to configure how and where
+kubeflow is defined. These are described in the table below.
 
-   ```
-   kpt cfg set instance mgmt-ctxt ${MANAGEMENT_CONTEXT}
-   ```
+kpt setter | Description |
+-----------|-------------|
+mgmt-ctxt | This is the name of the KUBECONFIG context for the management cluster; this kubecontext will be used to create CNRM resources for your Kubeflow deployment. **The context must set the namespace to the namespace in your CNRM cluster where you are creating CNRM resources for the managed project.**|
+gcloud.core.project| The project you want to deploy in |
+location | The zone or region you want to deploy in |
+gcloud.compute.region | The region you are deploying in |
+gcloud.compute.zone | The zone to use for zonal resources; must be in gcloud.compute.region |
 
-   * Follow the [instructions](../README.md) to create a kubecontext for your managment context
+* Location can be a zone or a region depending on whether you want a regional cluster
+  
+* The **Makefile** contains a rule `set-values` with approprt `kpt cfg` commands to set the values
+  of the parameters
 
-   * **Important** The context must set the namespace to the namespace in your CNRM cluster where you are creating
-     CNRM resources for the managed project. 
+* You need to edit the makefile to set the parameters to the desired values.
 
-1. Pick a name for the Kubeflow deployment
+   * Note there are multiple invocations of `kpt cfg set` on different directories to
+     work around [GoogleContainerTools/kpt#541](https://github.com/GoogleContainerTools/kpt/issues/541)      
 
-   ```
-   export KFNAME=<some name>
-   ```
+* If you haven't previously created an OAuth client for IAP then follow
+  the [directions](https://www.kubeflow.org/docs/gke/deploy/oauth-setup/) to setup
+  your consent screen and oauth client. 
 
-1. Pick a location for the Kubeflow deployment
+  * Unfortunately [GKE's BackendConfig](https://cloud.google.com/kubernetes-engine/docs/concepts/backendconfig)
+    currently doesn't support creating [IAP OAuth clients programmatically](https://cloud.google.com/iap/docs/programmatic-oauth-clients).
 
-   ```
-   export LOCATION=<zone or region>
-   export ZONE=<zone for disks>
-   ```
-
-   * Location can be a zone or a region depending on whether you want a regional cluster
-   * We recommend creating regional clusters for higher availability
-   * The [cluster management fee](https://cloud.google.com/kubernetes-engine/pricing) is the same for regional
-     and zonal clusters
-
-   * TODO(jlewi): Metadata and Pipelines are still using zonal disks what do we have to do make that work with regional clusters? For metadata
-     we could use CloudSQL.
-
-1. Set the values for the kubeflow deployment.
-
-   ```
-   kpt cfg set ./upstream/manifests/gcp  name ${KFNAME}
-   kpt cfg set ./upstream/manifests/gcp gcloud.core.project ${MANAGED_PROJECT}   
-   kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone ${ZONE}
-   kpt cfg set ./upstream/manifests/gcp location ${LOCATION}
-
-   kpt cfg set ./instance name ${KFNAME}   
-   kpt cfg set ./instance location ${LOCATION}
-   kpt cfg set ./instance gcloud.core.project ${MANAGED_PROJECT}   
-   ```
-
-   * TODO(https://github.com/GoogleContainerTools/kpt/issues/541): If annotations are null kpt chokes. We have such files in manifests which is
-     why we have a separate set statement for manifests once we fix that we should be able to just call it once on root
-
-   * TODO(jlewi): Need to figure out what to do about disk for metadata and pipelines when using regional clusters?. Maybe just 
-     use Cloud SQL?
-
-1. Set environment variables with OAuth Client ID and Secret for IAP
+*  Set environment variables with OAuth Client ID and Secret for IAP
 
    ```
    export CLIENT_ID=
    export CLIENT_SECRET=
    ```
 
-   * TODO(jlewi): Add link for instructions on creating an OAuth client id
+* Invoke the make rule to set the kpt setters
 
-1. Enable services
+  ```
+  make set-values
+  ```
 
-   ```
-   make apply-services
-   ```
+## Deploy Kubeflow
 
-   * **Important** This command will likely fail and you will need to rerun multiple times. This is
-     because this function tries to enable a bunch of services sequentially. However,
-     some of the services can't be enabled until previous services have been fully enabled which 
-     takes time.
-
-   * Retryable errors will look like the following but could mention different services and projects.
-
-     ```
-     Unexpected error: error reconciling objects: error reconciling CloudService:kubeflow-ci-deployment/mesh: error polling for operation: googleapi: Error 404: Request for host 'serviceusage.mtls.googleapis.com' and path '/v1/operations/acf.df31bb9e-783d-4c85-a02e-6a436b2af941?alt=json&prettyPrint=false' cannot be resolved. Please double check your request., notFound
-     ```
-
-
-1. Deploy Kubeflow
+To deploy kubeflow just run
 
    ```
    make apply
    ```
+
+   * If resources can't be created because `webhook.cert-manager.io` is unavailable wait and
+     then rerun `make apply`; certmanager can take some time to up and running.
+
+
+## Update Kubeflow
+
+To update Kubeflow
+
+1. Edit the Makefile and change `MANIFESTS_URL` to point at the version of Kubeflow manifests you
+   want to use
+
+   * Refer to the [kpt docs](https://googlecontainertools.github.io/kpt/reference/pkg/) for
+     more info about supported dependencies
+
+1. Update the local copies
+
+   
+   ```
+   make update
+   ```
+
+1. Redeploy
+
+   ```
+   make apply
+   ```
+
+To evaluate the changes before deploying them you can run `make hydrate` and then compare the contents
+of `.build` to what is currently deployed.
+
+## Best Practices
+
+The directory `.build` will contain hyrated manifests representing the configurations
+that are applied. You should check these into source control.
+
 
 ## Common Problems
 
@@ -297,6 +300,8 @@ You must setup an ACM cluster to manage your project. Typically this entails the
    ~/git_kustomize/kustomize/kustomize config run --enable-exec --exec-path ~/git_kubeflow-kfctl/kustomize-fns/remove-namespace/remove-namespace  ./acm-repo/ --stack-trace
    ```
 
+   * TODO(jlewi): Add the appropriate `kpt` command to run this using the docker image.
+   
    * Relevant issues:
 
    * https://github.com/kubeflow/gcp-blueprints/issues/27
