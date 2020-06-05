@@ -4,3 +4,4 @@ mgmt-ctxt: MANAGEMENT-CTXT # {"type":"string","x-kustomize":{"partialSetters":[{
 project: PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
 location: us-central1 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"us-central1"}]}}
 name: KUBEFLOW-NAME # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
+gkePrivate: false # {"type":"bool","x-kustomize":{"partialSetters":[{"name":"gke.private","value": "false"}]}}
