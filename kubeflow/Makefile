@@ -199,6 +199,8 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply --validate=false -f ./$(BUILD_DIR)/cert-manager-crds
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager-kube-system-resources	
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
+	# We need to wait for certmanager webhook to be available other wise we will get failures
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
 	# Create the kubeflow-issuer last to give cert-manager time deploy
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
