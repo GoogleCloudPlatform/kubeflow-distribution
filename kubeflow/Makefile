@@ -201,6 +201,8 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
 	# We need to wait for certmanager webhook to be available other wise we will get failures
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
 	# Create the kubeflow-issuer last to give cert-manager time deploy
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
@@ -215,9 +217,7 @@ apply-mirror: hydrate-mirror
 apply-endpoint:
 	# Per https://github.com/kubeflow/gcp-blueprints/issues/36 cloud endpoints controller won't
 	# work when running on private GKE
-	# TODO(jlewi): This should be changed to kfctl once the command is baked into kfctl
-	# The path is also hardcoded for jlewi.
-	/home/jlewi/git_cloud-endpoints-controller/controller --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
+	kfctl apply --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
 
 # Print out the context
 .PHONY: echo
