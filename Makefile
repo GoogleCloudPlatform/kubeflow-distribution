@@ -9,10 +9,13 @@ clean-for-pr:
 	rm -rf kubeflow/upstream/manifests
 	rm -rf management/upstream/management
 	
-
 	kpt cfg set ./kubeflow/instance name KUBEFLOW-NAME
 	kpt cfg set ./kubeflow/instance gcloud.core.project PROJECT
 	kpt cfg set ./kubeflow/instance mgmt-ctxt MANAGEMENT-CTXT
+	kpt cfg set ./kubeflow/instance email EMAIL
+	kpt cfg set ./kubeflow/instance location LOCATION
+	kpt cfg set ./kubeflow/instance gcloud.compute.region REGION
+	kpt cfg set ./kubeflow/instance gcloud.compute.zone ZONE
 
 	kpt cfg set ./management/instance name MANAGEMENT-NAME
 	kpt cfg set ./management/instance gcloud.core.project HOST_PROJECT

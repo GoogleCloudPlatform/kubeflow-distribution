@@ -2,6 +2,6 @@
 # TODO(jlewi): Add kpt setters?
 mgmt-ctxt: MANAGEMENT-CTXT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"mgmt-ctxt","value":"MANAGEMENT-CTXT"}]}}
 project: PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
-location: us-central1 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"us-central1"}]}}
+location: LOCATION # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"LOCATION"}]}}
 name: KUBEFLOW-NAME # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
 gkePrivate: false # {"type":"bool","x-kustomize":{"partialSetters":[{"name":"gke.private","value": "false"}]}}

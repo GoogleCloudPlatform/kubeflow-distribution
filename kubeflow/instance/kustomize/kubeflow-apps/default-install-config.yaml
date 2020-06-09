@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-  profile-name: kubeflow-jlewi
-  user: jlewi@google.com
+  profile-name: default-profile
+  user: EMAIL # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"email","value":"EMAIL"}]}}
 kind: ConfigMap
 metadata:
   creationTimestamp: null

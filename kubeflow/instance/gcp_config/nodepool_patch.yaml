@@ -1,7 +1,7 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerNodePool
 metadata:
-  clusterName: "PROJECT/us-central1/KUBEFLOW-NAME" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"},{"name":"name","value":"KUBEFLOW-NAME"},{"name":"location","value":"us-central1"}]}}
+  clusterName: "PROJECT/LOCATION/KUBEFLOW-NAME" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"},{"name":"name","value":"KUBEFLOW-NAME"},{"name":"location","value":"LOCATION"}]}}
   name: KUBEFLOW-NAME-cpu-pool-v1 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
 spec:
   nodeConfig:
