@@ -3,3 +3,14 @@
 workflows:
   - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/go-tests-run.yaml 
     name: go-unittests
+
+  #**************************************************************************
+  # auto-deploy tests
+  #
+  # The tests below run against auto-deploy clusters.
+  # As a result they run as periodic tests.
+  #**************************************************************************
+  - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/gcp-kf-ready.yaml 
+    name: gcp-kf-ready
+    job_types:
+    - periodic
