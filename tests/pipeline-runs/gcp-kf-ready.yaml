@@ -19,19 +19,6 @@ spec:
     value: 'us-central1'
   serviceAccountName: kf-ci
   resources:
-  - name: testing-repo
-    resourceSpec:
-      type: git
-      params:
-      # The URL must match the repo under test in prow otherwise you well get the
-      # error "Couldn't find repo under test"
-      - name: url
-        value: https://github.com/kubeflow/testing.git
-      # When running under prow revision automatically be replaced 
-      # by the appropriate GCS location for the test.
-      # So the value here only matters for manual runs.
-      - name: revision
-        value: master
   - name: kfctl-repo
     resourceSpec:
       type: git
