@@ -6,7 +6,7 @@ metadata:
   namespace: kf-ci
   labels:
     pipeline: go-test
-    repo: kubeflow/gcp-blueprints
+    repo: gcp-blueprints
 spec:
   params:
   # When running under prow this value will automatically be replaced 
