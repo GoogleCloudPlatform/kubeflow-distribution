@@ -1,4 +1,4 @@
-module github.com/kubeflow/gcp-blueprints/tests
+module github.com/kubeflow/gcp-blueprints
 
 go 1.13
 
