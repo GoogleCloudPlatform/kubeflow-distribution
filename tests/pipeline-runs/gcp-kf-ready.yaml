@@ -36,19 +36,14 @@ spec:
     resourceSpec:
       type: git
       params:
-      # TODO(jlewi): Switch back to kubeflow/kfctl master once these changes are merged.
-      - name: url
-        value: https://github.com/jlewi/kfctl.git
-      - name: revision
-        value: gcp_endpoint
       # The URL must match the repo under test in prow otherwise you well get the
       # error "Couldn't find repo under test"
-      #- name: url
-      #  value: https://github.com/kubeflow/kfctl.git
+      - name: url
+        value: https://github.com/kubeflow/kfctl.git
       # When running under prow revision automatically be replaced 
       # by the appropriate GCS location for the test.
       # So the value here only matters for manual runs.
-      #- name: revision
-      #  value: master        
+      - name: revision
+        value: master        
   pipelineRef:
     name: gcp-kf-ready
