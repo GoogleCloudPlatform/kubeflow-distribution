@@ -18,3 +18,11 @@ For more information about blueprints refer to the [kpt blueprint guide](https:/
 1. Use the [management](./management/README.md) blueprint to spin up a management
    cluster
 1. Use the [kubeflow](./kubeflow/README.md) blueprint to create a Kubeflow deployment.
+
+## Development
+
+### Test Grid
+
+* [Master Periodic](https://k8s-testgrid.appspot.com/sig-big-data#kubeflow-gcp-blueprints-master&group-by-hierarchy-pattern=%5B%5Cw-%5D%2B)
+* [Master Presubmit](https://k8s-testgrid.appspot.com/sig-big-data#kubeflow-gcp-blueprints-presubmit&group-by-hierarchy-pattern=%5B%5Cw-%5D%2B)
+* [Master Postsubmit](https://k8s-testgrid.appspot.com/sig-big-data#kubeflow-gcp-blueprints-postsubmit&group-by-hierarchy-pattern=%5B%5Cw-%5D%2B)

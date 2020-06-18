@@ -1,11 +1,10 @@
-# Pipelinerun for go unittests
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  generateName: go-test-
+  generateName: gcp-kf-ready-
   namespace: kf-ci
   labels:
-    pipeline: go-test
+    pipeline: gcp-kf-ready
     repo: gcp-blueprints
 spec:
   params:
@@ -14,20 +13,24 @@ spec:
   # So the value here only matters for manual runs.
   - name: artifacts-gcs
     value: "gs://kubeflow-ci-deployment/gabrielwen-testing-2"
+  - name: testing-cluster-pattern
+    value: 'kf-vbp-.*'
+  - name: testing-cluster-location
+    value: 'us-central1'
   serviceAccountName: kf-ci
   resources:
-  - name: source-repo
+  - name: kfctl-repo
     resourceSpec:
       type: git
       params:
       # The URL must match the repo under test in prow otherwise you well get the
       # error "Couldn't find repo under test"
       - name: url
-        value: https://github.com/kubeflow/gcp-blueprints.git
+        value: https://github.com/kubeflow/kfctl.git
       # When running under prow revision automatically be replaced 
       # by the appropriate GCS location for the test.
       # So the value here only matters for manual runs.
       - name: revision
-        value: master
+        value: master        
   pipelineRef:
-    name: go-tests
+    name: gcp-kf-ready
