@@ -5,5 +5,4 @@ patchesStrategicMerge:
 - default-install-config.yaml
 - pipeline-minio-install-config.yaml
 resources:
-- ../../../upstream/manifests/pipeline/minio/installs/gcp-pd # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}
-- ../../../upstream/manifests/stacks/generic # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}
+- ../../../upstream/manifests/stacks/gcp # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}
