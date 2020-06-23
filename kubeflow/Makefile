@@ -1,7 +1,7 @@
 # The kname of the context for the management cluster
 # These can be read using yq from the settings file.
 #
-# If you don't have yq 
+# If you don't have yq
 MGMTCTXT=$(shell yq r ./instance/settings.yaml mgmt-ctxt)
 # The name of the context for your Kubeflow cluster
 NAME=$(shell yq r ./instance/settings.yaml name)
@@ -19,7 +19,7 @@ MANIFESTS_DIR=./upstream/manifests
 
 ACM_KF_REPO=acm-repo
 
-# TODO(https://github.com/GoogleContainerTools/kpt/issues/539): 
+# TODO(https://github.com/GoogleContainerTools/kpt/issues/539):
 # Using a subdirectory fo the current directory breaks our ability to run kpt set .
 # So as a hack we use a $(BUILD_DIR)/ directory in the parent directory.
 BUILD_DIR=.build
@@ -47,6 +47,7 @@ set-values:
 	kpt cfg set ./instance location <YOUR_REGION or ZONE>
 	kpt cfg set ./instance gcloud.compute.region <YOUR REGION>
 	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
+	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
 
 #************************************************************************************************************************
 #
@@ -70,7 +71,7 @@ get-pkg:
 	# since its not needed anymore.
 	# https://github.com/GoogleContainerTools/kpt/issues/539
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
-		
+
 
 # Update the upstream packages
 .PHONE: update
@@ -92,23 +93,23 @@ ifeq ($(PRIVATE_GKE),true)
 		make hydrate-mirror
 endif
 	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
-	-kpt fn run $(BUILD_DIR) 
+	-kpt fn run $(BUILD_DIR)
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
 	# ***********************************************************************************
 	# Hydrate cnrm
-	mkdir -p $(BUILD_DIR)/gcp_config 
+	mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
 
 .PHONY: hydrate-asm
-hydrate-asm:	
+hydrate-asm:
 	#************************************************************************************
 	# hydrate asm
 	istioctl manifest generate -f $(MANIFESTS_DIR)/gcp/v2/asm/istio-operator.yaml -o $(BUILD_DIR)/istio
 
 .PHONY: hydrate-kubeflow
-hydrate-kubeflow:	
+hydrate-kubeflow:
 	#************************************************************************************
 	# Hydrate kubeflow applications
 	mkdir -p $(BUILD_DIR)/namespaces
@@ -131,7 +132,7 @@ hydrate-kubeflow:
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller	
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 
@@ -141,8 +142,8 @@ hydrate-mirror:
 	kfctl alpha mirror build $(MANIFESTS_DIR)/experimental/mirror-images/gcp_template.yaml -d ./instance/kustomize -V -o $(BUILD_DIR)/mirror-pipeline.yaml --gcb
 	mv cloudbuild.yaml $(BUILD_DIR)/
 
-	# Transform all the images 	
-	cp $(MANIFESTS_DIR)/gcp/v2/privateGKE/kustomize-fns/image_prefix.yaml $(BUILD_DIR)/	
+	# Transform all the images
+	cp $(MANIFESTS_DIR)/gcp/v2/privateGKE/kustomize-fns/image_prefix.yaml $(BUILD_DIR)/
 
 
 #*****************************************************************************************************
@@ -156,7 +157,7 @@ hydrate-mirror:
 # TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
 # be available before continuing?
 .PHONY: apply
-apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret	
+apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
 ifeq ($(PRIVATE_GKE),true)
 	make apply-mirror
 	make apply-endpoint
@@ -182,9 +183,9 @@ apply-asm: hydrate
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
 	# TODO(jlewi): Should we use the newer version in asm/asm
-	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml 
-	# TODO(jlewi): Switch to anthoscli once it supports generating manifests 
-	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml 
+	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
+	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
+	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
@@ -198,7 +199,7 @@ apply-kubeflow: hydrate
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
 	# We need to skip validation on Kubernetes 1.14
 	kubectl --context=$(KFCTXT) apply --validate=false -f ./$(BUILD_DIR)/cert-manager-crds
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager-kube-system-resources	
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager-kube-system-resources
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
 	# We need to wait for certmanager webhook to be available other wise we will get failures
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
@@ -213,27 +214,27 @@ apply-mirror: hydrate-mirror
 	# work when running on private GKE
 	# TODO(jlewi): This should be changed to kfctl once the command is baked into kfctl
 	# The path is also hardcoded for jlewi.
-	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml	
+	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml
 
 apply-endpoint:
 	# Per https://github.com/kubeflow/gcp-blueprints/issues/36 cloud endpoints controller won't
 	# work when running on private GKE
-	kfctl apply --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
+	kfctl apply --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml
 
 # Print out the context
 .PHONY: echo
 echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
-	@echo KFCTXT=$(KFCTXT)	
+	@echo KFCTXT=$(KFCTXT)
 
 #**************************************************************************************************
 # Hydrate ACM repos
 # These commands copy the configs to the appropriate acm repo
-acm-gcp: hydrate-gcp	
+acm-gcp: hydrate-gcp
 	cp -r $(BUILD_DIR)/gcp_config $(ACM_MGMT_REPO)/namespaces/$(PROJECT)
 
 acm-kubeflow: hydrate-asm hydrate-kubeflow
-	rm -rf $(ACM_KF_REPO)	
+	rm -rf $(ACM_KF_REPO)
 	mkdir -p $(ACM_KF_REPO)
 	find $(BUILD_DIR) -name "*.yaml" -not -path  "*/gcp_config/**" -exec cp {} $(ACM_KF_REPO)/ ";"
 
@@ -255,7 +256,7 @@ clean-build:
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
-.PHONY: check-iap 
+.PHONY: check-iap
 check-iap:
 	./hack/check_oauth_secret.sh
 
