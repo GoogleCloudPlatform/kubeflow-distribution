@@ -14,3 +14,8 @@ workflows:
     name: gcp-kf-ready
     job_types:
     - periodic
+
+  - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/mnist-nb-pipeline-run.yaml
+    name: mnist-notebook
+    job_types:
+    - periodic
