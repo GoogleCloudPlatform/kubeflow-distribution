@@ -43,6 +43,9 @@ set-values:
 	kpt cfg set ./upstream/manifests/gcp location <REGION OR ZONE>
 	kpt cfg set ./upstream/manifests/gcp log-firewalls false
 
+	kpt cfg set ./upstream/manifests/stacks/gcp name <YOUR_KF_NAME>
+	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+
 	kpt cfg set ./instance name <YOUR_KF_NAME>
 	kpt cfg set ./instance location <YOUR_REGION or ZONE>
 	kpt cfg set ./instance gcloud.compute.region <YOUR REGION>
