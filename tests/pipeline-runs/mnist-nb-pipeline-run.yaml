@@ -27,8 +27,6 @@ spec:
   - name: notebook-path
     value: mnist/mnist_gcp.ipynb
   resources:
-  # This pull number has changes blocked on:
-  # https://github.com/kubeflow/testing/pull/622
   - name: notebook-repo
     resourceSpec:
       type: git
@@ -37,15 +35,6 @@ spec:
         value: https://github.com/kubeflow/examples.git
       - name: revision
         value: master
-  - name: testing-repo
-    resourceSpec:
-      type: git
-      params:
-      - name: url
-        value: https://github.com/jlewi/testing.git
-      - name: revision
-        value: gcp_blueprints
-        #  value: refs/pull/676/head
   # The image we want to build
   - name: image
     resourceSpec:
