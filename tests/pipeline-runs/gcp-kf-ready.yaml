@@ -16,7 +16,7 @@ spec:
   - name: testing-cluster-pattern
     value: 'kf-vbp-.*'
   - name: testing-cluster-location
-    value: 'us-central1'
+    value: 'us-central1-c'
   serviceAccountName: kf-ci
   resources:
   - name: kfctl-repo
