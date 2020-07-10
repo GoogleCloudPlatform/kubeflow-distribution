@@ -19,3 +19,8 @@ workflows:
     name: mnist-notebook
     job_types:
     - periodic
+
+  - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/xgboost-nb-pipeline-run.yaml
+    name: xgboost-notebook
+    job_types:
+    - periodic
