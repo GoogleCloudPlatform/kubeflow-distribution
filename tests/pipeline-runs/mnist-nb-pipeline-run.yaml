@@ -19,7 +19,7 @@ spec:
   - name: junit-path
     value: artifacts/junit_manual-testing
   - name: testing-cluster-pattern
-    value: 'kf-vbp-.*'
+    value: 'kf-v1-1-.*'
   - name: testing-cluster-location
     value: 'us-central1-c'
   - name: notebook-output

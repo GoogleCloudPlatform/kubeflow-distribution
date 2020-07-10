@@ -6,6 +6,7 @@ metadata:
   labels:
     pipeline: gcp-kf-ready
     repo: gcp-blueprints
+    version: v1-1
 spec:
   params:
   # When running under prow this value will automatically be replaced 
@@ -14,7 +15,7 @@ spec:
   - name: artifacts-gcs
     value: "gs://kubeflow-ci-deployment/gabrielwen-testing-2"
   - name: testing-cluster-pattern
-    value: 'kf-vbp-.*'
+    value: 'kf-v1-1-.*'
   - name: testing-cluster-location
     value: 'us-central1-c'
   serviceAccountName: kf-ci
