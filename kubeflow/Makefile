@@ -120,6 +120,10 @@ hydrate-kubeflow:
 
 	mkdir -p $(BUILD_DIR)/application
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
+
+	mkdir -p $(BUILD_DIR)/knative
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/knative $(KF_DIR)/knative
+
 	mkdir -p $(BUILD_DIR)/cert-manager
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
 	mkdir -p $(BUILD_DIR)/cert-manager-crds
@@ -188,7 +192,7 @@ apply-asm: hydrate
 	# TODO(jlewi): Should we use the newer version in asm/asm
 	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
-	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
+	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml	
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
@@ -198,7 +202,8 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress	
+	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
 	# We need to skip validation on Kubernetes 1.14
 	kubectl --context=$(KFCTXT) apply --validate=false -f ./$(BUILD_DIR)/cert-manager-crds
