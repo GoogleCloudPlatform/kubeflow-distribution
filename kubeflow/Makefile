@@ -203,7 +203,11 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress	
+
+	# Apply the namespace first
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml 
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
+
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
 	# We need to skip validation on Kubernetes 1.14
 	kubectl --context=$(KFCTXT) apply --validate=false -f ./$(BUILD_DIR)/cert-manager-crds
