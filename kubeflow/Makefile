@@ -28,6 +28,7 @@ BUILD_DIR=.build
 # TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 
+
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment
 
@@ -48,7 +49,6 @@ set-values:
 
 	kpt cfg set ./instance name <YOUR_KF_NAME>
 	kpt cfg set ./instance location <YOUR_REGION or ZONE>
-	kpt cfg set ./instance gcloud.compute.region <YOUR REGION>
 	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
 	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
 
