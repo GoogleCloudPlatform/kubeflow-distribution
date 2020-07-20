@@ -26,11 +26,19 @@ spec:
   - name: testing-repo
     resourceSpec:
       type: git
+
+      # TODO(https://github.com/kubeflow/testing/pull/740): Change back 
+      # to kubeflow/testing master once 740 is merged
+      # params:
+      #   - name: revision
+      #     value: master
+      #   - name: url
+      #     value: https://github.com/kubeflow/testing.git
       params:
         - name: revision
-          value: master
+          value: kptfile
         - name: url
-          value: https://github.com/kubeflow/testing.git
+          value: https://github.com/jlewi/testing.git
   # Need to use a KSA with appropriate GSA
   serviceAccountName: default-editor
   pipelineRef:
