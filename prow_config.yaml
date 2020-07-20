@@ -4,9 +4,11 @@ workflows:
   - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/go-tests-run.yaml 
     name: go-unittests
 
-  # 
+  # This just tries to deploy Kubeflow; doesn't run any verification. Maybe that's enough?
   - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/deploy-blueprint-pipeline-run.yaml 
     name: deploy
+    job_types:
+    - presubmit
 
   #**************************************************************************
   # auto-deploy tests
