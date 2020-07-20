@@ -4,6 +4,10 @@ workflows:
   - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/go-tests-run.yaml 
     name: go-unittests
 
+  # 
+  - tekton_run: kubeflow/gcp-blueprints/tests/pipeline-runs/deploy-blueprint-pipeline-run.yaml 
+    name: deploy
+
   #**************************************************************************
   # auto-deploy tests
   #

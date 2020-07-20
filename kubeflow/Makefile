@@ -26,7 +26,11 @@ BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
 # TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
+#MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
+
+# TODO(https://github.com/kubeflow/manifests/pull/1398): Change back to kubeflow/manifests@master
+# once kubeflow/manifests#1398 is merged.
+MANIFESTS_URL=https://github.com/jlewi/manifests.git@blueprints
 
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment
