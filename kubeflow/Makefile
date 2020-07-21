@@ -189,8 +189,9 @@ apply-asm: hydrate
 	# Initialize your project to ready it for ASM installation.
 	# Reference: https://cloud.google.com/service-mesh/docs/gke-install-new-cluster#setting_credentials_and_permissions
 	curl --request POST \
-		--header "Authorization: Bearer $(gcloud auth print-access-token)" \
+		--header "Authorization: Bearer `gcloud auth print-access-token`" \
 		--data '' \
+		--fail \
 		"https://meshconfig.googleapis.com/v1alpha1/projects/$(PROJECT):initialize"
 	# We need to apply the CRD definitions first
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
