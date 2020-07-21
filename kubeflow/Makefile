@@ -186,13 +186,19 @@ apply-services: hydrate
 
 .PHONY: apply-asm
 apply-asm: hydrate
+	# Initialize your project to ready it for ASM installation.
+	# Reference: https://cloud.google.com/service-mesh/docs/gke-install-new-cluster#setting_credentials_and_permissions
+	curl --request POST \
+		--header "Authorization: Bearer $(gcloud auth print-access-token)" \
+		--data '' \
+		"https://meshconfig.googleapis.com/v1alpha1/projects/$(PROJECT):initialize"
 	# We need to apply the CRD definitions first
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
 	# TODO(jlewi): Should we use the newer version in asm/asm
 	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
-	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml	
+	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
@@ -202,10 +208,10 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress	
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
 
 	# Apply the namespace first
-	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml 
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
