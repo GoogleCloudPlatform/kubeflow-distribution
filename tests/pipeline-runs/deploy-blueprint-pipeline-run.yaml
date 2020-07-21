@@ -1,0 +1,37 @@
+# A Tekton PipelineRune to deploy Kubeflow using a blueprint.
+#
+# Several pieces of information in the spec are used to configure autodeployments.
+# 1. labels:
+#    auto-deploy-group - Used to group auto deployments. Only so many instances will be kept
+#        each pipeline run should use a unique value 
+#    auto-deploy-base-name: This will be changed to name-{uid} to generate a unique name for the deployment
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:      
+  generateName: deploy-kf-master-
+  namespace: auto-deploy
+  labels:
+    auto-deploy-group: gcp-blueprint-master
+    auto-deploy-base-name: kf-ci
+spec:    
+  resources:  
+  - name: blueprint-repo
+    resourceSpec:
+      type: git
+      params:
+        - name: revision
+          value: master
+        - name: url
+          value: https://github.com/kubeflow/gcp-blueprints.git
+  - name: testing-repo
+    resourceSpec:
+      type: git
+      params:
+        - name: revision
+          value: master
+        - name: url
+          value: https://github.com/kubeflow/testing.git
+  # Need to use a KSA with appropriate GSA
+  serviceAccountName: default-editor
+  pipelineRef:
+    name: deploy-gcp-blueprint

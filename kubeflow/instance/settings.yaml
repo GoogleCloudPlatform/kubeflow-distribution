@@ -1,7 +1,8 @@
 # Name of kubeconfig contexts for various 
-# TODO(jlewi): Add kpt setters?
-mgmt-ctxt: MANAGEMENT-CTXT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"mgmt-ctxt","value":"MANAGEMENT-CTXT"}]}}
-project: PROJECT # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"PROJECT"}]}}
-location: LOCATION # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"LOCATION"}]}}
-name: KUBEFLOW-NAME # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"KUBEFLOW-NAME"}]}}
-gkePrivate: false # {"type":"bool","x-kustomize":{"partialSetters":[{"name":"gke.private","value": "false"}]}}
+# TODO(jlewi): We should be able to get rid of this and just grab
+# the values from the kpt file using yq
+mgmt-ctxt: MANAGEMENT-CTXT # {"$kpt-set":"mgmt-ctxt"}
+project: PROJECT # {"$kpt-set":"project"}
+location: LOCATION # {"$kpt-set":"location"}
+name: KUBEFLOW-NAME # {"$kpt-set":"name"}
+gkePrivate: false # {"$kpt-set":"private"}

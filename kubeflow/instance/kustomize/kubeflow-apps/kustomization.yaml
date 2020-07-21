@@ -6,4 +6,4 @@ patchesStrategicMerge:
 - pipeline-minio-install-config.yaml
 - pipeline-mysql-install-config.yaml
 resources:
-- ../../../upstream/manifests/stacks/gcp # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"kustomize_manifests_path","value":"../../../upstream/manifests"}]}}
+- ../../../upstream/manifests/stacks/gcp # {"$kpt-set":"stacks-gcp"}
