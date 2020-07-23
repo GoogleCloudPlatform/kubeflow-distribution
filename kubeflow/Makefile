@@ -26,7 +26,7 @@ BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
 # TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git@v1.1-rc.1
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git@v1.1-rc.2
 
 
 #***********************************************************************************************************************
