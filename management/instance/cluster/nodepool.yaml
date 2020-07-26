@@ -1,5 +1,0 @@
-apiVersion: container.cnrm.cloud.google.com/v1alpha2
-kind: ContainerNodePool
-metadata:
-  clusterName: "HOST_PROJECT/us-central1/MANAGEMENT-NAME" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"HOST_PROJECT"},{"name":"name","value":"MANAGEMENT-NAME"},{"name":"location","value":"us-central1"}]}}
-  name: MANAGEMENT-NAME-pool # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"project-id"},{"name":"name","value":"MANAGEMENT-NAME"},{"name":"location","value":"us-central1-f"}]}}

@@ -5,8 +5,7 @@ NAME=$(shell yq r ./instance/settings.yaml name)
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-# TODO(jlewi): Change to kubeflow/gcp-blueprints once its checked in
-MANIFESTS_URL=https://github.com/jlewi/manifests.git/gcp/v2/management@blueprints
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
 
 PROJECT=$(shell yq r ./instance/settings.yaml project)
 
@@ -14,6 +13,22 @@ PROJECT=$(shell yq r ./instance/settings.yaml project)
 MANIFESTS_DIR=./upstream/management
 
 INSTANCE_DIR=./instance
+
+
+#***********************************************************************************************************************
+# Edit this section to set the values specific to your deployment
+
+.PHONY: set-values
+set-values:
+	set-values:	
+	kpt cfg set ./instance name <NAME>
+	kpt cfg set ./instance location <ZONE_OR_REGION>
+	kpt cfg set ./instance gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+	
+	kpt cfg set ./upstream/management name <NAME>
+	kpt cfg set ./upstream/management location <ZONE_OR_REGION>
+	kpt cfg set ./upstream/management gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+
 # Print out the context
 .PHONY: echo
 echo-ctxt:
@@ -52,11 +67,26 @@ create-ctxt:
 
 .PHONY: hydrate-kcc
 hydrate-kcc:
-	rm -rf ./.build/cnrm-install-system	
-	mkdir -p ./.build/cnrm-install-system	
+	rm -rf ./.build/cnrm-install-system
+	rm -rf ./.build/cnrm-install-services
+	rm -rf ./.build/cnrm-install-iam
+	mkdir -p ./.build/cnrm-install-system
+	mkdir -p ./.build/cnrm-install-services
+	mkdir -p ./.build/cnrm-install-iam	
 	kustomize build -o ./.build/cnrm-install-system $(INSTANCE_DIR)/cnrm-install-system
+	kustomize build -o ./.build/cnrm-install-services $(INSTANCE_DIR)/cnrm-install-services
+	kustomize build -o ./.build/cnrm-install-iam $(INSTANCE_DIR)/cnrm-install-iam
 
 .PHONY: apply-kcc
 apply-kcc: hydrate-kcc
+	anthoscli apply -f .build/cnrm-install-services
+	anthoscli apply -f .build/cnrm-install-iam
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system/~g_v1_namespace_cnrm-system.yaml
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system
+
+# Update the upstream packages
+.PHONE: update
+update:
+	rm -rf upstream
+	make get-pkg
+	make set-values	
