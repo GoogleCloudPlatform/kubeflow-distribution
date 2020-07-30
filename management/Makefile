@@ -1,13 +1,13 @@
 
 # The kname of the context for the management cluster
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./instance/settings.yaml name)
+NAME=$(shell yq -r .name ./instance/settings.yaml)
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
 
-PROJECT=$(shell yq r ./instance/settings.yaml project)
+PROJECT=$(shell yq -r .project ./instance/settings.yaml)
 
 # Directory where manifests should be fetched to
 MANIFESTS_DIR=./upstream/management
@@ -20,7 +20,6 @@ INSTANCE_DIR=./instance
 
 .PHONY: set-values
 set-values:
-	set-values:	
 	kpt cfg set ./instance name <NAME>
 	kpt cfg set ./instance location <ZONE_OR_REGION>
 	kpt cfg set ./instance gcloud.core.project <PROJECT_TO_DEPLOY_IN>
@@ -61,8 +60,8 @@ hydrate:
 # Create a kubeconfig context for the kubeflow cluster
 .PHONE: create-ctxt
 create-ctxt:
-	PROJECT=$(shell yq r ./instance/settings.yaml project) \
-	   REGION=$(shell yq r ./instance/settings.yaml location) \
+	PROJECT=$(shell yq -r .project ./instance/settings.yaml) \
+	   REGION=$(shell yq -r .location ./instance/settings.yaml) \
 	   NAME=$(NAME) ./hack/create_context.sh
 
 .PHONY: hydrate-kcc
