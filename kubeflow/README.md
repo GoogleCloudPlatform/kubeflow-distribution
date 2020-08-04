@@ -210,12 +210,32 @@ You must setup an ACM cluster to manage your project. Typically this entails the
     * Run the following command to add it as a patch
 
       ```
-      cd `${KFDIR}/instance/kustomize/iap-ingress/ingress-authentication-policy.yaml`
+      cd ${KFDIR}/instance/kustomize/iap-ingress/
       kustomize edit add patch ingress-authentication-policy.yaml
       ```
 
     * Change the audience to the OAuth client audience
     * TODO(https://github.com/kubeflow/gcp-blueprints/issues/14): Come up with a better solution
+
+1. Create a patch for the ISTIO gateway for the notebook controller
+
+   * Create the file `./${KFDIR}/instance/kustomize/kubeflow-apps/notebook-controller-patch.yaml` with the contents
+
+     ```
+      apiVersion: v1
+      data:
+        ISTIO_GATEWAY: istio-system/ingressgateway
+      kind: ConfigMap
+      metadata:
+        name: notebook-controller-config
+     ```
+
+   * Run the following command to add it as a patch
+
+      ```
+      cd ${KFDIR}/instance/kustomize/kubeflow-apps/
+      kustomize edit add patch notebook-controller-patch.yaml
+      ```
 
 1. Commit and push those configs
    
