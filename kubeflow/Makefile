@@ -254,18 +254,13 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 	rm -rf $(ACM_KF_REPO)/namespaces/*
 	mkdir -p $(ACM_KF_REPO)
 
-	# Use a kustomize function to remove namespace from cluster resources		
-	cp $(MANIFESTS_DIR)/gcp/kustomize-fns/remove_namespace.yaml $(BUILD_DIR)/
-
+	# Run kustomize fns to transform the configs.
 	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
-	-kpt fn run $(BUILD_DIR)/
+	-kpt fn run $(BUILD_DIR)/ --fn-path=$(MANIFESTS_DIR)/gcp/kustomize-fns
 
 	python ./hack/to_acm_structure.py --source=$(BUILD_DIR) --dest=$(ACM_KF_REPO)
 
 	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml	
-
-	# Need to remove the kustomize fn so that ACM doesn't choke on it.
-	rm -rf $(ACM_KF_REPO)/cluster/v1alpha1_RemoveNamespace_remove-namespace.yaml
 
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14) remove iap enabler pod
 	# because it will try to patch the authentication policy.
