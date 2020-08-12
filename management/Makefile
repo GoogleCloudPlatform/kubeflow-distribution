@@ -34,12 +34,10 @@ echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
 
 # Get packages
+# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
+# users don't end up pulling tests or other things they don't need.
 .PHONY: get-pkg
 get-pkg:
-	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
-	# to a specific version
-	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-	# users don't end up pulling tests or other things they don't need.
 	mkdir -p  ./upstream
 	kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
 
