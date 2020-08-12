@@ -2,156 +2,9 @@
 
 This directory contains a blueprint for creating a Kubeflow deployment.
 
-## Prerequisites
+## Installing Kubeflow
 
-You must have created a management cluster and installed Config Connector. 
-If you don't have a management cluster follow the [instructions](../management/README.md)
-for setting one up. 
-
-Your management cluster must have a namespace setup to administer the GCP project where
-Kubeflow will be deployped. Follow the [instructions](../management/README.md) to create
-one if you haven't already.
-
-
-## Install the required tools
-
-1. Install gcloud components
-
-   ```
-   gcloud components install kpt anthoscli beta
-   gcloud components update
-   ```
-
-1. Install [yq](https://github.com/mikefarah/yq)
-
-   ```
-   GO111MODULE=on go get github.com/mikefarah/yq/v3
-   ```
-
-   * If you don't have go installed you can download
-     a binary from [yq's GitHub releases](https://github.com/mikefarah/yq/releases).
-
-1. Follow these [instructions](https://cloud.google.com/service-mesh/docs/gke-install-new-cluster#download_the_installation_file) to
-   install istioctl
-
-## Fetch packages using kpt
-
-1. Fetch the blueprint
-
-   ```
-   kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/kubeflow@master ./${PKGNAME}
-   ```
-
-   * You can choose any name you would like for the directory ${PKGNAME}
-
-1. Change to the kubeflow directory
-
-   ```
-   cd ${PKGNAME}
-   ```
-
-1. Fetch Kubeflow manifests
-
-   ```
-   make get-pkg
-   ```
-
-  * This generates an error per [GoogleContainerTools/kpt#539](https://github.com/GoogleContainerTools/kpt/issues/539) but it looks like
-    this can be ignored.
-
-  * TODO(jlewi): This is giving an error like the one below but this can be ignored
-
-    ```
-    kpt pkg get https://github.com/jlewi/manifests.git@blueprints ./upstream
-    fetching package / from https://github.com/jlewi/manifests to upstream/manifests
-    Error: resources must be annotated with config.kubernetes.io/index to be written to files
-    ```
-
-## Configure Kubeflow
-
-There are certain parameters that you must define in order to configure how and where
-kubeflow is defined. These are described in the table below.
-
-kpt setter | Description |
------------|-------------|
-mgmt-ctxt | This is the name of the KUBECONFIG context for the management cluster; this kubecontext will be used to create CNRM resources for your Kubeflow deployment. **The context must set the namespace to the namespace in your CNRM cluster where you are creating CNRM resources for the managed project.**|
-gcloud.core.project| The project you want to deploy in |
-location | The zone or region you want to deploy in |
-gcloud.compute.region | The region you are deploying in |
-gcloud.compute.zone | The zone to use for zonal resources; must be in gcloud.compute.region |
-
-* Location can be a zone or a region depending on whether you want a regional cluster
-  
-* The **Makefile** contains a rule `set-values` with approprt `kpt cfg` commands to set the values
-  of the parameters
-
-* You need to edit the makefile to set the parameters to the desired values.
-
-   * Note there are multiple invocations of `kpt cfg set` on different directories to
-     work around [GoogleContainerTools/kpt#541](https://github.com/GoogleContainerTools/kpt/issues/541)      
-
-* If you haven't previously created an OAuth client for IAP then follow
-  the [directions](https://www.kubeflow.org/docs/gke/deploy/oauth-setup/) to setup
-  your consent screen and oauth client. 
-
-  * Unfortunately [GKE's BackendConfig](https://cloud.google.com/kubernetes-engine/docs/concepts/backendconfig)
-    currently doesn't support creating [IAP OAuth clients programmatically](https://cloud.google.com/iap/docs/programmatic-oauth-clients).
-
-*  Set environment variables with OAuth Client ID and Secret for IAP
-
-   ```
-   export CLIENT_ID=
-   export CLIENT_SECRET=
-   ```
-
-* Invoke the make rule to set the kpt setters
-
-  ```
-  make set-values
-  ```
-
-## Deploy Kubeflow
-
-To deploy kubeflow just run
-
-   ```
-   make apply
-   ```
-
-   * If resources can't be created because `webhook.cert-manager.io` is unavailable wait and
-     then rerun `make apply`; certmanager can take some time to up and running.
-
-
-## Update Kubeflow
-
-To update Kubeflow
-
-1. Edit the Makefile and change `MANIFESTS_URL` to point at the version of Kubeflow manifests you
-   want to use
-
-   * Refer to the [kpt docs](https://googlecontainertools.github.io/kpt/reference/pkg/) for
-     more info about supported dependencies
-
-1. Update the local copies
-
-   
-   ```
-   make update
-   ```
-
-1. Redeploy
-
-   ```
-   make apply
-   ```
-
-To evaluate the changes before deploying them you can run `make hydrate` and then compare the contents
-of `.build` to what is currently deployed.
-
-## Best Practices
-
-The directory `.build` will contain hyrated manifests representing the configurations
-that are applied. You should check these into source control.
+Please refer to the instructions on the [website](https://master.kubeflow.org/docs/gke/deploy/deploy-cli/).
 
 
 ## Common Problems
@@ -204,33 +57,65 @@ You must setup an ACM cluster to manage your project. Typically this entails the
     multiple projects and have admin privileges that consuemrs of those projects
     shouldn't have
 
-* Follow the instructions to install ACM on that cluster
+* Follow the [instructions](https://cloud.google.com/anthos-config-management/docs/how-to/installing) to install ACM on that cluster
 
-  * You will also need to install Cloud Config Connector. Starting with Anthos 1.4
-    you can use ACM to install Cloud Config Connector. Earlier versions of 
-    ACM install a version of Cloud Config COnnector that is to old for Kubeflow.
+* Initialize an ACM repo for your management cluster
+
+  ```
+  nomos init --path=${ACM_MGMT_REPO}
+  ```
 
 * In your ACM repo setup a namespace corresponding to the project you will install
   Kubeflow into.
 
+  * Create the directory **${ACM_MGMT_REPO}/namespaces/${PROJECT}**
+
+  * Add a file **namespace.yaml** That looks like 
+
+    ```
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: ${PROJECT}
+    ```
+
+  * If you are using ACM to actually create the project then add a project.yaml file that looks like
+
+
+    ```
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    metadata:
+      annotations:
+        # Set this to the id of the folder to create your project or delete this line
+        # if you aren't using folders.
+        cnrm.cloud.google.com/folder-id: "${FOLDER}"    
+        cnrm.cloud.google.com/auto-create-network: "true"
+      # Set this to your Project
+      name: ${PROJECT}
+    spec:
+      # Set this to your Project
+      name: ${PROJECT}      
+      billingAccountRef:
+        # Set this to your billing account
+        external: "${BILLING_ACCOUNT}"
+    ```
+
 ### Deploying Kubeflow
 
-1. Follow the steps in the previous section to configure and hydrate the manifests but do
-   not **apply** the manifests.
+1. Follow the steps in the [directions](https://master.kubeflow.org/docs/gke/deploy/deploy-cli/#configure-kubeflow)
+   to configure Kubeflow
 
+   * Edit your Makefile as described to fill in the **set-values** rule with the actual values for your deployment
+  
+1. Edit your Makefile to set the variables **ACM_MGMT_REPO** and **ACM_KF_REPO** to the
+   paths of your ACM repos for your management and KF repositories.
 
-1. Enable services
-
-   ```
-   make apply-services
-   ```
-
-   * TODO(jlewi): Can we use CNRM and ACM for this as well.
 
 1. Hydrate the manifests
 
    ```
-   make hydrate
+   make acm-gcp
    ```
 
 1. Copy the gcp config resources to the ACM repo that is being used to manage the project
@@ -252,16 +137,12 @@ You must setup an ACM cluster to manage your project. Typically this entails the
 1. Create a directory to use as your ACM repo
 
    ```
-   mkdir acm-repo   
+   nomos init --path=${ACM_KF_REPO}  
    ```
-
-   * **Important** We currently use an unstructured ACM repository because we don't have a good way
-     of reorganizing our K8s resources and files according to the layout required by structured repositories
-     e.g. we have files with cluster scoped and namespace scoped resources.
 
 1. Follow the ACM docs to install and configure the ACM operator on your cluster
 
-   * Use a structured repo
+   * Use **structured** repo 
    * Do not configure ACM to install Cloud Config Connector
 
 
@@ -294,29 +175,7 @@ You must setup an ACM cluster to manage your project. Typically this entails the
    make acm-kubeflow
    ```
 
-1. TODO(fix/test these instructions) Run the custom transform to remove the namespace from cluster scoped resoruces
-
-   ```
-   ~/git_kustomize/kustomize/kustomize config run --enable-exec --exec-path ~/git_kubeflow-kfctl/kustomize-fns/remove-namespace/remove-namespace  ./acm-repo/ --stack-trace
-   ```
-
-   * TODO(jlewi): Add the appropriate `kpt` command to run this using the docker image.
-   
-   * Relevant issues:
-
-   * https://github.com/kubeflow/gcp-blueprints/issues/27
-   * https://github.com/kubernetes-sigs/kustomize/issues/2498
-
-1. Remove `acm-repo/~g_v1_service_istio-ingressgateway.yaml`
-1. Open acm-repo/IngressGateway.yaml and add to the service `istio-ingressgateway` the annotations
-
-   ```
-   annotations:
-    beta.cloud.google.com/backend-config: '{"ports": {"http2":"iap-backendconfig"}}'
-   ```
-   * This is a workaround for https://github.com/kubeflow/gcp-blueprints/issues/22
-
-1. In gcloud console find the backend associated with the ingressgateway and change the health check
+1. In the Cloud Console find the backend associated with the ingress gateway and change the health check
 
    * Set port to the node port mapped to the istioingressgateway status port
    * Set health check path to /healthz/ready
@@ -324,17 +183,66 @@ You must setup an ACM cluster to manage your project. Typically this entails the
 
    * TODO(https://github.com/kubeflow/gcp-blueprints/issues/14) Automate this
 
-1. Find the IAP audience for your ingress and update `acm-repo/authentication.istio.io_v1alpha1_policy_ingress-jwt.yaml`
-   with it
 
+1. Find the IAP audience for your ingress and create a patch for it
+
+    * Create the file `${KFDIR}/instance/kustomize/iap-ingress/ingress-authentication-policy.yaml` with the contents
+
+      ```
+      apiVersion: authentication.istio.io/v1alpha1
+      kind: Policy
+      metadata:  
+        name: ingress-jwt
+      spec:
+        origins:
+        - jwt:
+            audiences:
+            - <Your IAP OAuth client audience>
+            issuer: https://cloud.google.com/iap
+            jwksUri: https://www.gstatic.com/iap/verify/public_key-jwk
+            jwtHeaders:
+            - x-goog-iap-jwt-assertion
+            trigger_rules:
+            - excluded_paths:
+              - exact: /healthz/ready
+      ```
+
+    * Run the following command to add it as a patch
+
+      ```
+      cd ${KFDIR}/instance/kustomize/iap-ingress/
+      kustomize edit add patch ingress-authentication-policy.yaml
+      ```
+
+    * Change the audience to the OAuth client audience
     * TODO(https://github.com/kubeflow/gcp-blueprints/issues/14): Come up with a better solution
+
+1. Create a patch for the ISTIO gateway for the notebook controller
+
+   * Create the file `./${KFDIR}/instance/kustomize/kubeflow-apps/notebook-controller-patch.yaml` with the contents
+
+     ```
+      apiVersion: v1
+      data:
+        ISTIO_GATEWAY: istio-system/ingressgateway
+      kind: ConfigMap
+      metadata:
+        name: notebook-controller-config
+     ```
+
+   * Run the following command to add it as a patch
+
+      ```
+      cd ${KFDIR}/instance/kustomize/kubeflow-apps/
+      kustomize edit add patch notebook-controller-patch.yaml
+      ```
 
 1. Commit and push those configs
    
 1. Check the status of the sync
 
    ```
-   nomos --contexts=${KUBEFLOW_CONTEXT} status   
+   nomos --contexts=${KUBEFLOW_CONTEXT} status  
    ```
 
 1. Wait for the istio-system to be created then create the iap secret
@@ -347,3 +255,12 @@ You must setup an ACM cluster to manage your project. Typically this entails the
    * The GKE ManagedCertificate can't be provisioned if the ingress doesn't exist
    * If the endpoint doesn't become available within O(5) minutes the GKEManagedCertificate will give up
      on trying to provision the certificate.
+
+
+## Troubleshooting ACM
+
+* Use the nomos command to get information about files failing validation.
+
+  ```
+  nomos vet --source-format=unstructured --no-api-server-check --path=${ACM_REPO_PATH}
+  ```

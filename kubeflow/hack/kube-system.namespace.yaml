@@ -1,0 +1,6 @@
+# Hack. For ACM we need to initialize a kube-system
+# directory with the namespace.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-system  
