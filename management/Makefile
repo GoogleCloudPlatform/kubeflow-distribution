@@ -2,12 +2,12 @@ ifndef NAME
 	NAME=$(shell yq r ./instance/settings.yaml name)
 endif
 
-ifndef PROJECT
-	PROJECT=$(shell yq r ./instance/settings.yaml project)
+ifndef LOCATION
+	LOCATION=$(shell yq r ./instance/settings.yaml location)
 endif
 
-ifndef ZONE_OR_REGION
-	ZONE_OR_REGION=$(shell yq r ./instance/settings.yaml location)
+ifndef PROJECT
+	PROJECT=$(shell yq r ./instance/settings.yaml project)
 endif
 
 MGMTCTXT=$(NAME)
@@ -23,11 +23,11 @@ INSTANCE_DIR=./instance
 .PHONY: set-values
 set-values:
 	kpt cfg set ./instance name $(NAME)
-	kpt cfg set ./instance location $(ZONE_OR_REGION)
+	kpt cfg set ./instance location $(LOCATION)
 	kpt cfg set ./instance gcloud.core.project $(PROJECT)
 	
 	kpt cfg set ./upstream/management name $(NAME)
-	kpt cfg set ./upstream/management location $(ZONE_OR_REGION)
+	kpt cfg set ./upstream/management location $(LOCATION)
 	kpt cfg set ./upstream/management gcloud.core.project $(PROJECT)
 
 # Print out the context
