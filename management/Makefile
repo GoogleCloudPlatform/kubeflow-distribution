@@ -1,7 +1,14 @@
-# Edit this section to set the values specific to your deployment
-NAME=<NAME>
-PROJECT=<PROJECT>
-ZONE_OR_REGION=<ZONE_OR_REGION>
+ifndef NAME
+	NAME=$(shell yq r ./instance/settings.yaml name)
+endif
+
+ifndef PROJECT
+	PROJECT=$(shell yq r ./instance/settings.yaml project)
+endif
+
+ifndef ZONE_OR_REGION
+	ZONE_OR_REGION=$(shell yq r ./instance/settings.yaml location)
+endif
 
 MGMTCTXT=$(NAME)
 
