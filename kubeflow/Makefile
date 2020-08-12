@@ -58,12 +58,10 @@ set-values:
 # The rules below help fetch and update packages
 #************************************************************************************************************************
 # Get packages
+# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
+# users don't end up pulling tests or other things they don't need.
 .PHONY: get-pkg
 get-pkg:
-	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
-	# to a specific version
-	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-	# users don't end up pulling tests or other things they don't need.
 	mkdir -p  ./upstream
 	# kpt pkg get currently throws some errors due to the way our configs our structured
 	# so we need to ignore those and keep going.
@@ -260,7 +258,7 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 
 	python ./hack/to_acm_structure.py --source=$(BUILD_DIR) --dest=$(ACM_KF_REPO)
 
-	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml	
+	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml
 
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14) remove iap enabler pod
 	# because it will try to patch the authentication policy.
