@@ -10,7 +10,7 @@ ifndef PROJECT
 	PROJECT=$(shell yq r ./instance/settings.yaml project)
 endif
 
-MGMTCTXT=$(NAME)
+MGMTCTXT=$(shell yq r ./instance/settings.yaml name)
 
 # The URL you want to fetch manifests from
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
@@ -59,12 +59,12 @@ hydrate:
 	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster 
 
 
-# Create a kubeconfig context for the kubeflow cluster
+# Create a kubeconfig context for the management cluster
 .PHONE: create-ctxt
 create-ctxt:
 	PROJECT=$(shell yq r ./instance/settings.yaml project) \
 	   REGION=$(shell yq r ./instance/settings.yaml location) \
-	   NAME=$(NAME) ./hack/create_context.sh
+	   NAME=$(shell yq r ./instance/settings.yaml name) ./hack/create_context.sh
 
 .PHONY: hydrate-kcc
 hydrate-kcc:
