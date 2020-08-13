@@ -36,12 +36,10 @@ echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
 
 # Get packages
+# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
+# users don't end up pulling tests or other things they don't need.
 .PHONY: get-pkg
 get-pkg:
-	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
-	# to a specific version
-	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-	# users don't end up pulling tests or other things they don't need.	
 	mkdir -p  ./upstream
 	kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
 
@@ -56,7 +54,7 @@ hydrate:
 	rm -rf .build
 	mkdir -p .build/
 	mkdir -p .build/cluster
-	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster 
+	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
 
 # Create a kubeconfig context for the management cluster
@@ -73,7 +71,7 @@ hydrate-kcc:
 	rm -rf ./.build/cnrm-install-iam
 	mkdir -p ./.build/cnrm-install-system
 	mkdir -p ./.build/cnrm-install-services
-	mkdir -p ./.build/cnrm-install-iam	
+	mkdir -p ./.build/cnrm-install-iam
 	kustomize build -o ./.build/cnrm-install-system $(INSTANCE_DIR)/cnrm-install-system
 	kustomize build -o ./.build/cnrm-install-services $(INSTANCE_DIR)/cnrm-install-services
 	kustomize build -o ./.build/cnrm-install-iam $(INSTANCE_DIR)/cnrm-install-iam
