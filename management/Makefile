@@ -1,16 +1,7 @@
-ifndef NAME
-	NAME=$(shell yq r ./instance/settings.yaml name)
-endif
-
-ifndef LOCATION
-	LOCATION=$(shell yq r ./instance/settings.yaml location)
-endif
-
-ifndef PROJECT
-	PROJECT=$(shell yq r ./instance/settings.yaml project)
-endif
-
-MGMTCTXT=$(shell yq r ./instance/settings.yaml name)
+NAME=$(shell yq r ./instance/settings.yaml name)
+PROJECT=$(shell yq r ./instance/settings.yaml project)
+LOCATION=$(shell yq r ./instance/settings.yaml location)
+MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
@@ -19,16 +10,6 @@ MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
 MANIFESTS_DIR=./upstream/management
 
 INSTANCE_DIR=./instance
-
-.PHONY: set-values
-set-values:
-	kpt cfg set ./instance name $(NAME)
-	kpt cfg set ./instance location $(LOCATION)
-	kpt cfg set ./instance gcloud.core.project $(PROJECT)
-	
-	kpt cfg set ./upstream/management name $(NAME)
-	kpt cfg set ./upstream/management location $(LOCATION)
-	kpt cfg set ./upstream/management gcloud.core.project $(PROJECT)
 
 # Print out the context
 .PHONY: echo
@@ -49,6 +30,10 @@ apply: hydrate
 
 .PHONY: hydrate
 hydrate:
+	kpt cfg set ./upstream/management name $(NAME)
+	kpt cfg set ./upstream/management location $(LOCATION)
+	kpt cfg set ./upstream/management gcloud.core.project $(PROJECT)
+
 	# Delete the directory so any resources that have been removed
 	# from the manifests will be pruned
 	rm -rf .build
@@ -56,13 +41,12 @@ hydrate:
 	mkdir -p .build/cluster
 	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
-
 # Create a kubeconfig context for the management cluster
 .PHONE: create-ctxt
 create-ctxt:
-	PROJECT=$(shell yq r ./instance/settings.yaml project) \
-	   REGION=$(shell yq r ./instance/settings.yaml location) \
-	   NAME=$(shell yq r ./instance/settings.yaml name) ./hack/create_context.sh
+	PROJECT=$(PROJECT) \
+	   REGION=$(LOCATION) \
+	   NAME=$(NAME) ./hack/create_context.sh
 
 .PHONY: hydrate-kcc
 hydrate-kcc:
@@ -88,4 +72,3 @@ apply-kcc: hydrate-kcc
 update:
 	rm -rf upstream
 	make get-pkg
-	make set-values
