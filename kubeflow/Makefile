@@ -28,7 +28,6 @@ BUILD_DIR=.build
 # TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git@v1.1.0
 
-
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment
 
@@ -179,11 +178,6 @@ apply-gcp: hydrate
 	# Apply management resources
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
-.PHONY: apply-services
-apply-services: hydrate
-	# Apply management resources
-	anthoscli apply --project=$(PROJECT) -f ./instance/gcp_config/enable-services.yaml
-
 .PHONY: apply-asm
 apply-asm: hydrate
 	# We need to apply the CRD definitions first
@@ -243,12 +237,43 @@ echo-ctxt:
 # Hydrate ACM repos
 # These commands copy the configs to the appropriate acm repo
 acm-gcp: hydrate-gcp
-	cp -r $(BUILD_DIR)/gcp_config $(ACM_MGMT_REPO)/namespaces/$(PROJECT)
+	acm-gcp: hydrate-gcp
+	mkdir -p $(ACM_MGMT_REPO)/namespaces/$(PROJECT)
+	cp -r $(BUILD_DIR)/gcp_config/* $(ACM_MGMT_REPO)/namespaces/$(PROJECT)
+	rm -rf $(BUILD_DIR)/gcp_config
 
 acm-kubeflow: hydrate-asm hydrate-kubeflow
-	rm -rf $(ACM_KF_REPO)
+	rm -rf $(ACM_KF_REPO)/cluster/*
+	rm -rf $(ACM_KF_REPO)/namespaces/*
 	mkdir -p $(ACM_KF_REPO)
-	find $(BUILD_DIR) -name "*.yaml" -not -path  "*/gcp_config/**" -exec cp {} $(ACM_KF_REPO)/ ";"
+
+	# Run kustomize fns to transform the configs.
+	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
+	-kpt fn run $(BUILD_DIR)/ --fn-path=$(MANIFESTS_DIR)/gcp/kustomize-fns
+
+	python ./hack/to_acm_structure.py --source=$(BUILD_DIR) --dest=$(ACM_KF_REPO)
+
+	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml	
+
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14) remove iap enabler pod
+	# because it will try to patch the authentication policy.
+	rm -rf $(ACM_KF_REPO)/namespaces/istio-system/apps_v1_Deployment_iap-enabler.yaml
+
+	# Remoee build dir; since $(ACM_KF_REPO) will be checked into source control
+	# BUILD_DIR is redundant
+	rm -rf $(BUILD_DIR)
+
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/22)
+	# Need to add the annotation for the service
+	yq w -i $(ACM_KF_REPO)/namespaces/istio-system/v1_Service_istio-ingressgateway.yaml metadata.annotations["beta.cloud.google.com/backend-config"] '{"ports": {"http2":"iap-backendconfig"}}'
+
+	# Bug fix for https://github.com/kubeflow/manifests/issues/1450
+	yq w -i $(ACM_KF_REPO)/namespaces/cert-manager/namespace.yaml metadata.labels["control-plane"] "kubeflow"
+
+	# Vet the repo for any errors
+	-nomos vet --no-api-server-check --path=$(ACM_KF_REPO)
+
+	echo done
 
 #*****************************************************************************************
 #
