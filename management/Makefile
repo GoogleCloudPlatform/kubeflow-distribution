@@ -16,6 +16,7 @@ INSTANCE_DIR=./instance
 echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
 
+# Validate cluster values are changed from default dummy values
 .PHONY: validate-values
 validate-values:
 	@if [[ $(NAME) == "dummy" || $(LOCATION) == "dummy" || $(PROJECT) == "dummy" ]]; then\
