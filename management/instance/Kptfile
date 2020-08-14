@@ -10,19 +10,19 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
-          value: YOUR-PROJECT
+          value: PROJECT
           isSet: true
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
           name: name
-          value: YOUR-NAME
+          value: NAME
           isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           name: location
-          value: us-central1
+          value: LOCATION
     io.k8s.cli.substitutions.cluster-name:
       x-k8s-cli:
         substitution:

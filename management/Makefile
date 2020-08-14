@@ -1,6 +1,6 @@
-NAME=$(shell yq r ./instance/settings.yaml name)
-PROJECT=$(shell yq r ./instance/settings.yaml project)
-LOCATION=$(shell yq r ./instance/settings.yaml location)
+NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
@@ -19,7 +19,7 @@ echo-ctxt:
 # Validate cluster values are changed from default dummy values
 .PHONY: validate-values
 validate-values:
-	@if [[ $(NAME) == "dummy" || $(LOCATION) == "dummy" || $(PROJECT) == "dummy" ]]; then\
+	@if [[ $(NAME) == "NAME" || $(LOCATION) == "LOCATION" || $(PROJECT) == "PROJECT" ]]; then\
         echo "either of NAME, LOCATION, PROJECT values not set.";\
 		exit 1;\
     fi
