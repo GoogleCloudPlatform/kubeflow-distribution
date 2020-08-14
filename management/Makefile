@@ -16,6 +16,13 @@ INSTANCE_DIR=./instance
 echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
 
+.PHONY: validate-values
+validate-values:
+	@if [[ $(NAME) == "dummy" || $(LOCATION) == "dummy" || $(PROJECT) == "dummy" ]]; then\
+        echo "either of <NAME>, <ZONE_OR_REGION>, <PROJECT_TO_DEPLOY_IN> not set.";\
+		exit 1;\
+    fi
+
 # Get packages
 # TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
 # users don't end up pulling tests or other things they don't need.
@@ -29,7 +36,7 @@ apply: hydrate
 	anthoscli apply --project=$(PROJECT) -f .build/cluster
 
 .PHONY: hydrate
-hydrate:
+hydrate: validate-values
 	kpt cfg set ./upstream/management name $(NAME)
 	kpt cfg set ./upstream/management location $(LOCATION)
 	kpt cfg set ./upstream/management gcloud.core.project $(PROJECT)
