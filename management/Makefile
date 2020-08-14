@@ -20,7 +20,7 @@ echo-ctxt:
 .PHONY: validate-values
 validate-values:
 	@if [[ $(NAME) == "dummy" || $(LOCATION) == "dummy" || $(PROJECT) == "dummy" ]]; then\
-        echo "either of <NAME>, <ZONE_OR_REGION>, <PROJECT_TO_DEPLOY_IN> not set.";\
+        echo "either of NAME, LOCATION, PROJECT values not set.";\
 		exit 1;\
     fi
 
