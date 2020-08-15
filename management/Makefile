@@ -1,6 +1,8 @@
+# NAME, LOCATION, PROJECT in Kptfile are set by calling kpt cfg set
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
@@ -32,6 +34,7 @@ get-pkg:
 	mkdir -p  ./upstream
 	kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
 
+# Create the cluster
 .PHONY: apply
 apply: hydrate
 	anthoscli apply --project=$(PROJECT) -f .build/cluster
@@ -49,9 +52,9 @@ hydrate: validate-values
 	mkdir -p .build/cluster
 	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
-# Create a kubeconfig context for the management cluster
+# Create a kubeconfig context for the cluster
 .PHONE: create-ctxt
-create-ctxt:
+create-ctxt: validate-values
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ./hack/create_context.sh
@@ -68,6 +71,7 @@ hydrate-kcc:
 	kustomize build -o ./.build/cnrm-install-services $(INSTANCE_DIR)/cnrm-install-services
 	kustomize build -o ./.build/cnrm-install-iam $(INSTANCE_DIR)/cnrm-install-iam
 
+# Install config connector in the cluster
 .PHONY: apply-kcc
 apply-kcc: hydrate-kcc
 	anthoscli apply -f .build/cnrm-install-services
