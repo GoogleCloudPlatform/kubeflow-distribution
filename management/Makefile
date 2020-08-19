@@ -5,7 +5,8 @@ NAME=$(shell yq r ./instance/settings.yaml name)
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
+# TODO(Bobgy): pin a specific release tag when it's ready
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@1f948ed
 
 PROJECT=$(shell yq r ./instance/settings.yaml project)
 
