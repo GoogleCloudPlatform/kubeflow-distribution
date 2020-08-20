@@ -5,7 +5,7 @@ NAME=$(shell yq r ./instance/settings.yaml name)
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@v1.1-branch
 
 PROJECT=$(shell yq r ./instance/settings.yaml project)
 
