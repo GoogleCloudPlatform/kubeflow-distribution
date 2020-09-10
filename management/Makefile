@@ -37,7 +37,7 @@ get-pkg:
 # Create the cluster
 .PHONY: apply
 apply: hydrate
-	anthoscli apply --project=$(PROJECT) -f .build/cluster
+	anthoscli apply -f .build/cluster
 
 .PHONY: hydrate
 hydrate: validate-values
