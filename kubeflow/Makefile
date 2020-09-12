@@ -58,12 +58,10 @@ set-values:
 # The rules below help fetch and update packages
 #************************************************************************************************************************
 # Get packages
+# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
+# users don't end up pulling tests or other things they don't need.
 .PHONY: get-pkg
 get-pkg:
-	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
-	# to a specific version
-	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-	# users don't end up pulling tests or other things they don't need.
 	mkdir -p  ./upstream
 	# kpt pkg get currently throws some errors due to the way our configs our structured
 	# so we need to ignore those and keep going.
@@ -180,20 +178,13 @@ apply-gcp: hydrate
 
 .PHONY: apply-asm
 apply-asm: hydrate
-	# Initialize your project to ready it for ASM installation.
-	# Reference: https://cloud.google.com/service-mesh/docs/gke-install-new-cluster#setting_credentials_and_permissions
-	curl --request POST \
-		--header "Authorization: Bearer `gcloud auth print-access-token`" \
-		--data '' \
-		--fail \
-		"https://meshconfig.googleapis.com/v1alpha1/projects/$(PROJECT):initialize"
 	# We need to apply the CRD definitions first
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
 	# TODO(jlewi): Should we use the newer version in asm/asm
 	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
-	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
+	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml	
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
@@ -203,10 +194,10 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress	
 
 	# Apply the namespace first
-	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml 
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
@@ -260,7 +251,7 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 
 	python ./hack/to_acm_structure.py --source=$(BUILD_DIR) --dest=$(ACM_KF_REPO)
 
-	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml	
+	cp ./hack/kube-system.namespace.yaml $(ACM_KF_REPO)/namespaces/kube-system/namespace.yaml
 
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14) remove iap enabler pod
 	# because it will try to patch the authentication policy.
