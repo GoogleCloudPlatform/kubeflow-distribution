@@ -6,24 +6,12 @@
 # PROJECT=<PROJECT> REGION=<region> NAME=<NAME>
 #
 # TODO(jlewi): Support zonal clusters as well
-set -x 
+set -ex
 
 # Default namespace to kubeflow
 NAMESPACE=${NAMESPACE:-kubeflow}
-echo Checking if context ${NAME} exists 
 
-kubectl config use-context ${NAME}
-
-RESULT=$?
-
-if [ ${RESULT} -eq 0 ]; then
-echo kubeconfig context ${NAME} already exists
-exit 0
-fi
-
-set -ex
-
-# TODO test if the context already exists and if it does do nothing
+# Get the context
 gcloud --project=${PROJECT} container clusters get-credentials \
 	   --region=${REGION} ${NAME}
 
