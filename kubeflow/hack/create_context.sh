@@ -8,16 +8,8 @@
 # TODO(jlewi): Support zonal clusters as well
 set -x
 
-echo Checking if context ${NAME} exists
-
-kubectl config use-context ${NAME}
-
-RESULT=$?
-
-if [ ${RESULT} -eq 0 ]; then
-echo delete existing ${NAME} context
+# Delete kubeconfig context if exist already
 kubectl config delete-context ${NAME}
-fi
 
 set -ex
 
