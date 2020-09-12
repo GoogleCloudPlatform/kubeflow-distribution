@@ -6,6 +6,19 @@
 # PROJECT=<PROJECT> REGION=<region> NAME=<NAME>
 #
 # TODO(jlewi): Support zonal clusters as well
+set -x
+
+echo Checking if context ${NAME} exists
+
+kubectl config use-context ${NAME}
+
+RESULT=$?
+
+if [ ${RESULT} -eq 0 ]; then
+echo delete existing ${NAME} context
+kubectl config delete-context ${NAME}
+fi
+
 set -ex
 
 # Default namespace to kubeflow
