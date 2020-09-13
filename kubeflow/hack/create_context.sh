@@ -9,7 +9,7 @@
 set -x
 
 # Delete kubeconfig context if exist already
-kubectl config delete-context ${NAME} || echo "Ignore error - context ${NAME} does not exist"
+kubectl config delete-context ${NAME} || echo "Ignore error - cannot delete context ${NAME}"
 
 set -ex
 
