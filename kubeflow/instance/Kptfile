@@ -169,6 +169,11 @@ openAPI:
         setter:
           name: gke.private
           value: "false"
+    io.k8s.cli.setters.log-firewalls:
+      x-k8s-cli:
+        setter:
+          name: log-firewalls
+          value: "false"
     io.k8s.cli.setters.email:
       x-k8s-cli:
         setter:
