@@ -8,6 +8,7 @@ NAME=$(shell yq r ./instance/settings.yaml name)
 PROJECT=$(shell yq r ./instance/settings.yaml project)
 PRIVATE_GKE=$(shell yq r ./instance/settings.yaml gkePrivate true)
 ZONE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.zone".x-k8s-cli.setter.value')
+FIREWALL_LOGS=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.log-firewalls".x-k8s-cli.setter.value')
 
 KFCTXT=$(NAME)
 
@@ -272,7 +273,7 @@ clean-build: validate-values
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project $(PROJECT)
 	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone $(ZONE)
 	kpt cfg set ./upstream/manifests/gcp location $(LOCATION)
-	kpt cfg set ./upstream/manifests/gcp log-firewalls false
+	kpt cfg set ./upstream/manifests/gcp log-firewalls $(FIREWALL_LOGS)
 
 	kpt cfg set ./upstream/manifests/stacks/gcp name $(NAME)
 	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project $(PROJECT)
