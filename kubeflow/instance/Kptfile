@@ -37,6 +37,11 @@ openAPI:
         setter:
           name: location
           value: LOCATION
+    io.k8s.cli.setters.zone:
+      x-k8s-cli:
+        setter:
+          name: zone
+          value: ZONE
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
