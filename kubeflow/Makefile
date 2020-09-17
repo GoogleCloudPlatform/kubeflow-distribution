@@ -7,7 +7,7 @@ MGMTCTXT=$(shell yq r ./instance/settings.yaml mgmt-ctxt)
 NAME=$(shell yq r ./instance/settings.yaml name)
 PROJECT=$(shell yq r ./instance/settings.yaml project)
 PRIVATE_GKE=$(shell yq r ./instance/settings.yaml gkePrivate true)
-ZONE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.zone".x-k8s-cli.setter.value')
+ZONE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.compute.zone".x-k8s-cli.setter.value')
 FIREWALL_LOGS=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.log-firewalls".x-k8s-cli.setter.value')
 
 KFCTXT=$(NAME)

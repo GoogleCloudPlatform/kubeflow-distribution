@@ -37,10 +37,10 @@ openAPI:
         setter:
           name: location
           value: LOCATION
-    io.k8s.cli.setters.zone:
+    io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
         setter:
-          name: zone
+          name: gcloud.compute.zone
           value: ZONE
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
