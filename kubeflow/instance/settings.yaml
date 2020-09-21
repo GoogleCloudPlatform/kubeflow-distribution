@@ -1,8 +1,0 @@
-# Name of kubeconfig contexts for various 
-# TODO(jlewi): We should be able to get rid of this and just grab
-# the values from the kpt file using yq
-mgmt-ctxt: MANAGEMENT-CTXT # {"$kpt-set":"mgmt-ctxt"}
-project: PROJECT # {"$kpt-set":"project"}
-location: LOCATION # {"$kpt-set":"location"}
-name: KUBEFLOW-NAME # {"$kpt-set":"name"}
-gkePrivate: false # {"$kpt-set":"private"}
