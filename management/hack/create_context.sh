@@ -10,8 +10,9 @@
 # Should we make hack its own package and put it in upstream?
 set -x
 
-# Delete kubeconfig context if exist already
-kubectl config delete-context ${NAME} || echo "Ignore error - cannot delete context ${NAME}"
+# Delete the existing kubeconfig, because it may be an outdated
+# context to a deleted cluster with the same name.
+kubectl config delete-context ${NAME} || echo "Context ${NAME} doesn't exist, Rename the context step will create it"
 
 set -ex
 
