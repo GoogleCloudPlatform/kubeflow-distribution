@@ -6,24 +6,18 @@
 # PROJECT=<PROJECT> REGION=<region> NAME=<NAME>
 #
 # TODO(jlewi): Support zonal clusters as well
-set -x 
+set -x
 
-# Default namespace to kubeflow
-NAMESPACE=${NAMESPACE:-kubeflow}
-echo Checking if context ${NAME} exists 
-
-kubectl config use-context ${NAME}
-
-RESULT=$?
-
-if [ ${RESULT} -eq 0 ]; then
-echo kubeconfig context ${NAME} already exists
-exit 0
-fi
+# Delete the existing kubeconfig, because it may be an outdated
+# context to a deleted cluster with the same name.
+kubectl config delete-context ${NAME} || echo "Context ${NAME} doesn't exist, Rename the context step will create it"
 
 set -ex
 
-# TODO test if the context already exists and if it does do nothing
+# Default namespace to kubeflow
+NAMESPACE=${NAMESPACE:-kubeflow}
+
+# Get the context
 gcloud --project=${PROJECT} container clusters get-credentials \
 	   --region=${REGION} ${NAME}
 
