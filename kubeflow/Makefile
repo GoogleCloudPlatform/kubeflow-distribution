@@ -10,7 +10,6 @@ PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters
 PRIVATE_GKE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gke.private".x-k8s-cli.setter.value')
 FIREWALL_LOGS=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.log-firewalls".x-k8s-cli.setter.value')
 
-
 KFCTXT=$(NAME)
 
 # Path to kustomize directories
