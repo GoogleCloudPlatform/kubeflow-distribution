@@ -33,10 +33,10 @@ MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 # Validate cluster values are changed from default dummy values
 .PHONY: validate-values
 validate-values:
-	@if [[ $(MGMTCTXT) == "MANAGEMENT-CTXT" || $(NAME) == "KUBEFLOW-NAME" || $(LOCATION) == "LOCATION" || $(ZONE) == "ZONE" || $(PROJECT) == "PROJECT" ]]; then\
-		echo "either of MGMTCTXT, NAME, LOCATION, ZONE, PROJECT values not set.";\
-		exit 1;\
-    fi
+	$(shell if [[ $(MGMTCTXT) == "MANAGEMENT-CTXT" || $(NAME) == "KUBEFLOW-NAME" || $(LOCATION) == "LOCATION" || $(PROJECT) == "PROJECT" ]]; then\
+		echo "[ERROR] either of MGMTCTXT, NAME, LOCATION, PROJECT values not set." 1>&2;\
+		echo "exit 1";\
+    fi)
 
 #************************************************************************************************************************
 #
@@ -299,7 +299,7 @@ iap-secret: check-iap
 
 .PHONY: wait-gcp
 wait-gcp:
-	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=900s  containercluster $(NAME)
+	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s  containercluster $(NAME)
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
