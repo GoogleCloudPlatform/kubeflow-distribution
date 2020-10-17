@@ -299,7 +299,7 @@ iap-secret: check-iap
 
 .PHONY: wait-gcp
 wait-gcp:
-	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s  containercluster $(NAME)
+	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=900s  containercluster $(NAME)
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
