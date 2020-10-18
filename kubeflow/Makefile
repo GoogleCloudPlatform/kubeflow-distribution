@@ -271,7 +271,7 @@ clean-build: validate-values
 	# Dedupe values to ./upstream/manifest
 	kpt cfg set ./upstream/manifests/gcp name $(NAME)
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project $(PROJECT)
-	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone $(ZONE)
+	# kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone $(ZONE)
 	kpt cfg set ./upstream/manifests/gcp location $(LOCATION)
 	kpt cfg set ./upstream/manifests/gcp log-firewalls $(FIREWALL_LOGS)
 
