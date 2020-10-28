@@ -33,10 +33,10 @@ MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 # Validate cluster values are changed from default dummy values
 .PHONY: validate-values
 validate-values:
-	$(shell if [[ $(MGMTCTXT) == "MANAGEMENT-CTXT" || $(NAME) == "KUBEFLOW-NAME" || $(LOCATION) == "LOCATION" || $(PROJECT) == "PROJECT" ]]; then\
-		echo "[ERROR] either of MGMTCTXT, NAME, LOCATION, PROJECT values not set." 1>&2;\
-		echo "exit 1";\
-    fi)
+	@if [ $(MGMTCTXT) == "MANAGEMENT-CTXT" ] || [ $(NAME) == "KUBEFLOW-NAME" ] || [ $(LOCATION) == "LOCATION" ] || [ $(PROJECT) == "PROJECT" ]; then\
+		echo "[ERROR] either of MGMTCTXT, NAME, LOCATION, PROJECT values not set.";\
+		exit 1;\
+    fi
 
 #************************************************************************************************************************
 #
