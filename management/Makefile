@@ -21,10 +21,13 @@ echo-ctxt:
 # Validate cluster values are changed from default dummy values
 .PHONY: validate-values
 validate-values:
-	@if [ $(NAME) == "NAME" ] || [ $(LOCATION) == "LOCATION" ] || [ $(PROJECT) == "PROJECT" ]; then\
-        echo "[ERROR] either of NAME, LOCATION, PROJECT values not set.";\
-		exit 1;\
-    fi
+ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
+                   "$(LOCATION)" =  LOCATION  -o  \
+                   "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
+	@echo "[ERROR] either of NAME, LOCATION, PROJECT values not set."
+	@exit 1;
+endif
+
 
 # Get packages
 # TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
