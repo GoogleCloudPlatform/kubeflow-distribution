@@ -37,8 +37,7 @@ ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(NAME)"     =  KUBEFLOW-NAME  -o  \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
-	@echo "[ERROR] either of MGMTCTXT, NAME, LOCATION, PROJECT values not set."
-	@exit 1;
+	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
 endif
 
 #************************************************************************************************************************

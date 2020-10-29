@@ -24,8 +24,7 @@ validate-values:
 ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
-	@echo "[ERROR] either of NAME, LOCATION, PROJECT values not set."
-	@exit 1;
+	$(error Either of NAME, LOCATION, PROJECT values not set)
 endif
 
 
