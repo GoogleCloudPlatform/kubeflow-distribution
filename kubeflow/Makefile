@@ -38,7 +38,7 @@ ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(ZONE)"     =  ZONE -o \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
-	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
+	$(error Either of MGMTCTXT, NAME, ZONE, LOCATION, PROJECT values not set)
 endif
 
 #************************************************************************************************************************
