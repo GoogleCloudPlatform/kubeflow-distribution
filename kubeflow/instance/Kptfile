@@ -37,6 +37,11 @@ openAPI:
         setter:
           name: location
           value: LOCATION
+    io.k8s.cli.setters.gcloud.compute.zone:
+      x-k8s-cli:
+        setter:
+          name: gcloud.compute.zone
+          value: ZONE
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
@@ -163,6 +168,11 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gke.private
+          value: "false"
+    io.k8s.cli.setters.log-firewalls:
+      x-k8s-cli:
+        setter:
+          name: log-firewalls
           value: "false"
     io.k8s.cli.setters.email:
       x-k8s-cli:

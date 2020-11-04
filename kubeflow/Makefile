@@ -5,8 +5,10 @@ MGMTCTXT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setter
 # The name of the context for your Kubeflow cluster
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+ZONE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.compute.zone".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 PRIVATE_GKE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gke.private".x-k8s-cli.setter.value')
+FIREWALL_LOGS=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.log-firewalls".x-k8s-cli.setter.value')
 
 KFCTXT=$(NAME)
 
@@ -28,28 +30,15 @@ BUILD_DIR=.build
 # TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
 MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 
-#***********************************************************************************************************************
-# Edit this section to set the values specific to your deployment
-
-.PHONY: set-values
-set-values:
-	kpt cfg set ./instance gke.private false
-
-	kpt cfg set ./instance mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
-
-	kpt cfg set ./upstream/manifests/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
-	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone <ZONE>
-	kpt cfg set ./upstream/manifests/gcp location <REGION OR ZONE>
-	kpt cfg set ./upstream/manifests/gcp log-firewalls false
-
-	kpt cfg set ./upstream/manifests/stacks/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
-
-	kpt cfg set ./instance name <YOUR_KF_NAME>
-	kpt cfg set ./instance location <YOUR_REGION or ZONE>
-	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
-	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
+# Validate cluster values are changed from default dummy values
+.PHONY: validate-values
+validate-values:
+ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
+                   "$(NAME)"     =  KUBEFLOW-NAME  -o  \
+                   "$(LOCATION)" =  LOCATION  -o  \
+                   "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
+	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
+endif
 
 #************************************************************************************************************************
 #
@@ -78,7 +67,6 @@ get-pkg:
 update:
 	rm -rf upstream
 	make get-pkg
-	make set-values
 
 #**************************************************************************************************************************
 # Hydration
@@ -281,7 +269,17 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 #*****************************************************************************************
 
 .PHONY: clean-build
-clean-build:
+clean-build: validate-values
+	# Dedupe values to ./upstream/manifest
+	kpt cfg set ./upstream/manifests/gcp name $(NAME)
+	kpt cfg set ./upstream/manifests/gcp gcloud.core.project $(PROJECT)
+	# kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone $(ZONE)
+	kpt cfg set ./upstream/manifests/gcp location $(LOCATION)
+	kpt cfg set ./upstream/manifests/gcp log-firewalls $(FIREWALL_LOGS)
+
+	kpt cfg set ./upstream/manifests/stacks/gcp name $(NAME)
+	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project $(PROJECT)
+
 	# Delete build because we want to prune any resources which are no longer defined in the manifests
 	rm -rf $(BUILD_DIR)/
 	mkdir -p $(BUILD_DIR)/
@@ -307,7 +305,7 @@ wait-gcp:
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
-create-ctxt:
+create-ctxt: validate-values
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ./hack/create_context.sh
