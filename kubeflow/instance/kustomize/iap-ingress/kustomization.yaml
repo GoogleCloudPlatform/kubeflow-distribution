@@ -3,6 +3,9 @@ kind: Kustomization
 patchesStrategicMerge:
 - iap-ingress-config.yaml
 - service-accounts.yaml
+# Explicitly disable container native load balancing
+# See: https://github.com/kubeflow/gcp-blueprints/pull/141
+- service.yaml
 resources:
 - ../../../upstream/manifests/gcp/iap-ingress/v3 # {"$kpt-set":"gcp-iap-ingress-v3"}
 - ../../../upstream/manifests/istio/iap-gateway/base # {"$kpt-set":"istio-iap-gateway-base"}
