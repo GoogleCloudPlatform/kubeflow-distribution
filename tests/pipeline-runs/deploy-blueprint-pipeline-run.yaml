@@ -20,7 +20,7 @@ spec:
       type: git
       params:
         - name: revision
-          value: master
+          value: v1.1-branch
         - name: url
           value: https://github.com/kubeflow/gcp-blueprints.git
   - name: testing-repo
@@ -28,7 +28,7 @@ spec:
       type: git
       params:
         - name: revision
-          value: master
+          value: v1.1-branch
         - name: url
           value: https://github.com/kubeflow/testing.git
   # Need to use a KSA with appropriate GSA
