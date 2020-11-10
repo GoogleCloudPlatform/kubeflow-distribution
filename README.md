@@ -11,8 +11,6 @@ Kubeflow is deployed as follows
 
 * Once the Kubeflow cluster is created we use kustomize to deploy the KF applications on it.
 
-For more information about blueprints refer to the [kpt blueprint guide](https://googlecontainertools.github.io/kpt/guides/producer/blueprint/)
-
 ## Getting Started
 
 1. Use the [management](./management/README.md) blueprint to spin up a management
