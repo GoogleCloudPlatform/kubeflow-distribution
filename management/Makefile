@@ -1,4 +1,9 @@
 # NAME, LOCATION, PROJECT in Kptfile are set by calling kpt cfg set
+#
+# NAME: The cluster name of the management cluster. Warning, it should be different
+#   from your Kubeflow cluster.
+# LOCATION: Location of the management cluster. You can choose either regional or zonal.
+# PROJECT: Google Cloud project where this management cluster is created in.
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
@@ -6,7 +11,7 @@ PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
+MANIFESTS_URL=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
 
 # Directory where manifests should be fetched to
 MANIFESTS_DIR=./upstream/management
@@ -28,9 +33,7 @@ ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
 endif
 
 
-# Get packages
-# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-# users don't end up pulling tests or other things they don't need.
+# Get upstream packages
 .PHONY: get-pkg
 get-pkg:
 	mkdir -p  ./upstream
@@ -55,7 +58,7 @@ hydrate: validate-values
 	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
 # Create a kubeconfig context for the cluster
-.PHONE: create-ctxt
+.PHONY: create-ctxt
 create-ctxt: validate-values
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
@@ -82,7 +85,8 @@ apply-kcc: hydrate-kcc
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system
 
 # Update the upstream packages
-.PHONE: update
+# Please edit MANIFESTS_URL to the desired version before running this.
+.PHONY: update
 update:
 	rm -rf upstream
 	make get-pkg
