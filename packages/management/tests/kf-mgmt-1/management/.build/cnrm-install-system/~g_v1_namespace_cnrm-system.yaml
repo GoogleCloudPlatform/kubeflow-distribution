@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    cnrm.cloud.google.com/version: 1.15.1
-  labels:
-    cnrm.cloud.google.com/system: "true"
-  name: cnrm-system

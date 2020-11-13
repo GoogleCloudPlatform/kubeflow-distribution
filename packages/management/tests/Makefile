@@ -55,24 +55,27 @@ apply-bucket:
 
 .PHONY: verify-bucket
 verify-bucket:
-	kubectl wait --for=condition=Ready --timeout=10s storagebucket $(BUCKET)
+	kubectl wait --for=condition=Ready --timeout=30s storagebucket $(BUCKET)
 	gsutil ls gs://$(BUCKET)
 
-.PHONY: cluster
-cluster: get-pkg set-values apply-cluster
+.PHONY: 1-cluster
+1-cluster: get-pkg set-values apply-cluster
 
-.PHONY: manage-project
-manage-project: create-ctxt apply-kcc apply-managed-project
+.PHONY: 2-manage-project
+2-manage-project: create-ctxt apply-kcc apply-managed-project
 
 .PHONY: bucket
-bucket: apply-bucket verify-bucket
+3-bucket: apply-bucket verify-bucket
+
+.PHONY: all
+all: 1-cluster 2-manage-project 3-bucket
 
 .PHONY: cleanup
 cleanup:
 	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
 	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
 		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
-		--role=owner || echo "already deleted"
+		--role=roles/owner || echo "already deleted"
 	yes | gcloud --project=$(PROJECT) iam service-accounts delete \
 		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com || echo "already deleted"
 	yes | gcloud --project=$(PROJECT) container clusters delete \
