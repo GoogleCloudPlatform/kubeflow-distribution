@@ -10,8 +10,11 @@ PROJECT=gongyuan-pipeline-test
 MANAGED_PROJECT=gongyuan-pipeline-test
 BUCKET=gongyuan-test-5
 
+# Test master
+MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@master
+
 # Test 1.1.0
-MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
+# MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@1.1.0
 
 # For development, you can update the following line to point to your own branch.
 # MANIFESTS_URL=https://github.com/USER/gcp-blueprints.git/management@BRANCH
