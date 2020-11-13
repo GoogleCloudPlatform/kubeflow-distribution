@@ -27,6 +27,12 @@ ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
 	$(error Either of NAME, LOCATION, PROJECT values not set)
 endif
 
+# Validate NAME <= 18 characters
+.PHONY: validate-name-length
+validate-name-length:
+ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
+	$(error NAME cannot exceed 18 characthers in length. Got: "$(NAME)")
+endif
 
 # Get packages
 # TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
