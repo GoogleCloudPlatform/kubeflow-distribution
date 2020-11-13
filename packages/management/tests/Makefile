@@ -11,9 +11,10 @@ MANAGED_PROJECT=gongyuan-pipeline-test
 BUCKET=gongyuan-test-5
 
 # Test 1.1.0
-# MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
-# TODO(Bobgy): Switch to pinned branch
-MANAGEMENT_URL=https://github.com/Bobgy/gcp-blueprints.git/management@mgmt-package
+MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
+
+# For development, you can update the following line to point to your own branch.
+# MANIFESTS_URL=https://github.com/USER/gcp-blueprints.git/management@BRANCH
 
 .PHONY: test
 test: 1-cluster 2-manage-project 3-bucket

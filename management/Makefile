@@ -11,9 +11,10 @@ PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-# MANIFESTS_URL=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
-# TODO(Bobgy): remove this
-MANIFESTS_URL=https://github.com/Bobgy/gcp-blueprints.git/packages/management@mgmt-package
+MANIFESTS_URL=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
+
+# For development, you can update the following line to point to your own branch.
+# MANIFESTS_URL=https://github.com/USER/gcp-blueprints.git/packages/management@BRANCH
 
 # Directory where manifests should be fetched to
 MANIFESTS_DIR=./upstream/management
