@@ -4,7 +4,7 @@
 #   from your Kubeflow cluster.
 # LOCATION: Location of the management cluster. You can choose either regional or zonal.
 # PROJECT: Google Cloud project where this management cluster is created in.
-NAME=kf-mgmt-1
+NAME=kf-mgmt-2
 LOCATION=asia-east1-c
 PROJECT=gongyuan-pipeline-test
 MANAGED_PROJECT=gongyuan-pipeline-test
