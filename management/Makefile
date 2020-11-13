@@ -1,4 +1,9 @@
 # NAME, LOCATION, PROJECT in Kptfile are set by calling kpt cfg set
+#
+# NAME: The cluster name of the management cluster. Warning, it should be different
+#   from your Kubeflow cluster.
+# LOCATION: Location of the management cluster. You can choose either regional or zonal.
+# PROJECT: Google Cloud project where this management cluster is created in.
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
@@ -6,7 +11,10 @@ PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
+MANIFESTS_URL=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
+
+# For development, you can update the following line to point to your own branch.
+# MANIFESTS_URL=https://github.com/USER/gcp-blueprints.git/packages/management@BRANCH
 
 # Directory where manifests should be fetched to
 MANIFESTS_DIR=./upstream/management
@@ -34,9 +42,7 @@ ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), t
 	$(error NAME cannot exceed 18 characthers in length. Got: "$(NAME)")
 endif
 
-# Get packages
-# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-# users don't end up pulling tests or other things they don't need.
+# Get upstream packages
 .PHONY: get-pkg
 get-pkg:
 	mkdir -p  ./upstream
@@ -61,7 +67,7 @@ hydrate: validate-values
 	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
 # Create a kubeconfig context for the cluster
-.PHONE: create-ctxt
+.PHONY: create-ctxt
 create-ctxt: validate-values
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
@@ -84,11 +90,23 @@ hydrate-kcc:
 apply-kcc: hydrate-kcc
 	anthoscli apply -f .build/cnrm-install-services
 	anthoscli apply -f .build/cnrm-install-iam
-	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system/~g_v1_namespace_cnrm-system.yaml
+	# Fisrt, apply and wait for the CRDs and namespaces
+	for resource in $$(find .build/cnrm-install-system -name '~g_v1_namespace_*.yaml' -o -name '*_customresourcedefinition_*.yaml'); \
+	do \
+		kubectl --context=$(MGMTCTXT) apply -f $$resource; \
+	done
+	# Then, apply all the resources
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system
+	# Wait until config connector operator pods are ready
+	kubectl wait -n configconnector-operator-system --for=condition=Ready pod --all --timeout 5m
+	# Wait for config connector pods are created
+	sleep 60
+	# Wait until config connector pods are ready
+	kubectl wait -n cnrm-system --for=condition=Ready pod --all --timeout 5m
 
 # Update the upstream packages
-.PHONE: update
+# Please edit MANIFESTS_URL to the desired version before running this.
+.PHONY: update
 update:
 	rm -rf upstream
 	make get-pkg
