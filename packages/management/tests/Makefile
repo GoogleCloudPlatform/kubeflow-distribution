@@ -11,41 +11,39 @@ MANAGED_PROJECT=gongyuan-pipeline-test
 BUCKET=gongyuan-test-5
 
 MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
-DIR=$(NAME)/management
 
 .PHONY: get-pkg
 get-pkg:
-	rm -rf $(NAME)
-	mkdir -p $(NAME)
-	kpt pkg get $(MANAGEMENT_URL) $(NAME)
-	cd $(DIR) && make get-pkg
+	rm -rf management
+	kpt pkg get $(MANAGEMENT_URL) .
+	cd management && make get-pkg
 
 .PHONY: set-values
 set-values:
-	kpt cfg set $(DIR)/instance name $(NAME)
-	kpt cfg set $(DIR)/instance location $(LOCATION)
-	kpt cfg set $(DIR)/instance gcloud.core.project $(PROJECT)
+	kpt cfg set management/instance name $(NAME)
+	kpt cfg set management/instance location $(LOCATION)
+	kpt cfg set management/instance gcloud.core.project $(PROJECT)
 
-	kpt cfg set $(DIR)/upstream/management name $(NAME)
-	kpt cfg set $(DIR)/upstream/management location $(LOCATION)
-	kpt cfg set $(DIR)/upstream/management gcloud.core.project $(PROJECT)
+	kpt cfg set management/upstream/management name $(NAME)
+	kpt cfg set management/upstream/management location $(LOCATION)
+	kpt cfg set management/upstream/management gcloud.core.project $(PROJECT)
 
 .PHONY: apply-cluster
 apply-cluster:
-	cd $(DIR) && make apply
+	cd management && make apply
 
 .PHONY: create-ctxt
 create-ctxt:
-	cd $(DIR) && make create-ctxt
+	cd management && make create-ctxt
 
 .PHONY: apply-kcc
 apply-kcc:
-	cd $(DIR) && make apply-kcc
+	cd management && make apply-kcc
 
 .PHONY: apply-managed-project
 apply-managed-project:
-	kpt cfg set $(DIR)/instance managed-project $(MANAGED_PROJECT)
-	anthoscli apply -f $(DIR)/instance/managed-project/iam.yaml
+	kpt cfg set management/instance managed-project $(MANAGED_PROJECT)
+	anthoscli apply -f management/instance/managed-project/iam.yaml
 
 .PHONY: create-bucket
 apply-bucket:
