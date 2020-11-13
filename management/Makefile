@@ -90,7 +90,11 @@ apply-kcc: hydrate-kcc
 	done
 	# Then, apply all the resources
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system
-	# Wait until all config connector pods are running
+	# Wait until config connector operator pods are ready
+	kubectl wait -n configconnector-operator-system --for=condition=Ready pod --all --timeout 5m
+	# Wait for config connector pods are created
+	sleep 60
+	# Wait until config connector pods are ready
 	kubectl wait -n cnrm-system --for=condition=Ready pod --all --timeout 5m
 
 # Update the upstream packages

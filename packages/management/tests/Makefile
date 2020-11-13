@@ -4,7 +4,7 @@
 #   from your Kubeflow cluster.
 # LOCATION: Location of the management cluster. You can choose either regional or zonal.
 # PROJECT: Google Cloud project where this management cluster is created in.
-NAME=kf-mgmt-2
+NAME=kf-mgmt-1
 LOCATION=asia-east1-c
 PROJECT=gongyuan-pipeline-test
 MANAGED_PROJECT=gongyuan-pipeline-test
@@ -14,6 +14,20 @@ BUCKET=gongyuan-test-5
 # MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
 # TODO(Bobgy): Switch to pinned branch
 MANAGEMENT_URL=https://github.com/Bobgy/gcp-blueprints.git/management@mgmt-package
+
+.PHONY: test
+test: 1-cluster 2-manage-project 3-bucket
+
+.PHONY: cleanup
+cleanup:
+	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
+	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
+		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
+		--role=roles/owner || echo "already deleted"
+	yes | gcloud --project=$(PROJECT) iam service-accounts delete \
+		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com || echo "already deleted"
+	yes | gcloud --project=$(PROJECT) container clusters delete \
+	   --zone=$(LOCATION) $(NAME) || echo "already deleted"
 
 .PHONY: get-pkg
 get-pkg:
@@ -67,17 +81,3 @@ verify-bucket:
 
 .PHONY: bucket
 3-bucket: apply-bucket verify-bucket
-
-.PHONY: all
-all: 1-cluster 2-manage-project 3-bucket
-
-.PHONY: cleanup
-cleanup:
-	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
-	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
-		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
-		--role=roles/owner || echo "already deleted"
-	yes | gcloud --project=$(PROJECT) iam service-accounts delete \
-		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com || echo "already deleted"
-	yes | gcloud --project=$(PROJECT) container clusters delete \
-	   --zone=$(LOCATION) $(NAME) || echo "already deleted"
