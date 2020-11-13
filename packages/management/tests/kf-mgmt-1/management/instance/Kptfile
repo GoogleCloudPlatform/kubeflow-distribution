@@ -12,18 +12,18 @@ openAPI:
           name: gcloud.core.project
           value: gongyuan-pipeline-test
           isSet: true
-          setBy: kpt
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
           name: name
-          value: YOUR-NAME
+          value: kf-mgmt-1
           isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           name: location
-          value: us-central1
+          value: asia-east1-c
+          isSet: true
     io.k8s.cli.substitutions.cluster-name:
       x-k8s-cli:
         substitution:
@@ -58,7 +58,8 @@ openAPI:
       x-k8s-cli:
         setter:
           name: managed-project
-          value: MANAGED_PROJECT
+          value: gongyuan-pipeline-test
+          isSet: true
     io.k8s.cli.substitutions.managed-project-ref:
       x-k8s-cli:
         substitution:

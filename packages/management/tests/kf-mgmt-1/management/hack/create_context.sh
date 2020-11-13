@@ -8,9 +8,9 @@
 # TODO(jlewi): Support zonal clusters as well
 # TODO(jlewi): How should we dedupe with kubeflow/hack?
 # Should we make hack its own package and put it in upstream?
-set -x 
+set -x
 
-echo Checking if context ${NAME} exists 
+echo Checking if context ${NAME} exists
 
 kubectl config use-context ${NAME}
 

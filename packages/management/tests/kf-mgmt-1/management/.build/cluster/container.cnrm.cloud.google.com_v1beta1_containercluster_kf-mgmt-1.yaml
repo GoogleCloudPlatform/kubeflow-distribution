@@ -1,0 +1,14 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  annotations:
+    gke.io/cluster: bootstrap://
+  name: kf-mgmt-1
+  namespace: gongyuan-pipeline-test
+spec:
+  initialNodeCount: 3
+  location: asia-east1-c
+  releaseChannel:
+    channel: REGULAR
+  workloadIdentityConfig:
+    identityNamespace: gongyuan-pipeline-test.svc.id.goog

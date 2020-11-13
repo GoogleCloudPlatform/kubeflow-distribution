@@ -1,0 +1,42 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.15.1
+  labels:
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-admin
+rules:
+- apiGroups:
+  - accesscontextmanager.cnrm.cloud.google.com
+  - bigquery.cnrm.cloud.google.com
+  - bigtable.cnrm.cloud.google.com
+  - cloudbuild.cnrm.cloud.google.com
+  - compute.cnrm.cloud.google.com
+  - container.cnrm.cloud.google.com
+  - dataflow.cnrm.cloud.google.com
+  - dns.cnrm.cloud.google.com
+  - firestore.cnrm.cloud.google.com
+  - iam.cnrm.cloud.google.com
+  - kms.cnrm.cloud.google.com
+  - pubsub.cnrm.cloud.google.com
+  - redis.cnrm.cloud.google.com
+  - resourcemanager.cnrm.cloud.google.com
+  - secretmanager.cnrm.cloud.google.com
+  - servicenetworking.cnrm.cloud.google.com
+  - serviceusage.cnrm.cloud.google.com
+  - sourcerepo.cnrm.cloud.google.com
+  - spanner.cnrm.cloud.google.com
+  - sql.cnrm.cloud.google.com
+  - storage.cnrm.cloud.google.com
+  - storagetransfer.cnrm.cloud.google.com
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete

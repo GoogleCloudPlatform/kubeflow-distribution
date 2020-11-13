@@ -1,0 +1,31 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerNodePool
+metadata:
+  annotations:
+    gke.io/cluster: bootstrap://
+  clusterName: mgmt-project-id/mgmt-location/mgmt-name
+  name: kf-mgmt-1-pool
+  namespace: gongyuan-pipeline-test
+spec:
+  autoscaling:
+    maxNodeCount: 3
+    minNodeCount: 1
+  clusterRef:
+    name: kf-mgmt-1
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  nodeConfig:
+    diskSizeGb: 100
+    diskType: pd-standard
+    machineType: n1-standard-4
+    metadata:
+      disable-legacy-endpoints: "true"
+    oauthScopes:
+    - https://www.googleapis.com/auth/devstorage.read_only
+    - https://www.googleapis.com/auth/logging.write
+    - https://www.googleapis.com/auth/monitoring
+    - https://www.googleapis.com/auth/trace.append
+    preemptible: false
+    workloadMetadataConfig:
+      mode: GKE_METADATA

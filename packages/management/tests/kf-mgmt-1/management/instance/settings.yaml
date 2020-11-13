@@ -2,5 +2,5 @@
 # so its easy to get them using yq for use in Make.
 # TODO(jlewi): File a feature request to have kpt list-setters return the value
 project: gongyuan-pipeline-test # {"$kpt-set":"gcloud.core.project"}
-name: YOUR-NAME # {"$kpt-set":"name"}
-location: us-central1 # {"$kpt-set":"location"}
+name: kf-mgmt-1 # {"$kpt-set":"name"}
+location: asia-east1-c # {"$kpt-set":"location"}

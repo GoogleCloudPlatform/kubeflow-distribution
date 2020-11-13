@@ -11,14 +11,14 @@ MANAGED_PROJECT=gongyuan-pipeline-test
 BUCKET=gongyuan-test-5
 
 MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
-DIR=$(NAME)
+DIR=$(NAME)/management
 
 .PHONY: get-pkg
 get-pkg:
-	rm -rf $(DIR)
-	mkdir -p $(DIR)
-	kpt pkg get $(MANAGEMENT_URL) $(DIR)
-	cd $(DIR)/management && make get-pkg
+	rm -rf $(NAME)
+	mkdir -p $(NAME)
+	kpt pkg get $(MANAGEMENT_URL) $(NAME)
+	cd $(DIR) && make get-pkg
 
 .PHONY: set-values
 set-values:
@@ -32,27 +32,30 @@ set-values:
 
 .PHONY: apply-cluster
 apply-cluster:
-	cd $(DIR)/management && make apply
+	cd $(DIR) && make apply
 
 .PHONY: create-ctxt
 create-ctxt:
-	cd $(DIR)/management && make create-ctxt
+	cd $(DIR) && make create-ctxt
 
 .PHONY: apply-kcc
 apply-kcc:
-	cd $(DIR)/management && make apply-kcc
+	cd $(DIR) && make apply-kcc
 
 .PHONY: apply-managed-project
 apply-managed-project:
-	kpt cfg set $(DIR)/management/instance managed-project $(MANAGED_PROJECT)
-	anthoscli apply -f $(DIR)/management/instance/managed-project/iam.yaml
+	kpt cfg set $(DIR)/instance managed-project $(MANAGED_PROJECT)
+	anthoscli apply -f $(DIR)/instance/managed-project/iam.yaml
 
 .PHONY: create-bucket
-create-bucket:
-	kubectl create -f storagebucket.yaml
+apply-bucket:
+	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run=client | kubectl apply -f -
+	kubectl config set-context --current --namespace $(MANAGED_PROJECT)
+	kubectl apply -f storagebucket.yaml
 
 .PHONY: verify-bucket
 verify-bucket:
+	kubectl wait --for=condition=Ready --timeout=10s storagebucket $(BUCKET)
 	gsutil ls gs://$(BUCKET)
 
 .PHONY: cluster
@@ -62,4 +65,15 @@ cluster: get-pkg set-values apply-cluster
 manage-project: create-ctxt apply-kcc apply-managed-project
 
 .PHONY: bucket
-bucket: create-bucket verify-bucket
+bucket: apply-bucket verify-bucket
+
+.PHONY: cleanup
+cleanup:
+	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
+	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
+		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
+		--role=owner
+	yes | gcloud --project=$(PROJECT) iam service-accounts delete \
+		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com
+	yes | gcloud --project=$(PROJECT) container clusters delete \
+	   --zone=$(LOCATION) $(NAME)
