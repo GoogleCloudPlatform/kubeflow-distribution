@@ -84,7 +84,7 @@ apply-kcc: hydrate-kcc
 	anthoscli apply -f .build/cnrm-install-services
 	anthoscli apply -f .build/cnrm-install-iam
 	# apply and wait for the namespaces first
-	kubectl --context=$(MGMTCTXT) apply -f $(find .build/cnrm-install-system/~g_v1_namespace_*.yaml)
+	kubectl --context=$(MGMTCTXT) apply -f $(shell find .build/cnrm-install-system/~g_v1_namespace_*.yaml | grep .)
 	kubectl --context=$(MGMTCTXT) apply -f .build/cnrm-install-system
 
 # Update the upstream packages
