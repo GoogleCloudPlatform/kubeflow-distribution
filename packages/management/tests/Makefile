@@ -72,8 +72,8 @@ cleanup:
 	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
 	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
 		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
-		--role=owner
+		--role=owner || echo "already deleted"
 	yes | gcloud --project=$(PROJECT) iam service-accounts delete \
-		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com
+		$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com || echo "already deleted"
 	yes | gcloud --project=$(PROJECT) container clusters delete \
-	   --zone=$(LOCATION) $(NAME)
+	   --zone=$(LOCATION) $(NAME) || echo "already deleted"
