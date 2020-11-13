@@ -10,7 +10,10 @@ PROJECT=gongyuan-pipeline-test
 MANAGED_PROJECT=gongyuan-pipeline-test
 BUCKET=gongyuan-test-5
 
-MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
+# Test 1.1.0
+# MANAGEMENT_URL=https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0
+# TODO(Bobgy): Switch to pinned branch
+MANAGEMENT_URL=https://github.com/Bobgy/gcp-blueprints.git/management@mgmt-package
 
 .PHONY: get-pkg
 get-pkg:

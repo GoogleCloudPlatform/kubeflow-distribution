@@ -11,6 +11,8 @@ metadata:
   annotations:
     # Annotation required by anthoscli
     gke.io/cluster: "bootstrap://"
+    # We are defining the nodepool in nodepool.yaml
+    cnrm.cloud.google.com/remove-default-node-pool: "true"
 spec:
   # Use a regional cluster. Regional offer higher availability and the cluster management fee is the same.
   location: LOCATION # {"$kpt-set":"location"}
