@@ -12,6 +12,7 @@ deploy-and-test: check-env 1-cluster 2-manage-project 3-bucket
 
 .PHONY: cleanup
 cleanup: check-env
+	kpt cfg set resources bucket BUCKET
 	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
 	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
 		--member=serviceAccount:$(NAME)-cnrm-system@$(PROJECT).iam.gserviceaccount.com \
@@ -73,7 +74,8 @@ apply-managed-project:
 apply-bucket:
 	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run=client | kubectl apply -f -
 	kubectl config set-context --current --namespace $(MANAGED_PROJECT)
-	kubectl apply -f ./storagebucket.yaml
+	kpt cfg set resources bucket $(BUCKET)
+	kubectl apply -f ./resources/storagebucket.yaml
 
 .PHONY: verify-bucket
 verify-bucket:
