@@ -58,19 +58,12 @@ func TestHydrate(t *testing.T) {
 	instanceVars := map[string]string {
 		"mgmt-ctxt": "mgmt-ctxt",
 		"name": "kf-test",
+		"gcloud.compute.zone": "us-east1-d",
 		"gcloud.core.project": "kubeflow-ci-deployment",
 		"location": "us-east1",
 		"email": "user@gmail.com",
 	}
 	setValues(instanceVars, "instance")
-
-	upstreamVars := map[string]string {
-		"name": "kf-test",
-		"gcloud.core.project": "kubeflow-ci-deployment",
-		"gcloud.compute.zone": "us-east1-d",
-		"location": "us-east1",
-	}
-	setValues(upstreamVars, "upstream/manifests/gcp")
 
 	cmd = exec.Command("make", "hydrate")
 	cmd.Dir = target
