@@ -15,9 +15,9 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     ```
 1. Set values for the name, project, and location of your management cluster:
     ```bash
-    kpt cfg set ./instance name NAME
-    kpt cfg set ./instance location LOCATION
-    kpt cfg set ./instance gcloud.core.project PROJECT
+    kpt cfg set ./instance name $NAME
+    kpt cfg set ./instance location $LOCATION
+    kpt cfg set ./instance gcloud.core.project $PROJECT
     ```
     * NAME is the cluster name of your management cluster. Management cluster
     should be a different cluster from your Kubeflow cluster.
@@ -43,10 +43,56 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     ```bash
     make create-ctxt
     ```
+    The context will be called `${NAME}`.
 1. Install the config connector:
     ```bash
     make apply-kcc
     ```
+
+## Clean up Instructions
+The following instructions introduce how to clean up all resources created when
+installing management cluster and using management cluster to manage Google
+Cloud resources in the managed project.
+
+Be cautious, if you want to keep managed Google Cloud resources, you should
+finish steps below to keep managed Google Cloud resources before cleaning up
+management cluster.
+
+### Clean up or keep managed Google Cloud resources
+There are Google Cloud resources managed by Config Connector in the
+management cluster after you deploy Kubeflow clusters with this management
+cluster.
+
+To delete all the managed Google Cloud resources, delete the managed project
+namespace:
+```bash
+kubectl use-context ${MGMTCTXT}
+kubectl delete namespace --wait ${MANAGED_PROJECT}
+```
+To keep these Google Cloud resources after deleting cnrm resources, you should
+add annotation `cnrm.cloud.google.com/deletion-policy: abandon` to all of them
+**before** deleting the namespace.
+
+Refer to
+[Config Connector: Keeping resources after deletion](https://cloud.google.com/config-connector/docs/how-to/managing-deleting-resources#keeping_resources_after_deletion)
+for more details.
+
+### Clean up management cluster Google Cloud resources
+
+To delete the IAM policy binding for the managed project, the Google service account,
+and the management cluster:
+```bash
+gcloud projects remove-iam-policy-binding ${MANAGED_PROJECT} \
+    --member=serviceAccount:${NAME}-cnrm-system@${PROJECT}.iam.gserviceaccount.com \
+    --role=roles/owner
+gcloud --project=${PROJECT} iam service-accounts delete \
+    ${NAME}-cnrm-system@${PROJECT}.iam.gserviceaccount.com
+gcloud --project=${PROJECT} container clusters delete \
+    --zone=${LOCATION} ${NAME}
+# Or the following for a regional cluster
+# gcloud --project=${PROJECT} container clusters delete \
+#     --region=${LOCATION} ${NAME}
+```
 
 ## Upgrade Instructions
 
@@ -80,7 +126,7 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     ```
 1. Apply updated cluster and config connector:
     ```bash
-    make apply apply-kcc
+    make apply-kcc
     ```
     Note, you do not need to call `kpt cfg set` again because they
     will be called automatically during apply using values stored in
