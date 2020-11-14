@@ -1,17 +1,14 @@
 # Use .env file to include environment specific parameters
-# Reference: https://lithic.tech/blog/2020-05/makefile-dot-env
-ifneq (,$(wildcard ./.env))
-    include .env
-endif
+include .env
 
 # Test master
 MANAGEMENT_URL?=https://github.com/kubeflow/gcp-blueprints.git/management@master
 
 .PHONY: test
-deploy-and-test: check-env 1-cluster 2-manage-project 3-bucket
+deploy-and-test: 1-cluster 2-manage-project 3-bucket
 
 .PHONY: cleanup
-cleanup: check-env
+cleanup:
 	kpt cfg set resources bucket BUCKET
 	kubectl delete ns --wait $(MANAGED_PROJECT) || echo "already deleted"
 	yes | gcloud projects remove-iam-policy-binding $(MANAGED_PROJECT) \
@@ -22,20 +19,14 @@ cleanup: check-env
 	yes | gcloud --project=$(PROJECT) container clusters delete \
 	   --zone=$(LOCATION) $(NAME) || echo "already deleted"
 
-.PHONY: check-env
-check-env:
-ifeq (,$(wildcard ./.env))
-	$(error ./.env configuration does not exist, please set up referring to ./example.env)
-endif
-
 .PHONY: 1-cluster
-1-cluster: check-env get-pkg set-values apply-cluster
+1-cluster: get-pkg set-values apply-cluster
 
 .PHONY: 2-manage-project
-2-manage-project: check-env create-ctxt apply-kcc apply-managed-project
+2-manage-project: create-ctxt apply-kcc apply-managed-project
 
 .PHONY: bucket
-3-bucket: check-env apply-bucket verify-bucket
+3-bucket: apply-bucket verify-bucket
 
 .PHONY: get-pkg
 get-pkg:
@@ -44,7 +35,7 @@ get-pkg:
 	cd management && make get-pkg
 
 .PHONY: set-values
-set-values: check-env
+set-values:
 	kpt cfg set management/instance name $(NAME)
 	kpt cfg set management/instance location $(LOCATION)
 	kpt cfg set management/instance gcloud.core.project $(PROJECT)

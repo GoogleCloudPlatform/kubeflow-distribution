@@ -15,6 +15,7 @@
 Usage:
 ```bash
 # deploy management cluster in Kubeflow 1.1.0
+# and verify managing a GCS bucket with it
 MANAGEMENT_URL="https://github.com/kubeflow/gcp-blueprints.git/management@v1.1.0" make
 
 # uninstall config connector, but keep all user resources to prepare for upgrade
@@ -25,6 +26,6 @@ kubectl delete validatingwebhookconfiguration validating-webhook.cnrm.cloud.goog
 kubectl delete mutatingwebhookconfiguration mutating-webhook.cnrm.cloud.google.com --ignore-not-found --wait=true
 
 # deploy management cluster in Kubeflow 1.2.0
-cd ../management
+# and verify picking up the existing GCS bucket with it
 make
 ```

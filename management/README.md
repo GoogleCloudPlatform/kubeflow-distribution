@@ -107,9 +107,9 @@ gcloud --project=${PROJECT} container clusters delete \
     ```
 1. Check your existing config connector version:
     ```bash
-    # For Kubeflow 1.1, it should be 1.15.0
+    # For Kubeflow 1.1, it should be 1.15.1
     $ kubectl get namespace cnrm-system -ojsonpath='{.metadata.annotations.cnrm\.cloud\.google\.com\/version}'
-    1.15.0
+    1.15.1
     ```
 1. Uninstall the old config connector in the management cluster:
     ```bash
