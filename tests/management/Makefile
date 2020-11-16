@@ -1,8 +1,13 @@
 # Use .env file to include environment specific parameters
 include .env
 
+USER?=kubeflow
+REPO?=gcp-blueprints
+BRANCH?=master
+
 # Test master
-MANAGEMENT_URL?=https://github.com/kubeflow/gcp-blueprints.git/management@master
+MANAGEMENT_URL?=https://github.com/$(USER)/$(REPO).git/management@$(BRANCH)
+PACKAGE_URL?=https://github.com/$(USER)/$(REPO).git/packages/management@$(BRANCH)
 
 .PHONY: test
 deploy-and-test: 1-cluster 2-manage-project 3-bucket
@@ -23,7 +28,7 @@ cleanup:
 1-cluster: get-pkg set-values apply-cluster
 
 .PHONY: 2-manage-project
-2-manage-project: create-ctxt apply-kcc apply-managed-project
+2-manage-project: create-context apply-kcc apply-managed-project
 
 .PHONY: bucket
 3-bucket: apply-bucket verify-bucket
@@ -32,7 +37,10 @@ cleanup:
 get-pkg:
 	rm -rf management
 	kpt pkg get $(MANAGEMENT_URL) .
-	cd management && make get-pkg
+	cd management && PACKAGE_URL=$(PACKAGE_URL) make get-pkg
+	# make set-values.sh an empty script, because in this test, we set values
+	# directly via kpt cfg set
+	echo "#!/bin/bash" > management/set-values.sh
 
 .PHONY: set-values
 set-values:
@@ -46,11 +54,12 @@ set-values:
 
 .PHONY: apply-cluster
 apply-cluster:
-	cd management && make apply
+	# After Kubflow v1.2, we use apply-cluster instead of apply
+	cd management && (make apply-cluster || make apply)
 
-.PHONY: create-ctxt
-create-ctxt:
-	cd management && make create-ctxt
+.PHONY: create-context
+create-context:
+	cd management && make create-context
 
 .PHONY: apply-kcc
 apply-kcc:
