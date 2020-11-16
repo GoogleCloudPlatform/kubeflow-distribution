@@ -43,10 +43,7 @@ ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
 	$(error Either of NAME, LOCATION, PROJECT values not set)
 endif
-
 # Validate NAME <= 18 characters
-.PHONY: validate-name-length
-validate-name-length:
 ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
 	$(error NAME cannot exceed 18 characthers in length. Got: "$(NAME)")
 endif
