@@ -67,7 +67,7 @@ create-ctxt: validate-values
 	# Create a kubeconfig context for the cluster
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
-	   NAME=$(NAME) ./hack/create_context.sh
+	   NAME=$(NAME) $(PACKAGE_DIR)/hack/create_context.sh
 
 .PHONY: hydrate-kcc
 hydrate-kcc: validate-values
@@ -114,8 +114,9 @@ uninstall-kcc:
 	# You cannot use it to uninstall the old config connector installed with Kubeflow v1.1.
 	kubectl $(CTXT_ARG) delete configconnector --all
 
-.PHONY: delete-gcp-resources
-delete-gcp-resources: validate-values
+.PHONY: delete-cluster
+delete-cluster: validate-values
+	# Deletes management cluster GCP resources.
 	# Similar to uninstall-kcc, all Google Cloud resources managed by this
 	# management cluster will be kept.
 	-gcloud --project=${PROJECT} iam service-accounts delete \

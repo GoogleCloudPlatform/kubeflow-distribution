@@ -55,9 +55,9 @@ hydrate-kcc: set-values
 apply-kcc: hydrate-kcc
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile apply-kcc
 
-.PHONY: delete-gcp-resources
-delete-gcp-resources: set-values
-	$(MAKE) -f $(PACKAGE_DIR)/Makefile delete-gcp-resources
+.PHONY: delete-cluster
+delete-cluster: set-values
+	$(MAKE) -f $(PACKAGE_DIR)/Makefile delete-cluster
 
 .PHONY: uninstall-kcc
 uninstall-kcc:
