@@ -2,7 +2,7 @@
 include .env
 
 # Test master
-MANAGEMENT_URL?=https://github.com/kubeflow/gcp-blueprints.git/management@master
+PACKAGE_URL?=https://github.com/kubeflow/gcp-blueprints.git/management@master
 
 .PHONY: test
 deploy-and-test: 1-cluster 2-manage-project 3-bucket
@@ -31,7 +31,7 @@ cleanup:
 .PHONY: get-pkg
 get-pkg:
 	rm -rf management
-	kpt pkg get $(MANAGEMENT_URL) .
+	kpt pkg get $(PACKAGE_URL) .
 	cd management && make get-pkg
 
 .PHONY: set-values
