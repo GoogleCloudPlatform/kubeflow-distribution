@@ -38,6 +38,9 @@ get-pkg:
 	rm -rf management
 	kpt pkg get $(MANAGEMENT_URL) .
 	cd management && PACKAGE_URL=$(PACKAGE_URL) make get-pkg
+	# make set-values.sh an empty script, because in this test, we set values
+	# directly via kpt cfg set
+	echo "#!/bin/bash" > management/set-values.sh
 
 .PHONY: set-values
 set-values:
