@@ -8,10 +8,7 @@ PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters
 export MGMTCTXT=$(NAME)
 
 # The URL you want to fetch upstream package from
-PACKAGE_URL=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
-
-# For development, you can update the following line to point to your own branch.
-# PACKAGE_URL=https://github.com/USER/gcp-blueprints.git/packages/management@BRANCH
+PACKAGE_URL?=https://github.com/kubeflow/gcp-blueprints.git/packages/management@master
 
 INSTANCE_DIR=./instance
 

@@ -1,8 +1,13 @@
 # Use .env file to include environment specific parameters
 include .env
 
+USER?=kubeflow
+REPO?=gcp-blueprints
+BRANCH?=master
+
 # Test master
-PACKAGE_URL?=https://github.com/kubeflow/gcp-blueprints.git/management@master
+MANAGEMENT_URL?=https://github.com/$(USER)/$(REPO).git/management@$(BRANCH)
+PACKAGE_URL?=https://github.com/$(USER)/$(REPO).git/packages/management@$(BRANCH)
 
 .PHONY: test
 deploy-and-test: 1-cluster 2-manage-project 3-bucket
@@ -31,8 +36,8 @@ cleanup:
 .PHONY: get-pkg
 get-pkg:
 	rm -rf management
-	kpt pkg get $(PACKAGE_URL) .
-	cd management && make get-pkg
+	kpt pkg get $(MANAGEMENT_URL) .
+	cd management && PACKAGE_URL=$(PACKAGE_URL) make get-pkg
 
 .PHONY: set-values
 set-values:
