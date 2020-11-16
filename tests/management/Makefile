@@ -46,7 +46,8 @@ set-values:
 
 .PHONY: apply-cluster
 apply-cluster:
-	cd management && make apply
+	# After Kubflow v1.2, we use apply-cluster instead of apply
+	cd management && (make apply-cluster || make apply)
 
 .PHONY: create-ctxt
 create-ctxt:
