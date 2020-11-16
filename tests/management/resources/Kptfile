@@ -1,0 +1,14 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: resources
+packageMetadata:
+  shortDescription: sample description
+openAPI:
+  definitions:
+    io.k8s.cli.setters.bucket:
+      x-k8s-cli:
+        setter:
+          name: bucket
+          value: BUCKET
+          isSet: true

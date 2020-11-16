@@ -6,4 +6,4 @@ To update:
 
 1. Download the the latest GCS install bundle listed on (https://cloud.google.com/config-connector/docs/how-to/advanced-install#manual).
 
-1. Untar and replace the `operator-system/configconnector-operator.yaml`.
+1. Untar and replace the `install-system/configconnector-operator.yaml`.
