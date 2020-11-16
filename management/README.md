@@ -42,7 +42,7 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     and look into `build/cluster` folder.
 1. Create a kubectl context for the management cluster, it will be called `${NAME}`:
     ```bash
-    make create-ctxt
+    make create-context
     ```
 1. Install the config connector:
     ```bash

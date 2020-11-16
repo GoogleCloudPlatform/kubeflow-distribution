@@ -28,7 +28,7 @@ cleanup:
 1-cluster: get-pkg set-values apply-cluster
 
 .PHONY: 2-manage-project
-2-manage-project: create-ctxt apply-kcc apply-managed-project
+2-manage-project: create-context apply-kcc apply-managed-project
 
 .PHONY: bucket
 3-bucket: apply-bucket verify-bucket
@@ -57,9 +57,9 @@ apply-cluster:
 	# After Kubflow v1.2, we use apply-cluster instead of apply
 	cd management && (make apply-cluster || make apply)
 
-.PHONY: create-ctxt
-create-ctxt:
-	cd management && make create-ctxt
+.PHONY: create-context
+create-context:
+	cd management && make create-context
 
 .PHONY: apply-kcc
 apply-kcc:

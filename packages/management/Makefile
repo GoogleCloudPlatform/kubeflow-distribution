@@ -62,8 +62,8 @@ apply-cluster:
 	# Create the cluster
 	anthoscli apply -f $(BUILD_DIR)/cluster
 
-.PHONY: create-ctxt
-create-ctxt: validate-values
+.PHONY: create-context
+create-context: validate-values
 	# Create a kubeconfig context for the cluster
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \

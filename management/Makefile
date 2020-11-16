@@ -38,11 +38,15 @@ set-values:
 
 .PHONY: apply-cluster
 apply-cluster: hydrate-cluster
-	$(MAKE) -f $(PACKAGE_DIR)/Makefile apply-cluster create-ctxt
+	$(MAKE) -f $(PACKAGE_DIR)/Makefile apply-cluster
 
 .PHONY: hydrate-cluster
 hydrate-cluster: set-values
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile hydrate-cluster
+
+.PHONY: create-context
+create-context: hydrate-cluster
+	$(MAKE) -f $(PACKAGE_DIR)/Makefile create-context
 
 .PHONY: hydrate-kcc
 hydrate-kcc: set-values
