@@ -14,7 +14,7 @@
 
 set -ex
 
-for package in (./instance ./upstream/management)
+for package in ./instance ./upstream/management
 do
     kpt cfg set $package name $NAME
     kpt cfg set $package gcloud.core.project $PROJECT
