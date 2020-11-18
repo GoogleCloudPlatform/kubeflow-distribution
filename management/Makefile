@@ -1,6 +1,7 @@
-# NAME, LOCATION, PROJECT in Kptfile are set in ./set-values.sh
-# Please edit ./set-values.sh before calling this Makefile.
+# NAME, LOCATION, PROJECT in Kptfile are set by calling `kpt cfg set`, for
+# details please read README.md.
 
+# Read values set by `kpt cfg set`.
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
@@ -31,17 +32,25 @@ get-pkg:
 	mkdir -p  ./upstream
 	kpt pkg get $(PACKAGE_URL) $(PACKAGE_DIR)
 
-.PHONY: set-values
-set-values:
-	# Please first edit ./set-values.sh to your own values.
-	./set-values.sh
+.PHONY: validate-values
+validate-values:
+# Validate kpt setter values have been set
+ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
+                   "$(LOCATION)" =  LOCATION  -o  \
+                   "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
+	$(error Either of NAME, LOCATION, PROJECT values not set. Please set them via command `kpt cfg set`.)
+endif
+# Validate NAME <= 18 characters
+ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
+	$(error NAME cannot exceed 18 characthers in length. Got: "$(NAME)")
+endif
 
 .PHONY: apply-cluster
 apply-cluster: hydrate-cluster
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile apply-cluster
 
 .PHONY: hydrate-cluster
-hydrate-cluster: set-values
+hydrate-cluster: validate-values
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile hydrate-cluster
 
 .PHONY: create-context
@@ -49,7 +58,7 @@ create-context: hydrate-cluster
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile create-context
 
 .PHONY: hydrate-kcc
-hydrate-kcc: set-values
+hydrate-kcc: validate-values
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile hydrate-kcc
 
 .PHONY: apply-kcc
@@ -57,7 +66,7 @@ apply-kcc: hydrate-kcc
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile apply-kcc
 
 .PHONY: delete-cluster
-delete-cluster: set-values
+delete-cluster: validate-values
 	$(MAKE) -f $(PACKAGE_DIR)/Makefile delete-cluster
 
 .PHONY: uninstall-kcc
@@ -70,7 +79,9 @@ clean:
 
 .PHONY: update
 update:
-	# Update the upstream packages
+	# Update the upstream packages to PACKAGE_URL.
 	# Please edit PACKAGE_URL to the desired version before running this.
 	rm -rf upstream
-	$(MAKE) get-pkg set-values
+	$(MAKE) get-pkg
+	@echo 'Warning: values in upstream packages have been reset after updating.'
+	@echo 'You should run: `kpt cfg set -R` commands again to set values.'

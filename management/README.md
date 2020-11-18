@@ -1,4 +1,4 @@
-# Management Blueprint
+# Management Package
 
 This directory contains the configuration needed to setup a management GKE cluster.
 
@@ -13,8 +13,17 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     # Get upstream package
     make get-pkg
     ```
-1. Edit `management/set-values.sh` to set values for the name, project, and location of your management cluster:
 
+    Note, paths in all the following instructions assume your current working
+    directory is this `./management` folder.
+
+1. Use kpt to set values for the name, project, and location of your management cluster:
+    ```bash
+    kpt cfg set -R . name ${NAME}
+    kpt cfg set -R . gcloud.core.project ${PROJECT}
+    kpt cfg set -R . location ${LOCATION}
+    ```
+    For the values you need to set for management cluster:
     * NAME is the cluster name of your management cluster. Management cluster
     should be a different cluster from your Kubeflow cluster.
 
@@ -26,12 +35,22 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     * LOCATION is the management cluster's location, you can choose between regional or zonal.
     * PROJECT is the Google Cloud project where you will create this management cluster.
 
-    Running `set-values.sh` stores values you set in `./instance/Kptfile`. Commit the
-    changes to source control to preserve your configuration.
+    Running `kpt cfg set` stores values you set in `./instance/Kptfile` and
+    `./upstream/management/Kptfile`. Commit the changes to source control to
+    preserve your configuration.
 
-    You can learn more about `kpt cfg set` in [kpt documentation](https://googlecontainertools.github.io/kpt/reference/cfg/set/).
+    We have two packages with setters: `./instance` and `./upstream/management`.
+    The `-R` flag means `--recurse-subpackages`. It sets values recursively in all the
+    nested subpackages in current directory `.` in one command.
 
-1. Create/apply the management cluster:
+    You can learn more about `kpt cfg set` in [kpt documentation](https://googlecontainertools.github.io/kpt/reference/cfg/set/), or by running `kpt cfg set --help`.
+
+    Note, you can find out which setters exist in a package and which values were previously set by:
+    ```
+    kpt cfg list-setters .
+    ```
+
+1. Create or apply the management cluster:
     ```bash
     make apply-cluster
     ```
@@ -39,7 +58,7 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     ```bash
     make hydrate-cluster
     ```
-    and look into `build/cluster` folder.
+    and look into `./build/cluster` folder.
 1. Create a kubectl context for the management cluster, it will be called `${NAME}`:
     ```bash
     make create-context
@@ -52,7 +71,36 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
     ```bash
     make hydrate-kcc
     ```
-    and look into `build/cnrm-install-*` folder.
+    and look into `./build/cnrm-install-*` folder.
+
+## Customize the installation
+
+To declaratively customize any resource declared in `./upstream/*` folder,
+add [Kustomize](https://kustomize.io/) overlays in `./instance` folder.
+
+Some useful links for Kustomize:
+* [patchesStrategicMerge](https://kubectl.docs.kubernetes.io/references/kustomize/patchesstrategicmerge/) let you patch any fields of an existing resource using a partial resource definition.
+* Reference for all Kustomize features: https://kubectl.docs.kubernetes.io/references/kustomize/.
+
+To get detailed reference for Google Cloud resources, refer to
+[Config Connector resources documentation](https://cloud.google.com/config-connector/docs/reference/overview).
+
+To verify whether hydrated resources match your expectation:
+```bash
+make hydrate-cluster
+# or
+make hydrate-kcc
+```
+and refer to hydrated resources in `./build/*`.
+
+To apply your customizations:
+```
+make apply-cluster
+# or
+make apply-kcc
+```
+Note that, some fields in some resources may be immutable. You may need to
+manually delete them before applying again.
 
 ## Clean up Instructions
 The following instructions introduce how to clean up all resources created when
@@ -124,12 +172,22 @@ cnrm resources. Refer to https://cloud.google.com/config-connector/docs/how-to/m
     kubectl delete mutatingwebhookconfiguration mutating-webhook.cnrm.cloud.google.com --ignore-not-found --wait=true
     ```
     These commands uninstall the config connector without removing your resources.
-1. Merge your own customizations in `management/Makefile` with the latest: https://github.com/kubeflow/gcp-blueprints/blob/master/management/Makefile. Note, you should download https://github.com/kubeflow/gcp-blueprints/blob/master/management/set-values.sh and edit values in `set-values.sh`.
-1. Update `upstream/management` package:
+1. Merge your own customizations in `./Makefile` with the latest: https://github.com/kubeflow/gcp-blueprints/blob/master/management/Makefile.
+1. Update `./upstream/management` package:
     ```bash
     make update
     ```
-1. Apply updated config connector:
+1. Use kpt to set user values:
+    ```bash
+    kpt cfg set -R . name ${NAME}
+    kpt cfg set -R . gcloud.core.project ${PROJECT}
+    kpt cfg set -R . location ${LOCATION}
+    ```
+    Note, you can find out which setters exist and which values were previously set by:
+    ```
+    kpt cfg list-setters .
+    ```
+1. Apply upgraded config connector:
     ```bash
     make apply-kcc
     ```
