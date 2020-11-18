@@ -18,6 +18,8 @@
 # overriden to relative path from working directory.
 PACKAGE_DIR?=.
 BUILD_DIR?=build
+# Specific package dirs can be overriden with ./instance/xxxx paths, so that
+# users can add kustomize overlays on top of the base package.
 PACKAGE_CLUSTER_DIR?=$(PACKAGE_DIR)/cluster
 PACKAGE_CNRM_SERVICES_DIR?=$(PACKAGE_DIR)/cnrm-install/services
 PACKAGE_CNRM_IAM_DIR?=$(PACKAGE_DIR)/cnrm-install/iam
