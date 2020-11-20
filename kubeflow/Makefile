@@ -27,8 +27,7 @@ ACM_KF_REPO=acm-repo
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-# TODO(jlewi): Should we make this a setter to make it easier to update programmatically?
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
+MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2-branch
 
 # Validate cluster values are changed from default dummy values
 .PHONY: validate-values
@@ -176,7 +175,7 @@ apply-asm: hydrate
 	# TODO(jlewi): Should we use the newer version in asm/asm
 	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
-	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml	
+	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
@@ -186,10 +185,10 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress	
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
 
 	# Apply the namespace first
-	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml 
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
