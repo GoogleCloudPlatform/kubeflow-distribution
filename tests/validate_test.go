@@ -1,12 +1,13 @@
 package tests
 
 import (
-	shutil "github.com/termie/go-shutil"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
 	"testing"
+
+	shutil "github.com/termie/go-shutil"
 )
 
 // TestHydrate verifies we can properly hydrate the config
@@ -43,27 +44,34 @@ func TestHydrate(t *testing.T) {
 	}
 
 	setValues := func(vars map[string]string, subDir string) {
-			for k, v := range vars {
-				cmd := exec.Command("kpt", "cfg", "set", subDir, k, v)
-				cmd.Dir = target
-				out, err := cmd.CombinedOutput()
+		for k, v := range vars {
+			cmd := exec.Command("kpt", "cfg", "set", subDir, k, v)
+			cmd.Dir = target
+			out, err := cmd.CombinedOutput()
 
-				t.Logf("Run %v:\n%v", cmd, string(out))
+			t.Logf("Run %v:\n%v", cmd, string(out))
 
-				if err != nil {
-					t.Fatalf("%v failed; error %v", cmd, err)
-				}
+			if err != nil {
+				t.Fatalf("%v failed; error %v", cmd, err)
 			}
+		}
 	}
-	instanceVars := map[string]string {
-		"mgmt-ctxt": "mgmt-ctxt",
-		"name": "kf-test",
-		"gcloud.compute.zone": "us-east1-d",
+	instanceVars := map[string]string{
+		"mgmt-ctxt":           "mgmt-ctxt",
+		"name":                "kf-test",
 		"gcloud.core.project": "kubeflow-ci-deployment",
-		"location": "us-east1",
-		"email": "user@gmail.com",
+		"location":            "us-east1",
+		"email":               "user@gmail.com",
 	}
 	setValues(instanceVars, "instance")
+
+	upstreamVars := map[string]string{
+		"name":                "kf-test",
+		"gcloud.core.project": "kubeflow-ci-deployment",
+		"gcloud.compute.zone": "us-east1-d",
+		"location":            "us-east1",
+	}
+	setValues(upstreamVars, "upstream/manifests/gcp")
 
 	cmd = exec.Command("make", "hydrate")
 	cmd.Dir = target
