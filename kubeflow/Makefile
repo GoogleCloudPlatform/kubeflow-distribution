@@ -36,6 +36,11 @@ ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
 	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
 endif
+# Validate cluster name <= 18 characters
+ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
+	$(error Kubeflow cluster name cannot exceed 18 characthers in length. Got: "$(NAME)")
+endif
+
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment
 
@@ -98,7 +103,7 @@ update:
 
 # Run all the various hydration rules
 .PHONY: hydrate
-hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
+hydrate: clean-build validate-values hydrate-gcp hydrate-asm hydrate-kubeflow
 ifeq ($(PRIVATE_GKE),true)
 		make hydrate-mirror
 endif
