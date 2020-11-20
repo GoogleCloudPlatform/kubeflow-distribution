@@ -32,10 +32,9 @@ MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2-branch
 validate-values:
 ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(NAME)"     =  KUBEFLOW-NAME  -o  \
-                   "$(ZONE)"     =  ZONE -o \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
-	$(error Either of MGMTCTXT, NAME, ZONE, LOCATION, PROJECT values not set)
+	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
 endif
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment
@@ -72,14 +71,16 @@ set-values:
 .PHONY: get-pkg
 get-pkg:
 	mkdir -p  ./upstream
-	# kpt pkg get currently throws some errors due to the way our configs our structured
-	# so we need to ignore those and keep going.
-	-kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
+	# kpt pkg get auto-set currently throws some errors due to the way our configs
+	# our structured, so we need to disable auto-set.
+	kpt pkg get --auto-set=false $(MANIFESTS_URL) $(MANIFESTS_DIR)
 	rm -rf $(MANIFESTS_DIR)/tests
 	# TODO(jlewi): Package appears to cause problems for kpt. We should delete in the upstream
 	# since its not needed anymore.
 	# https://github.com/GoogleContainerTools/kpt/issues/539
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
+	rm -rf $(MANIFESTS_DIR)/stacks/ibm
+	rm -rf $(MANIFESTS_DIR)/stacks/openshift
 
 
 # Update the upstream packages
