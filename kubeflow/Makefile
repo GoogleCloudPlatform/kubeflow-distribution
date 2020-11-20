@@ -5,10 +5,8 @@ MGMTCTXT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setter
 # The name of the context for your Kubeflow cluster
 NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-ZONE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.compute.zone".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 PRIVATE_GKE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gke.private".x-k8s-cli.setter.value')
-FIREWALL_LOGS=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.log-firewalls".x-k8s-cli.setter.value')
 
 KFCTXT=$(NAME)
 
@@ -34,11 +32,37 @@ MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2-branch
 validate-values:
 ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(NAME)"     =  KUBEFLOW-NAME  -o  \
-                   "$(ZONE)"     =  ZONE -o \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
-	$(error Either of MGMTCTXT, NAME, ZONE, LOCATION, PROJECT values not set)
+	$(error Either of MGMTCTXT, NAME, LOCATION, PROJECT values not set)
 endif
+# Validate cluster name <= 18 characters
+ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
+	$(error Kubeflow cluster name cannot exceed 18 characthers in length. Got: "$(NAME)")
+endif
+
+#***********************************************************************************************************************
+# Edit this section to set the values specific to your deployment
+
+.PHONY: set-values
+set-values:
+	kpt cfg set ./instance gke.private false
+
+	kpt cfg set ./instance mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
+
+	kpt cfg set ./upstream/manifests/gcp name <YOUR_KF_NAME>
+	kpt cfg set ./upstream/manifests/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone <ZONE>
+	kpt cfg set ./upstream/manifests/gcp location <REGION OR ZONE>
+	kpt cfg set ./upstream/manifests/gcp log-firewalls false
+
+	kpt cfg set ./upstream/manifests/stacks/gcp name <YOUR_KF_NAME>
+	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+
+	kpt cfg set ./instance name <YOUR_KF_NAME>
+	kpt cfg set ./instance location <YOUR_REGION or ZONE>
+	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
+	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
 
 #************************************************************************************************************************
 #
@@ -52,14 +76,16 @@ endif
 .PHONY: get-pkg
 get-pkg:
 	mkdir -p  ./upstream
-	# kpt pkg get currently throws some errors due to the way our configs our structured
-	# so we need to ignore those and keep going.
-	-kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
+	# kpt pkg get auto-set currently throws some errors due to the way our configs
+	# our structured, so we need to disable auto-set.
+	kpt pkg get --auto-set=false $(MANIFESTS_URL) $(MANIFESTS_DIR)
 	rm -rf $(MANIFESTS_DIR)/tests
 	# TODO(jlewi): Package appears to cause problems for kpt. We should delete in the upstream
 	# since its not needed anymore.
 	# https://github.com/GoogleContainerTools/kpt/issues/539
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
+	rm -rf $(MANIFESTS_DIR)/stacks/ibm
+	rm -rf $(MANIFESTS_DIR)/stacks/openshift
 
 
 # Update the upstream packages
@@ -67,6 +93,7 @@ get-pkg:
 update:
 	rm -rf upstream
 	make get-pkg
+	make set-values
 
 #**************************************************************************************************************************
 # Hydration
@@ -76,7 +103,7 @@ update:
 
 # Run all the various hydration rules
 .PHONY: hydrate
-hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
+hydrate: clean-build validate-values hydrate-gcp hydrate-asm hydrate-kubeflow
 ifeq ($(PRIVATE_GKE),true)
 		make hydrate-mirror
 endif
@@ -272,17 +299,7 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 #*****************************************************************************************
 
 .PHONY: clean-build
-clean-build: validate-values
-	# Dedupe values to ./upstream/manifest
-	kpt cfg set ./upstream/manifests/gcp name $(NAME)
-	kpt cfg set ./upstream/manifests/gcp gcloud.core.project $(PROJECT)
-	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone $(ZONE)
-	kpt cfg set ./upstream/manifests/gcp location $(LOCATION)
-	kpt cfg set ./upstream/manifests/gcp log-firewalls $(FIREWALL_LOGS)
-
-	kpt cfg set ./upstream/manifests/stacks/gcp name $(NAME)
-	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project $(PROJECT)
-
+clean-build:
 	# Delete build because we want to prune any resources which are no longer defined in the manifests
 	rm -rf $(BUILD_DIR)/
 	mkdir -p $(BUILD_DIR)/
@@ -308,7 +325,7 @@ wait-gcp:
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
-create-ctxt: validate-values
+create-ctxt:
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ./hack/create_context.sh
