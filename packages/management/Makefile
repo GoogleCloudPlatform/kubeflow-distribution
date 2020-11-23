@@ -93,7 +93,7 @@ apply-kcc:
 	anthoscli apply -f $(BUILD_DIR)/cnrm-install-iam
 	# Deploy Config Connector to the cluster
 	# Apply and wait for the CRDs and namespaces first
-	for resource in $$(find $(BUILD_DIR)/cnrm-install-system -name '~g_v1_namespace_*.yaml' -o -name '*_customresourcedefinition_*.yaml'); \
+	for resource in $$(find $(BUILD_DIR)/cnrm-install-system -name 'v1_namespace_*.yaml' -o -name '*_customresourcedefinition_*.yaml'); \
 	do \
 		kubectl $(CTXT_ARG) apply -f $$resource; \
 	done
