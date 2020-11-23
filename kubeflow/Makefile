@@ -319,9 +319,24 @@ check-iap:
 iap-secret: check-iap
 	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} --dry-run -o yaml | kubectl apply -f -
 
+# You may override the variable by env var if you customized the deployment
+# and deploy fewer or more types of resources.
+# All Google Cloud resources deployed for this Kubeflow cluster has a label:
+# "kf-name=$(NAME)".
+GCP_RESOURCE_TYPES_TO_CHECK?=iamserviceaccount iampolicymember computeaddress containercluster
 .PHONY: wait-gcp
 wait-gcp:
-	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s  containercluster $(NAME)
+	# Wait for all Google Cloud resources to get created and become ready.
+	@set -e; \
+	for resource in $(GCP_RESOURCE_TYPES_TO_CHECK); \
+	do \
+		echo "Waiting for $$resource resources..."; \
+		kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s "$${resource}" -l kf-name=$(NAME)  \
+		|| (echo "Error: waiting for $${resource} ready timed out."; \
+			echo "To troubleshoot, you can run:"; \
+			echo "kubectl --context=$(MGMTCTXT) describe $${resource} -l kf-name=$(NAME)"; \
+			exit 1); \
+	done
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
