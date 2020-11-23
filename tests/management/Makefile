@@ -72,7 +72,7 @@ apply-managed-project:
 
 .PHONY: create-bucket
 apply-bucket:
-	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run=client | kubectl apply -f -
+	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run | kubectl apply -f -
 	kubectl config set-context --current --namespace $(MANAGED_PROJECT)
 	kpt cfg set resources bucket $(BUCKET)
 	kubectl apply -f ./resources/storagebucket.yaml
