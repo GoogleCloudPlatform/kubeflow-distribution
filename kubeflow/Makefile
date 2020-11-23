@@ -25,7 +25,7 @@ ACM_KF_REPO=acm-repo
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2-branch
+MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2.0
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-admin must be a valid service account name, so $NAME should be no
