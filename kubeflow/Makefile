@@ -160,6 +160,9 @@ hydrate-kubeflow:
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+	mkdir -p $(BUILD_DIR)/cluster-local-gateway
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cluster-local-gateway $(KF_DIR)/cluster-local-gateway
+
 
 
 # Hydrate resources to mirror images
@@ -219,6 +222,8 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cluster-local-gateway	
+
 
 	# Apply the namespace first
 	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml
