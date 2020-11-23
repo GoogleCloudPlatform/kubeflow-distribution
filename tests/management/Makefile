@@ -1,13 +1,13 @@
 # Use .env file to include environment specific parameters
 include .env
 
-USER?=kubeflow
-REPO?=gcp-blueprints
-BRANCH?=master
+GH_USER?=kubeflow
+GH_REPO?=gcp-blueprints
+GH_BRANCH?=master
 
 # Test master
-MANAGEMENT_URL?=https://github.com/$(USER)/$(REPO).git/management@$(BRANCH)
-PACKAGE_URL?=https://github.com/$(USER)/$(REPO).git/packages/management@$(BRANCH)
+MANAGEMENT_URL?=https://github.com/$(GH_USER)/$(GH_REPO).git/management@$(GH_BRANCH)
+PACKAGE_URL?=https://github.com/$(GH_USER)/$(GH_REPO).git/packages/management@$(GH_BRANCH)
 
 .PHONY: test
 deploy-and-test: 1-cluster 2-manage-project 3-bucket
@@ -72,7 +72,7 @@ apply-managed-project:
 
 .PHONY: create-bucket
 apply-bucket:
-	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run=client | kubectl apply -f -
+	kubectl create namespace $(MANAGED_PROJECT) -oyaml --dry-run | kubectl apply -f -
 	kubectl config set-context --current --namespace $(MANAGED_PROJECT)
 	kpt cfg set resources bucket $(BUCKET)
 	kubectl apply -f ./resources/storagebucket.yaml
