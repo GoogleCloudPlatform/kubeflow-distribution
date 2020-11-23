@@ -7,11 +7,11 @@
 #
 # You can set these values by
 # ```
-# kpt cfg set ./instance name NAME
-# kpt cfg set ./instance location LOCATION
-# kpt cfg set ./instance gcloud.core.project PROJECT
+# kpt cfg set . name NAME
+# kpt cfg set . location LOCATION
+# kpt cfg set . gcloud.core.project PROJECT
 # ```
-# The values you set will be stored in ./instance/Kptfile, so they will be preserved.
+# The values you set will be stored in ./Kptfile, so they will be preserved.
 
 # Directory where manifests live. Defaults to current directory.
 # When calling this makefile from a different directory, this should be
@@ -38,17 +38,23 @@ NAME=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setter
 LOCATION=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 
+# All Google Cloud resources must have a valid name, the most strict requirement is
+# $NAME-cnrm-system must be a valid service account name, so $NAME should be no
+# longer than 18 characters.
+cluster_name_regex=^[a-z][-a-z0-9]{0,16}[a-z0-9]$$
 .PHONY: validate-values
 validate-values:
+	@if echo '$(NAME)' | egrep '$(cluster_name_regex)' >/dev/null; then \
+		echo 'The management cluster name "$(NAME)" is valid.'; \
+	else \
+		echo 'The management cluster name "$(NAME)" may contain only lowercase alphanumerics and "-", must start with a letter and end with an alphanumeric, and no longer than 18 characters.'; \
+	fi
+
 # Validate kpt setter values have been set
 ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
                    "$(LOCATION)" =  LOCATION  -o  \
                    "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
 	$(error Either of NAME, LOCATION, PROJECT values not set. Please set them via command `kpt cfg set`.)
-endif
-# Validate NAME <= 18 characters
-ifeq ($(shell test $(shell printf "$(NAME)" | wc -c) -gt 18 && printf "true"), true)
-	$(error NAME cannot exceed 18 characthers in length. Got: "$(NAME)")
 endif
 
 .PHONY: hydrate-cluster
