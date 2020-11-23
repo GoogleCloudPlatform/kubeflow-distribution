@@ -215,7 +215,11 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
 
 	# Apply the namespace first
-	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/~g_v1_namespace_knative-serving.yaml
+	#
+	# Note, insert a * before v1_namespace, because different versions of
+	# kustomize may generate slightly different file names:
+	# https://github.com/kubeflow/gcp-blueprints/issues/164.
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/*v1_namespace_knative-serving.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
