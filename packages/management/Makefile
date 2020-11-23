@@ -38,7 +38,10 @@ NAME=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setter
 LOCATION=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 
-cluster_name_regex=^[a-z][-a-z0-9]{2,16}[a-z0-9]$$
+# All Google Cloud resources must have a valid name, the most strict requirement is
+# $NAME-cnrm-system must be a valid service account name, so $NAME should be no
+# longer than 18 characters.
+cluster_name_regex=^[a-z][-a-z0-9]{0,16}[a-z0-9]$$
 .PHONY: validate-values
 validate-values:
 	@if echo '$(NAME)' | egrep '$(cluster_name_regex)' >/dev/null; then \

@@ -27,15 +27,19 @@ BUILD_DIR=.build
 # The URL you want to fetch manifests from
 MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2-branch
 
-cluster_name_regex=^[a-z][-a-z0-9]{2,16}[a-z0-9]$$
-# Validate cluster values are changed from default dummy values
+# All Google Cloud resources must have a valid name, the most strict requirement is
+# $NAME-admin must be a valid service account name, so $NAME should be no
+# longer than 24 characters.
+cluster_name_regex=^[a-z][-a-z0-9]{0,22}[a-z0-9]$$
 .PHONY: validate-values
 validate-values:
 	@if echo '$(NAME)' | egrep '$(cluster_name_regex)' >/dev/null; then \
 		echo 'The kubeflow cluster name "$(NAME)" is valid.'; \
 	else \
-		echo 'The kubeflow cluster name "$(NAME)" may contain only lowercase alphanumerics and "-", must start with a letter and end with an alphanumeric, and no longer than 18 characters.'; \
+		echo 'The kubeflow cluster name "$(NAME)" may contain only lowercase alphanumerics and "-", must start with a letter and end with an alphanumeric, and no longer than 24 characters.'; \
 	fi
+
+# Validate cluster values are changed from default dummy values
 ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT  -o  \
                    "$(NAME)"     =  KUBEFLOW-NAME  -o  \
                    "$(LOCATION)" =  LOCATION  -o  \
