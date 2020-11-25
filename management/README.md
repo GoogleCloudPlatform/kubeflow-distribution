@@ -8,7 +8,7 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
 
 1. Fetch the management package:
     ```bash
-    kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/management@master ./
+    kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/management@v1.2.0 ./
     cd ./management
     # Get upstream package
     make get-pkg
