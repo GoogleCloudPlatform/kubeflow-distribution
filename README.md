@@ -2,6 +2,7 @@
 
 Blueprints for Kubeflow.
 
+
 Kubeflow is deployed as follows
 
 * A mangement cluster is setup using the manifests in **management**
