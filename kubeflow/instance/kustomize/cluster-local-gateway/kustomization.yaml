@@ -1,0 +1,5 @@
+kind: Kustomization
+namespace: istio-system
+resources:
+- ../../../upstream/manifests/istio/cluster-local-gateway/base 
+
