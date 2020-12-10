@@ -23,7 +23,7 @@ metadata:
 # annotations:
 #   cnrm.cloud.google.com/remove-default-node-pool: "false"
 spec:
-  location: "LOCATION" # {"$kpt-set":"location"}
+  location: LOCATION # {"$kpt-set":"location"}
   # Add any fields here to override default cluster spec
   # Refer to https://cloud.google.com/config-connector/docs/reference/resource-docs/container/containercluster
   # for detailed fields and documentation.

@@ -22,7 +22,7 @@ metadata:
 # Refer to https://cloud.google.com/config-connector/docs/reference/resource-docs/container/containernodepool
 # for detailed fields and documentation.
 spec:
-  location: "LOCATION" # {"$kpt-set":"location"}
+  location: LOCATION # {"$kpt-set":"location"}
   # You can adjust node zones by:
   # nodeLocations:
   # - gcp-zone-1
@@ -33,7 +33,7 @@ spec:
     maxNodeCount: 8
   nodeConfig:
     machineType: n1-standard-8
-    minCpuPlatform: 'Intel Broadwell'
+    minCpuPlatform: Intel Broadwell
     metadata:
       disable-legacy-endpoints: "true"
     serviceAccountRef:
