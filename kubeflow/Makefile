@@ -161,7 +161,7 @@ hydrate-kubeflow:
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 	mkdir -p $(BUILD_DIR)/cluster-local-gateway
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cluster-local-gateway $(KF_DIR)/cluster-local-gateway
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cluster-local-gateway $(MANIFESTS_DIR)/istio/cluster-local-gateway/base_v3
 
 
 
