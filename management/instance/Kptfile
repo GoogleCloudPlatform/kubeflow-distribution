@@ -11,13 +11,11 @@ openAPI:
         setter:
           name: gcloud.core.project
           value: PROJECT
-          isSet: true
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
           name: name
           value: NAME
-          isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
