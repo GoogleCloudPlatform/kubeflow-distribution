@@ -246,7 +246,7 @@ apply-mirror: hydrate-mirror
 	# work when running on private GKE
 	# TODO(jlewi): This should be changed to kfctl once the command is baked into kfctl
 	# The path is also hardcoded for jlewi.
-	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml
+	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml --timeout=1800
 
 apply-endpoint:
 	# Per https://github.com/kubeflow/gcp-blueprints/issues/36 cloud endpoints controller won't
