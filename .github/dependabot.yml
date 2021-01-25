@@ -1,0 +1,10 @@
+updates:
+- assignees:
+  - bobgy
+  - jlewi
+  directory: .
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+version: 2

@@ -24,3 +24,5 @@ clean-for-pr:
 	kpt cfg set ./management/instance managed_project MANAGED_PROJECT
 	kpt cfg set ./management/instance managed_gsa_name MANAGED-GSA-NAME
 	
+build-dependabot:
+	python3 hack/create_dependabot.py
