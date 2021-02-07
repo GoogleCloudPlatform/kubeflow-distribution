@@ -154,7 +154,7 @@ hydrate-kubeflow:
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
-	mkdir -p $(BUILD_DIR)/kubeflow-apps
+	mkdir -p $(BUILD_DIR)/kubeflow-istio
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/metacontroller
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
