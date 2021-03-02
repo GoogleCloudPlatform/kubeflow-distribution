@@ -21,6 +21,7 @@ openAPI:
         setter:
           name: location
           value: LOCATION
+          isSet: true
     io.k8s.cli.substitutions.cluster-name:
       x-k8s-cli:
         substitution:
@@ -56,6 +57,7 @@ openAPI:
         setter:
           name: managed-project
           value: MANAGED_PROJECT
+          isSet: true
     io.k8s.cli.substitutions.managed-project-ref:
       x-k8s-cli:
         substitution:
