@@ -1,4 +1,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ../../../upstream/manifests/namespaces/base # {"$kpt-set":"namespaces-base"}
+- ../../../upstream/manifests/common/namespaces/base # {"$kpt-set":"namespaces-base"}

@@ -25,7 +25,8 @@ ACM_KF_REPO=acm-repo
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2.0
+# MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@v1.2.0
+MANIFESTS_URL?=https://github.com/kubeflow/manifests.git@master
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-admin must be a valid service account name, so $NAME should be no
@@ -136,28 +137,34 @@ hydrate-kubeflow:
 	mkdir -p $(BUILD_DIR)/namespaces
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
 
+	# TODO(Bobgy): remove application controller, add an issue link here
 	mkdir -p $(BUILD_DIR)/application
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
 
-	mkdir -p $(BUILD_DIR)/knative
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/knative $(KF_DIR)/knative
+	# mkdir -p $(BUILD_DIR)/knative
+	# kustomize build --load_restrictor none -o $(BUILD_DIR)/knative $(KF_DIR)/knative
 
+	# TODO(Bobgy): sync with community which version to use
 	mkdir -p $(BUILD_DIR)/cert-manager
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
 	mkdir -p $(BUILD_DIR)/cert-manager-crds
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
 	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
+
 	mkdir -p $(BUILD_DIR)/cloud-endpoints
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
 	mkdir -p $(BUILD_DIR)/iap-ingress
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
+
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
 	mkdir -p $(BUILD_DIR)/kubeflow-istio
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/metacontroller
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
+
+	# TODO(Bobgy): figure out what is kubeflow issuer
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 

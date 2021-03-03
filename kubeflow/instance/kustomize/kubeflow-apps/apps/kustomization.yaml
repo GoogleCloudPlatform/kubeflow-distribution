@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubeflow
+resources:
+# List the Kubeflow applications that should be included 
+# TODO(https://github.com/kubeflow/manifests/issues/1073): 
+# We need to switch the admission webhook to use cert-manager.
+# - ../../../../upstream/manifests/apps/admission-webhook/webhook/v3
+- ../../../../upstream/manifests/apps/centraldashboard/upstream/overlays/stacks
+- ../../../../upstream/manifests/common/kubeflow-roles/base
+# - ../../../../upstream/manifests/apps/jupyter/jupyter-web-app/base_v3
+# - ../../../../upstream/manifests/apps/jupyter/notebook-controller/base_v3
+- ../../../../upstream/manifests/apps/profiles/upstream/base_v3
+# - ../../../../upstream/manifests/apps/pytorch-job/pytorch-job-crds/overlays/application
+# - ../../../../upstream/manifests/apps/pytorch-job/pytorch-operator/overlays/application
+# - ../../../../upstream/manifests/apps/tf-training/tf-job-crds/overlays/application
+# - ../../../../upstream/manifests/apps/tf-training/tf-job-operator/overlays/application
+# - ../../../../upstream/manifests/apps/argo/base_v3
+# - ../../../../upstream/manifests/apps/pipeline/minio/installs/gcp-pd
+# - ../../../../upstream/manifests/apps/pipeline/mysql/installs/gcp-pd
+# - ../../../../upstream/manifests/apps/pipeline/installs/multi-user
+# - ../../../../upstream/manifests/apps/metadata/v3
+# - ../../../../upstream/manifests/apps/kfserving/installs/generic
+# This package will create a profile resource so it needs to be installed after the profiles CR
+- ../../../../upstream/manifests/contrib/default-install/base
+# - ../../../../upstream/manifests/apps/katib/installs/katib-standalone
+patchesStrategicMerge:
+- workload-identity-bindings-patch.yaml
+configMapGenerator:
+- envs:
+  - ./config/params.env
+  name: kubeflow-config
+vars:
+# We need to define vars at the top level otherwise we will get
+# conflicts. 
+- fieldref:
+    fieldPath: data.clusterDomain
+  name: clusterDomain
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kubeflow-config
+- fieldref:
+    fieldPath: metadata.namespace
+  name: namespace
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kubeflow-config
+# - fieldref:
+#     fieldpath: metadata.namespace
+#   name: katib-ui-namespace
+#   objref:
+#     kind: Service
+#     name: katib-ui
+#     apiVersion: v1

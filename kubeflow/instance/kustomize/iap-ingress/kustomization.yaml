@@ -4,5 +4,5 @@ patchesStrategicMerge:
 - iap-ingress-config.yaml
 - service-accounts.yaml
 resources:
-- ../../../upstream/manifests/gcp/iap-ingress/v3 # {"$kpt-set":"gcp-iap-ingress-v3"}
-- ../../../upstream/manifests/istio/iap-gateway/base # {"$kpt-set":"istio-iap-gateway-base"}
+- ../../../../packages/iap-ingress/v3 # {"$kpt-set":"gcp-iap-ingress-v3"}
+- ../../../../packages/iap-gateway/base # {"$kpt-set":"istio-iap-gateway-base"}
