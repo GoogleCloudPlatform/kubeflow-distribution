@@ -60,7 +60,7 @@ spec:
   tls:
   - match:
     - port: 443
-      sni_hosts:
+      sniHosts:
       - www.googleapis.com
     route:
     - destination:
@@ -93,7 +93,7 @@ spec:
   tls:
   - match:
     - port: 443
-      sni_hosts:
+      sniHosts:
       - storage.googleapis.com
     route:
     - destination:
@@ -102,12 +102,19 @@ spec:
           number: 443
       weight: 100
 ---
-apiVersion: rbac.istio.io/v1alpha1
-kind: ClusterRbacConfig
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
 metadata:
-  name: default
+  # Setting this policy makes all traffic to be allowed by default.
+  # If this policy is not set, then as long as there is any explicit policy added in the mesh,
+  # istio will implicitly deny all traffic unless they are in the explicit policy.
+  name: allow-all-traffic
+  # If set namespace value to the root namespace, the policy applies to all namespaces in a mesh. 
+  # The value of the root namespace is configurable, and the default is istio-system. If set to any other namespace, the policy only applies to the specified namespace.
+  namespace: istio-system 
 spec:
-  mode: $(clusterRbacConfig)
-  exclusion:
-    namespaces:
-    - istio-system # Accessing Istio services won't require an rbac policy.
+  action: ALLOW
+  # If rules is set but no content inside, all traffic will match this policy and is allowed.
+  # If rules is not set, then nothing match this policy, therefore all traffic will be denied.
+  rules: 
+  - {}

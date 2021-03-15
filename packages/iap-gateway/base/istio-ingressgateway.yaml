@@ -2,11 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: istio-ingressgateway
+  namespace: istio-system
   annotations:
     beta.cloud.google.com/backend-config: '{"ports": {"http2":"iap-backendconfig"}}'
+    cloud.google.com/neg: '{"ingress":false}'
   labels:
     app: istio-ingressgateway
     istio: ingressgateway
+    istio.io/rev: asm-191-1
     release: istio
 spec:
   # TODO(jlewi):  Why are we hardcoding the ports here? With ASM I believe the service
@@ -51,12 +54,19 @@ spec:
   sessionAffinity: None
   type: NodePort
 ---
-apiVersion: rbac.istio.io/v1alpha1
-kind: ClusterRbacConfig
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
 metadata:
-  name: default
+  # Setting this policy makes all traffic to be allowed by default.
+  # If this policy is not set, then as long as there is any explicit policy added in the mesh,
+  # istio will implicitly deny all traffic unless they are in the explicit policy.
+  name: allow-all-traffic
+  # If set namespace value to the root namespace, the policy applies to all namespaces in a mesh. 
+  # The value of the root namespace is configurable, and the default is istio-system. If set to any other namespace, the policy only applies to the specified namespace.
+  namespace: istio-system 
 spec:
-  mode: ON_WITH_EXCLUSION
-  exclusion:
-    namespaces:
-    - istio-system
+  action: ALLOW
+  # If rules is set but no content inside, all traffic will match this policy and is allowed.
+  # If rules is not set, then nothing match this policy, therefore all traffic will be denied.
+  rules: 
+  - {}

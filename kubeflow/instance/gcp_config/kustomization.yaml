@@ -10,7 +10,7 @@ commonLabels:
   kf-name: KUBEFLOW-NAME # {"$kpt-set":"name-label"}
 resources:
 # The default Google Cloud resources.
-- ../../upstream/manifests/gcp/v2/cnrm
+- ../../upstream/manifests/distributions/gcp/v2/cnrm
 # Add additional Google Cloud resources by including resources here.
 # For example, uncomment the following line to include an additional example
 # nodepool described in a local file ./nodepool-example.yaml.

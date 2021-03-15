@@ -11,13 +11,6 @@ configMapGenerator:
   envs:
   - ../base/params.env
 vars:
-- name: clusterRbacConfig
-  objref:
-    kind: ConfigMap
-    name: istio-config
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.clusterRbacConfig
 - name: gatewaySelector
   objref:
     kind: ConfigMap

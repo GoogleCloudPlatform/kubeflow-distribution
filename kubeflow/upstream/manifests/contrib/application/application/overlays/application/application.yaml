@@ -20,12 +20,14 @@ spec:
     description: application that aggregates all kubeflow applications
     maintainers:
     - name: Jeremy Lewi
-      email: jlewi@google.com
+      email: jeremy@lewi.us
     - name: Kam Kasravi
       email: kam.d.kasravi@intel.com
     owners:
     - name: Jeremy Lewi
-      email: jlewi@google.com
+      email: jeremy@lewi.us
+    - name: Yuan Gong
+      email: gongyuan@google.com
     keywords:
      - kubeflow
     links:

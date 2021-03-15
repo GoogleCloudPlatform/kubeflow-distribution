@@ -334,7 +334,7 @@ check-iap:
 # TODO(jlewi): How can we test to make sure CLIENT_ID is set so we don't create an empty secret.
 .PHONY: iap-secret
 iap-secret: check-iap
-	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} --dry-run -o yaml | kubectl apply -f -
+	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} -o yaml | kubectl apply -f -
 
 # You may override the variable by env var if you customized the deployment
 # and deploy fewer or more types of resources.

@@ -26,8 +26,10 @@ rules:
   - patch
 - apiGroups:
   - authentication.istio.io
+  - security.istio.io
   resources:
   - policies
+  - requestauthentications
   verbs:
   - '*'
 - apiGroups:
