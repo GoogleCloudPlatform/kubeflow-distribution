@@ -41,41 +41,25 @@ validate-values:
 	fi
 
 # Validate cluster values are changed from default dummy values
-ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT && printf "true"), true)
+ifeq ($(shell test "$(MGMTCTXT)" =  MANAGEMENT-CTXT   &&  printf "true"), true)
 	$(error MGMTCTXT values not set)
 endif
-ifeq ($(shell test "$(NAME)"     =  KUBEFLOW-NAME   && printf "true"), true)
+ifeq ($(shell test "$(NAME)"     =  KUBEFLOW-NAME  &&  printf "true"), true)
 	$(error NAME values not set)
 endif
-ifeq ($(shell test "$(LOCATION)" =  LOCATION        && printf "true"), true)
+ifeq ($(shell test "$(LOCATION)" =  LOCATION  &&  printf "true"), true)
 	$(error LOCATION values not set)
 endif
-ifeq ($(shell test "$(PROJECT)"  =  PROJECT         && printf "true"), true)
+ifeq ($(shell test "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
 	$(error PROJECT values not set)
 endif
 
 #***********************************************************************************************************************
-# Edit this section to set the values specific to your deployment
+# Edit the values in cfg.mk specific to your deployment
 
 .PHONY: set-values
 set-values:
-	kpt cfg set ./instance gke.private false
-
-	kpt cfg set ./instance mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
-
-	kpt cfg set ./upstream/manifests/distributions/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/distributions/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
-	kpt cfg set ./upstream/manifests/distributions/gcp gcloud.compute.zone <ZONE>
-	kpt cfg set ./upstream/manifests/distributions/gcp location <REGION OR ZONE>
-	kpt cfg set ./upstream/manifests/distributions/gcp log-firewalls false
-
-	kpt cfg set ./upstream/manifests/distributions/stacks/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/distributions/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
-
-	kpt cfg set ./instance name <YOUR_KF_NAME>
-	kpt cfg set ./instance location <YOUR_REGION or ZONE>
-	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
-	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
+	make -f cfg.mk set-cfg-values
 
 #************************************************************************************************************************
 #
@@ -239,12 +223,25 @@ hydrate-mirror:
 # Rules to apply the various manifests
 #****************************************************************************************************
 
+.PHONY: apply-v2
+apply-v2: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt iap-secret apply-asm apply-kubeflow
+# ifeq ($(PRIVATE_GKE),true)
+# 	make apply-mirror
+# 	make apply-endpoint
+# endif
+# 	# Kick the IAP pod because we will reset the policy and need to patch it.
+# 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
+# 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+# 	# Kick the backend updater pod, because information might be outdated after the apply.
+# 	# https://github.com/kubeflow/gcp-blueprints/issues/160
+# 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
+
 # Uber apply rule to invoke all dependencies
 # TODO(jlewi): If we use prune does that give us a complete upgrade solution?
 # TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
 # be available before continuing?
 .PHONY: apply
-apply: clean-build check-name check-iap iap-secret apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow
+apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
 ifeq ($(PRIVATE_GKE),true)
 	make apply-mirror
 	make apply-endpoint
