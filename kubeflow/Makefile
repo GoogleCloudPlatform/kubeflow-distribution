@@ -269,6 +269,47 @@ apply-asm: hydrate
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
+.PHONY: apply-namespaces
+apply-namespaces: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
+
+.PHONY: apply-kubeflow-istio
+apply-kubeflow-istio: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
+
+.PHONY: apply-metacontroller
+apply-metacontroller: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
+
+.PHONY: apply-application
+apply-application: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
+
+.PHONY: apply-cloud-endpoints
+apply-cloud-endpoints: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
+
+.PHONY: apply-iap-ingress
+apply-iap-ingress: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
+
+.PHONY: apply-cert-manager
+apply-cert-manager: 
+	kubectl --context=$(KFCTXT) apply --validate=false -f ./$(BUILD_DIR)/cert-manager-crds
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager-kube-system-resources
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
+
+.PHONY: apply-kubeflow-apps
+apply-kubeflow-apps: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
+
+.PHONY: apply-kubeflow-issuer
+apply-kubeflow-issuer: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
+
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
 	# Apply kubeflow apps
@@ -299,45 +340,6 @@ apply-kubeflow: hydrate
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
 	# Create the kubeflow-issuer last to give cert-manager time deploy
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
-
-.PHONY: hydrate-namespaces
-hydrate-namespaces:
-	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
-
-.PHONY: hydrate-kubeflow-istio
-hydrate-kubeflow-istio:
-	mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
-
-.PHONY: hydrate-metacontroller
-hydrate-metacontroller:
-	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
-
-.PHONY: hydrate-application
-hydrate-application:
-	mkdir -p $(BUILD_DIR)/application
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
-
-.PHONY: hydrate-cloud-endpoints
-hydrate-cloud-endpoints:
-	mkdir -p $(BUILD_DIR)/cloud-endpoints
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
-
-.PHONY: hydrate-iap-ingress
-hydrate-iap-ingress:
-	mkdir -p $(BUILD_DIR)/iap-ingress
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
-
-.PHONY: hydrate-cert-manager
-hydrate-cert-manager:
-	mkdir -p $(BUILD_DIR)/cert-manager
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
-	mkdir -p $(BUILD_DIR)/cert-manager-crds
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
-	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
 
 .PHONY: hydrate-kubeflow-apps
 hydrate-kubeflow-apps:
