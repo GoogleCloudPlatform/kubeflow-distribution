@@ -59,7 +59,7 @@ endif
 
 .PHONY: set-values
 set-values:
-	make -f cfg.mk set-cfg-values
+	$(MAKE) -f cfg.mk set-cfg-values
 
 #************************************************************************************************************************
 #
@@ -92,6 +92,29 @@ update:
 	make get-pkg
 	make set-values
 
+.PHONY: install-asm-script
+install-asm-script:
+	mkdir -p ${APP_DIR}/asm;
+	cd ${APP_DIR}/asm && { \
+		curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9 > install_asm; \
+		curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9.sha256 > install_asm.sha256; \
+		sha256sum -c --ignore-missing install_asm.sha256; \
+		chmod +x install_asm; \
+		cd -;}
+
+.PHONY: install-asm
+install-asm: install-asm-script
+	rm -rf ./asm/asm
+	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@release-1.9-asm asm
+	./asm/install_asm \
+	--project_id ${KF_PROJECT} \
+	--cluster_name ${KF_NAME} \
+	--cluster_location ${LOCATION} \
+	--mode install \
+	--enable_all \
+	--custom_overlay asm/asm/istio/options/iap-operator.yaml
+
+
 #**************************************************************************************************************************
 # Hydration
 #
@@ -111,6 +134,7 @@ endif
 hydrate-gcp:
 	# ***********************************************************************************
 	# Hydrate cnrm
+	rm -rf $(BUILD_DIR)/gcp_config
 	mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
 
@@ -224,17 +248,17 @@ hydrate-mirror:
 #****************************************************************************************************
 
 .PHONY: apply-v2
-apply-v2: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt iap-secret apply-asm apply-kubeflow
-# ifeq ($(PRIVATE_GKE),true)
-# 	make apply-mirror
-# 	make apply-endpoint
-# endif
-# 	# Kick the IAP pod because we will reset the policy and need to patch it.
-# 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
-# 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
-# 	# Kick the backend updater pod, because information might be outdated after the apply.
-# 	# https://github.com/kubeflow/gcp-blueprints/issues/160
-# 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
+apply-v2: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm iap-secret apply-kubeflow
+ifeq ($(PRIVATE_GKE),true)
+	make apply-mirror
+	make apply-endpoint
+endif
+	# Kick the IAP pod because we will reset the policy and need to patch it.
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+	# Kick the backend updater pod, because information might be outdated after the apply.
+	# https://github.com/kubeflow/gcp-blueprints/issues/160
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
 
 # Uber apply rule to invoke all dependencies
 # TODO(jlewi): If we use prune does that give us a complete upgrade solution?
@@ -253,6 +277,11 @@ endif
 	# https://github.com/kubeflow/gcp-blueprints/issues/160
 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
 
+
+.PHONY: apply-gcp-v2
+apply-gcp-v2: hydrate-gcp
+	# Apply management resources
+	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
 .PHONY: apply-gcp
 apply-gcp: hydrate
@@ -341,16 +370,6 @@ apply-kubeflow: hydrate
 	# Create the kubeflow-issuer last to give cert-manager time deploy
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
 
-.PHONY: hydrate-kubeflow-apps
-hydrate-kubeflow-apps:
-	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
-
-.PHONY: hydrate-kubeflow-issuer
-hydrate-kubeflow-issuer:
-	mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
-
 apply-mirror: hydrate-mirror
 	# Per https://github.com/kubeflow/gcp-blueprints/issues/36 cloud endpoints controller won't
 	# work when running on private GKE
@@ -437,7 +456,7 @@ check-iap:
 # TODO(jlewi): How can we test to make sure CLIENT_ID is set so we don't create an empty secret.
 .PHONY: iap-secret
 iap-secret: check-iap
-	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} -o yaml | kubectl apply -f -
+	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} --dry-run=client -o yaml | kubectl apply -f -
 
 # You may override the variable by env var if you customized the deployment
 # and deploy fewer or more types of resources.
