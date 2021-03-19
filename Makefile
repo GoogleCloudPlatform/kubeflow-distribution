@@ -2,13 +2,14 @@
 # files that shouldn't be included in PRs
 # TODO(jlewi): We should add a test to make sure changed values don't get checked in
 # We don't run it in generate because we don't want to force all developers to install kpt
-clean-for-pr:
+clean-for-pr: reset-cfg-values
 	rm -rf kubeflow/.build
 	rm -rf management/.build
 
 	rm -rf kubeflow/upstream/manifests
 	rm -rf management/upstream/management
 
+reset-cfg-values:
 	kpt cfg set ./kubeflow/instance name KUBEFLOW-NAME
 	kpt cfg set ./kubeflow/instance gcloud.core.project PROJECT
 	kpt cfg set ./kubeflow/instance mgmt-ctxt MANAGEMENT-CTXT
