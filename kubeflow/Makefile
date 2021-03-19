@@ -57,14 +57,14 @@ set-values:
 
 	kpt cfg set ./instance mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
 
-	kpt cfg set ./upstream/manifests/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
-	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone <ZONE>
-	kpt cfg set ./upstream/manifests/gcp location <REGION OR ZONE>
-	kpt cfg set ./upstream/manifests/gcp log-firewalls false
+	kpt cfg set ./upstream/manifests/distributions/gcp name <YOUR_KF_NAME>
+	kpt cfg set ./upstream/manifests/distributions/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+	kpt cfg set ./upstream/manifests/distributions/gcp gcloud.compute.zone <ZONE>
+	kpt cfg set ./upstream/manifests/distributions/gcp location <REGION OR ZONE>
+	kpt cfg set ./upstream/manifests/distributions/gcp log-firewalls false
 
-	kpt cfg set ./upstream/manifests/stacks/gcp name <YOUR_KF_NAME>
-	kpt cfg set ./upstream/manifests/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
+	kpt cfg set ./upstream/manifests/distributions/stacks/gcp name <YOUR_KF_NAME>
+	kpt cfg set ./upstream/manifests/distributions/stacks/gcp gcloud.core.project <PROJECT_TO_DEPLOY_IN>
 
 	kpt cfg set ./instance name <YOUR_KF_NAME>
 	kpt cfg set ./instance location <YOUR_REGION or ZONE>
@@ -189,7 +189,7 @@ hydrate-mirror:
 # TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
 # be available before continuing?
 .PHONY: apply
-apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
+apply: clean-build check-name check-iap iap-secret apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow
 ifeq ($(PRIVATE_GKE),true)
 	make apply-mirror
 	make apply-endpoint
