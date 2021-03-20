@@ -3,7 +3,7 @@ kind: Kustomization
 patchesStrategicMerge:
 - profiles-config.yaml
 - default-install-config.yaml
-# - pipeline-minio-install-config.yaml
-# - pipeline-mysql-install-config.yaml
+- pipeline-minio-install-config.yaml
+- pipeline-mysql-install-config.yaml
 resources:
 - apps

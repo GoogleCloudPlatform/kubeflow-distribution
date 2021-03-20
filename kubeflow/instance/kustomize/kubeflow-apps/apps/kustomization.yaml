@@ -1,29 +1,52 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
+gapiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kubeflow
 resources:
 # List the Kubeflow applications that should be included 
 # TODO(https://github.com/kubeflow/manifests/issues/1073): 
 # We need to switch the admission webhook to use cert-manager.
-# - ../../../../upstream/manifests/apps/admission-webhook/webhook/v3
+
+#
+# this is Optional, no need for now.
+- ../../../../upstream/manifests/apps/admission-webhook/upstream/webhook/v3
 - ../../../../upstream/manifests/apps/centraldashboard/upstream/overlays/stacks
 - ../../../../upstream/manifests/common/kubeflow-roles/base
-# - ../../../../upstream/manifests/apps/jupyter/jupyter-web-app/base_v3
-# - ../../../../upstream/manifests/apps/jupyter/notebook-controller/base_v3
+
+# kubeflow notebook service: can connect to a notebook, they are independent from others.
+- ../../../../upstream/manifests/apps/jupyter/jupyter-web-app/upstream/base_v3
+- ../../../../upstream/manifests/apps/jupyter/notebook-controller/upstream/base_v3
+
+# no dependency. Other service will depend on this profile controller.
+# Create a namespace for a new signed-in user.
+# We can also create namespace manually. provide CRD profile
+# Profile controller can create namespace and resource for users
 - ../../../../upstream/manifests/apps/profiles/upstream/base_v3
-# - ../../../../upstream/manifests/apps/pytorch-job/pytorch-job-crds/overlays/application
-# - ../../../../upstream/manifests/apps/pytorch-job/pytorch-operator/overlays/application
-# - ../../../../upstream/manifests/apps/tf-training/tf-job-crds/overlays/application
-# - ../../../../upstream/manifests/apps/tf-training/tf-job-operator/overlays/application
-# - ../../../../upstream/manifests/apps/argo/base_v3
-# - ../../../../upstream/manifests/apps/pipeline/minio/installs/gcp-pd
-# - ../../../../upstream/manifests/apps/pipeline/mysql/installs/gcp-pd
-# - ../../../../upstream/manifests/apps/pipeline/installs/multi-user
-# - ../../../../upstream/manifests/apps/metadata/v3
-# - ../../../../upstream/manifests/apps/kfserving/installs/generic
+
+# Training working groups: for distributed training.
+- ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-job-crds/overlays/application
+- ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-operator/overlays/application
+- ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-crds/overlays/application
+- ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-operator/overlays/application
+
+# pipeline's dependency
+- ../../../../upstream/manifests/contrib/argo/base_v3
+- ../../../../upstream/manifests/contrib/metadata/v3
+
+# pipeline itself. Minio: object store. mysql: DB.
+- ../../../../upstream/manifests/apps/pipeline/upstream/minio/installs/gcp-pd
+- ../../../../upstream/manifests/apps/pipeline/upstream/mysql/installs/gcp-pd
+- ../../../../upstream/manifests/apps/pipeline/upstream/installs/multi-user
+
+# Depends on Knative, installed in another package.
+- ../../../../upstream/manifests/apps/kfserving/upstream/installs/generic
+
+# default namespace
 # This package will create a profile resource so it needs to be installed after the profiles CR
 - ../../../../upstream/manifests/contrib/default-install/base
-# - ../../../../upstream/manifests/apps/katib/installs/katib-standalone
+
+# AutoML working group: no dependency
+- ../../../../upstream/manifests/apps/katib/upstream/installs/katib-standalone
+
 patchesStrategicMerge:
 - workload-identity-bindings-patch.yaml
 configMapGenerator:
@@ -47,10 +70,10 @@ vars:
     apiVersion: v1
     kind: ConfigMap
     name: kubeflow-config
-# - fieldref:
-#     fieldpath: metadata.namespace
-#   name: katib-ui-namespace
-#   objref:
-#     kind: Service
-#     name: katib-ui
-#     apiVersion: v1
+- fieldref:
+    fieldpath: metadata.namespace
+  name: katib-ui-namespace
+  objref:
+    kind: Service
+    name: katib-ui
+    apiVersion: v1
