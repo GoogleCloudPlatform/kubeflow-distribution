@@ -182,10 +182,15 @@ hydrate-iap-ingress:
 
 .PHONY: hydrate-cert-manager
 hydrate-cert-manager:
+	rm -rf $(BUILD_DIR)/cert-manager
 	mkdir -p $(BUILD_DIR)/cert-manager
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
-	mkdir -p $(BUILD_DIR)/cert-manager-crds
+	
+	rm -rf $(BUILD_DIR)/cert-manager-crds
+	kdir -p $(BUILD_DIR)/cert-manager-crds
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
+	
+	rm -rf $(BUILD_DIR)/cert-manager-kube-system-resources
 	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
 

@@ -113,6 +113,7 @@ spec:
     matchLabels:
       app: cache-server
   rules:
+  - {}
   # - to:
   #   - operation: {}
 ---
