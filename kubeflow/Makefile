@@ -187,7 +187,7 @@ hydrate-cert-manager:
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
 	
 	rm -rf $(BUILD_DIR)/cert-manager-crds
-	kdir -p $(BUILD_DIR)/cert-manager-crds
+	mkdir -p $(BUILD_DIR)/cert-manager-crds
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
 	
 	rm -rf $(BUILD_DIR)/cert-manager-kube-system-resources
