@@ -136,7 +136,7 @@ hydrate-gcp:
 	# Hydrate cnrm
 	rm -rf $(BUILD_DIR)/gcp_config
 	mkdir -p $(BUILD_DIR)/gcp_config
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
 
 .PHONY: hydrate-asm
 hydrate-asm:
@@ -148,101 +148,101 @@ hydrate-asm:
 hydrate-namespaces:
 	rm -rf $(BUILD_DIR)/namespaces
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
 
 .PHONY: hydrate-kubeflow-istio
 hydrate-kubeflow-istio:
 	rm -rf $(BUILD_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
 
 .PHONY: hydrate-metacontroller
 hydrate-metacontroller:
 	rm -rf $(BUILD_DIR)/metacontroller
 	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
 
 .PHONY: hydrate-application
 hydrate-application:
 	rm -rf $(BUILD_DIR)/application
 	mkdir -p $(BUILD_DIR)/application
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/application $(KF_DIR)/application
 
 .PHONY: hydrate-cloud-endpoints
 hydrate-cloud-endpoints:
 	rm -rf $(BUILD_DIR)/cloud-endpoints
 	mkdir -p $(BUILD_DIR)/cloud-endpoints
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
 
 .PHONY: hydrate-iap-ingress
 hydrate-iap-ingress:
 	rm -rf $(BUILD_DIR)/iap-ingress
 	mkdir -p $(BUILD_DIR)/iap-ingress
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
 
 .PHONY: hydrate-cert-manager
 hydrate-cert-manager:
 	rm -rf $(BUILD_DIR)/cert-manager
 	mkdir -p $(BUILD_DIR)/cert-manager
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
 	
 	rm -rf $(BUILD_DIR)/cert-manager-crds
 	kdir -p $(BUILD_DIR)/cert-manager-crds
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
 	
 	rm -rf $(BUILD_DIR)/cert-manager-kube-system-resources
 	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
 
 .PHONY: hydrate-kubeflow-apps
 hydrate-kubeflow-apps:
 	rm -rf $(BUILD_DIR)/kubeflow-apps
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
 
 .PHONY: hydrate-kubeflow-issuer
 hydrate-kubeflow-issuer:
 	rm -rf $(BUILD_DIR)/kubeflow-issuer
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 
 .PHONY: hydrate-kubeflow
 hydrate-kubeflow:
 	#************************************************************************************
 	# Hydrate kubeflow applications
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
 
 	# TODO(Bobgy): remove application controller, add an issue link here
 	mkdir -p $(BUILD_DIR)/application
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/application $(KF_DIR)/application
 
 	# mkdir -p $(BUILD_DIR)/knative
-	# kustomize build --load_restrictor none -o $(BUILD_DIR)/knative $(KF_DIR)/knative
+	# kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/knative $(KF_DIR)/knative
 
 	# TODO(Bobgy): sync with community which version to use
 	mkdir -p $(BUILD_DIR)/cert-manager
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
 	mkdir -p $(BUILD_DIR)/cert-manager-crds
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
 	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
 
 	mkdir -p $(BUILD_DIR)/cloud-endpoints
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
 	mkdir -p $(BUILD_DIR)/iap-ingress
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
 
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
 	mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
 
 	# TODO(Bobgy): figure out what is kubeflow issuer
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 
 
 # Hydrate resources to mirror images
