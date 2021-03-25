@@ -5,6 +5,14 @@ metadata:
 spec:
   # Jupyter uses websockets so we want to increase the timeout.
   timeoutSec: 3600
+  healthCheck:
+    checkIntervalSec: 2
+    timeoutSec: 1
+    healthyThreshold: 1
+    unhealthyThreshold: 10
+    port: 31223
+    type: HTTP
+    requestPath: /healthz/ready
   iap:
     enabled: true
     oauthclientCredentials:

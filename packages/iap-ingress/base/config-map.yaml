@@ -103,7 +103,7 @@ data:
       
       # Use kubectl patch.
       echo patch JWT audience: ${JWT_AUDIENCE}
-      kubectl patch RequestAuthentication ingress-jwt -n istio-system --type json -p '[{"op": "replace", "path": "/spec/jwtRules/0/audiences/0", "value": "'${JWT_AUDIENCE}'"}]'
+      kubectl patch RequestAuthentication ingress-jwt -n ${NAMESPACE} --type json -p '[{"op": "replace", "path": "/spec/jwtRules/0/audiences/0", "value": "'${JWT_AUDIENCE}'"}]'
 
       echo "Clearing lock on service annotation"
       kubectl patch svc "${SERVICE}" -n istio-system -p "{\"metadata\": { \"annotations\": {\"backendlock\": \"\" }}}"
