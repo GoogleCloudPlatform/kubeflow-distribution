@@ -23,6 +23,9 @@ metadata:
   name: name # {"$kpt-set":"name"}
 spec:
   initialNodeCount: 2
+  addonsConfig:
+    httpLoadBalancing:
+      disabled: false
   clusterAutoscaling:
     enabled: true
     autoProvisioningDefaults:
