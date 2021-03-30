@@ -5,6 +5,11 @@ metadata:
 spec:
   template:
     spec:
+      volumes:
+        - name: namespace-labels
+          configMap:
+            # Provide the name of the ConfigMap containing labels
+            name: namespace-labels-data
       containers:
       - command:
         - /manager 
@@ -16,6 +21,10 @@ spec:
         - $(WORKLOAD_IDENTITY)
         args: []
         name: manager
+        volumeMounts:
+        - name: namespace-labels
+          mountPath: /etc/config/labels
+          readOnly: true 
         env:
         - name: USERID_HEADER
           valueFrom:
