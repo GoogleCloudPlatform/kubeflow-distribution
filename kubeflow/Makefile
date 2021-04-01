@@ -107,8 +107,8 @@ install-asm: install-asm-script
 	rm -rf ./asm/asm
 	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@release-1.9-asm asm
 	./asm/install_asm \
-	--project_id ${KF_PROJECT} \
-	--cluster_name ${KF_NAME} \
+	--project_id ${PROJECT} \
+	--cluster_name ${NAME} \
 	--cluster_location ${LOCATION} \
 	--mode install \
 	--enable_all \
@@ -394,6 +394,9 @@ apply-endpoint:
 	# Per https://github.com/kubeflow/gcp-blueprints/issues/36 cloud endpoints controller won't
 	# work when running on private GKE
 	kfctl apply --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml
+
+.PHONY: deploy-gcp-resources
+deploy-gcp-resources: hydrate-gcp apply-gcp-v2 wait-gcp
 
 # Print out the context
 .PHONY: echo
