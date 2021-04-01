@@ -17,3 +17,6 @@ set-cfg-values:
 	kpt cfg set ./instance location <YOUR_REGION or ZONE>
 	kpt cfg set ./instance gcloud.core.project <YOUR PROJECT>
 	kpt cfg set ./instance email <YOUR_EMAIL_ADDRESS>
+
+	kpt cfg set ./instance/kustomize/kubeflow-apps/apps name <YOUR_KF_NAME>
+	kpt cfg set ./instance/kustomize/kubeflow-apps/apps gcloud.core.project <YOUR PROJECT>
