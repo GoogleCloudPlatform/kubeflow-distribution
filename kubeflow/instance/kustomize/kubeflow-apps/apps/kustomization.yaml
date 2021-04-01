@@ -30,7 +30,8 @@ resources:
 
 # pipeline's dependency
 - ../../../../upstream/manifests/contrib/argo/base_v3
-- ../../../../upstream/manifests/contrib/metadata/v3
+# - ../../../../upstream/manifests/contrib/metadata/v3
+- ../../../../upstream/manifests/apps/pipeline/upstream/upstream/base/metadata
 
 # pipeline itself. Minio: object store. mysql: DB.
 - ../../../../upstream/manifests/apps/pipeline/upstream/minio/installs/gcp-pd
