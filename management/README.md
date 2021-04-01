@@ -7,8 +7,9 @@ Please refer to the latest [docs](https://master.kubeflow.org/docs/gke/deploy/ma
 ## Install Instructions
 
 1. Fetch the management package:
+
     ```bash
-    kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/management@v1.2.0 ./
+    kpt pkg get https://github.com/kubeflow/gcp-blueprints.git/management@v1.2.1 ./
     cd ./management
     # Get upstream package
     make get-pkg
