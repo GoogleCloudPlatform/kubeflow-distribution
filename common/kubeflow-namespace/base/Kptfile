@@ -8,7 +8,7 @@ upstream:
     commit: d36fc9c0555c936c7b71fd273b8e4604985ebba8
     repo: https://github.com/kubeflow/manifests
     directory: /common/kubeflow-namespace/base
-    ref: master
+    ref: v1.3.0-rc.0
 packageMetadata:
   shortDescription: GCP blueprint configs.
 openAPI:
@@ -29,25 +29,25 @@ openAPI:
         setter:
           isSet: true
           name: gcloud.compute.zone
-          value: us-west1-b
+          value: ZONE
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:
         setter:
           isSet: true
           name: gcloud.core.project
-          value: jamxl-kfp-dev
+          value: PROJECT
     io.k8s.cli.setters.gcloud.project.projectNumber:
       x-k8s-cli:
         setter:
           isSet: true
           name: gcloud.project.projectNumber
-          value: "1027430761074"
+          value: "PROJECT_NUMBER"
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           isSet: true
           name: location
-          value: us-west1-b
+          value: LOCATION
     io.k8s.cli.setters.log-firewalls:
       x-k8s-cli:
         setter:
@@ -86,13 +86,12 @@ openAPI:
         setter:
           isSet: true
           name: name
-          value: kf-ref
+          value: KUBEFLOW-NAME
     io.k8s.cli.setters.node-locations:
       type: array
       x-k8s-cli:
         setter:
           listValues:
-          - ""
           - ""
           - "ZONE"
           name: node-locations
