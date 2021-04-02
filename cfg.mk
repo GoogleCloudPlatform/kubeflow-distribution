@@ -3,7 +3,7 @@
 
 .PHONY: set-cfg-values
 set-cfg-values:
-	kpt cfg set ./instance gke.private false
+	kpt cfg set -R . gke.private false
 
 	kpt cfg set -R . mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
 
@@ -28,7 +28,7 @@ clean-for-pr: reset-cfg-values
 
 .PHONY: reset-cfg-values
 reset-cfg-values:
-	kpt cfg set ./instance gke.private false
+	kpt cfg set -R . gke.private false
 
 	kpt cfg set -R . mgmt-ctxt <YOUR_MANAGEMENT_CTXT>
 
