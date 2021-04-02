@@ -139,10 +139,10 @@ endif
 	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
 	-kpt fn run $(BUILD_DIR)
 
+# ***********************************************************************************
+# cnrm
 .PHONY: hydrate-cnrm
 hydrate-cnrm:
-	# ***********************************************************************************
-	# Hydrate cnrm
 	rm -rf $(BUILD_DIR)/gcp_config
 	mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
@@ -154,24 +154,28 @@ apply-cnrm: hydrate-cnrm
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
-	# ***********************************************************************************
-	# Hydrate cnrm
 	rm -rf $(BUILD_DIR)/gcp_config
 	mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
 
 .PHONY: hydrate-asm
 hydrate-asm:
-	#************************************************************************************
-	# hydrate asm
 	istioctl manifest generate -f $(MANIFESTS_DIR)/gcp/v2/asm/istio-operator.yaml -o $(BUILD_DIR)/istio
 
+# ***********************************************************************************
+# namespace
 .PHONY: hydrate-namespaces
 hydrate-namespaces:
 	rm -rf $(BUILD_DIR)/namespaces
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace
 
+.PHONY: apply-namespaces
+apply-namespaces: hydrate-namespaces
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
+
+# ***********************************************************************************
+# 
 .PHONY: hydrate-kubeflow-istio
 hydrate-kubeflow-istio:
 	rm -rf $(BUILD_DIR)/kubeflow-istio
@@ -333,9 +337,6 @@ apply-asm: hydrate
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
-.PHONY: apply-namespaces
-apply-namespaces: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
 
 .PHONY: apply-kubeflow-istio
 apply-kubeflow-istio: 
