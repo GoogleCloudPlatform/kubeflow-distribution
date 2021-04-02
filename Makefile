@@ -2,13 +2,13 @@
 
 # The name of the context for the management cluster
 # These are read using yq from the Kptfile.
-MGMTCTXT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
+MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
 
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
-PRIVATE_GKE=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gke.private".x-k8s-cli.setter.value')
+NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+PRIVATE_GKE=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gke.private".x-k8s-cli.setter.value')
 
 KFCTXT=$(NAME)
 
@@ -146,6 +146,11 @@ hydrate-cnrm:
 	rm -rf $(BUILD_DIR)/gcp_config
 	mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
+
+.PHONY: apply-cnrm
+apply-cnrm: hydrate-cnrm
+	# Apply management resources
+	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
