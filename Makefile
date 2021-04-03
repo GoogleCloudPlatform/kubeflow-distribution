@@ -226,11 +226,18 @@ hydrate-metacontroller:
 apply-metacontroller: 
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 
+# ***********************************************************************************
+# cloud-endpoints
 .PHONY: hydrate-cloud-endpoints
 hydrate-cloud-endpoints:
 	rm -rf $(BUILD_DIR)/cloud-endpoints
 	mkdir -p $(BUILD_DIR)/cloud-endpoints
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cloud-endpoints ./common/cloud-endpoints
+
+.PHONY: apply-cloud-endpoints
+apply-cloud-endpoints: hydrate-cloud-endpoints
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
+
 
 .PHONY: hydrate-iap-ingress
 hydrate-iap-ingress:
@@ -356,9 +363,6 @@ apply-asm: hydrate
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
 
-.PHONY: apply-cloud-endpoints
-apply-cloud-endpoints: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cloud-endpoints
 
 .PHONY: apply-iap-ingress
 apply-iap-ingress: 

@@ -45,4 +45,9 @@ if [ -d contrib/metacontroller/upstream/ ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/metacontroller/@$KUBEFLOW_MANIFESTS_VERSION contrib/metacontroller/upstream/
 
+if [ -d contrib/metacontroller/upstream/ ]; then
+    rm -rf contrib/metacontroller/upstream/
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/metacontroller/@$KUBEFLOW_MANIFESTS_VERSION contrib/metacontroller/upstream/
+
 sudo chmod -R 777 ./
