@@ -35,4 +35,9 @@ if [ -d contrib/application/upstream/ ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/application/@$KUBEFLOW_MANIFESTS_VERSION contrib/application/upstream/
 
+if [ -d common/cert-manager/upstream/ ]; then
+    rm -rf common/cert-manager/upstream/
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/cert-manager/@$KUBEFLOW_MANIFESTS_VERSION common/cert-manager/upstream/
+
 sudo chmod -R 777 ./
