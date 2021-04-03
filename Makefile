@@ -186,17 +186,25 @@ hydrate-kubeflow-istio:
 apply-kubeflow-istio: hydrate-kubeflow-istio
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
 
+
+# ***********************************************************************************
+# application
+.PHONY: hydrate-application
+hydrate-application:
+	rm -rf $(BUILD_DIR)/application
+	mkdir -p $(BUILD_DIR)/application
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/application ./contrib/application
+
+.PHONY: apply-application
+apply-application: hydrate-application
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
+
+
 .PHONY: hydrate-metacontroller
 hydrate-metacontroller:
 	rm -rf $(BUILD_DIR)/metacontroller
 	mkdir -p $(BUILD_DIR)/metacontroller
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
-
-.PHONY: hydrate-application
-hydrate-application:
-	rm -rf $(BUILD_DIR)/application
-	mkdir -p $(BUILD_DIR)/application
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/application $(KF_DIR)/application
 
 .PHONY: hydrate-cloud-endpoints
 hydrate-cloud-endpoints:
@@ -349,10 +357,6 @@ apply-kubeflow-istio:
 .PHONY: apply-metacontroller
 apply-metacontroller: 
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
-
-.PHONY: apply-application
-apply-application: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
 
 .PHONY: apply-cloud-endpoints
 apply-cloud-endpoints: 

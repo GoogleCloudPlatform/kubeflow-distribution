@@ -30,4 +30,9 @@ if [ -d common/istio/istio-1-9-0/ ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/istio-1-9-0
 
+if [ -d contrib/application/upstream/ ]; then
+    rm -rf contrib/application/upstream/
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/application/@$KUBEFLOW_MANIFESTS_VERSION contrib/application/upstream/
+
 sudo chmod -R 777 ./
