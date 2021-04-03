@@ -214,11 +214,17 @@ apply-cert-manager: hydrate-cert-manager
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
 
+# ***********************************************************************************
+# metacontroller
 .PHONY: hydrate-metacontroller
 hydrate-metacontroller:
 	rm -rf $(BUILD_DIR)/metacontroller
 	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller ./contrib/metacontroller
+
+.PHONY: apply-metacontroller
+apply-metacontroller: 
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 
 .PHONY: hydrate-cloud-endpoints
 hydrate-cloud-endpoints:
@@ -349,10 +355,6 @@ apply-asm: hydrate
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
-
-.PHONY: apply-metacontroller
-apply-metacontroller: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 
 .PHONY: apply-cloud-endpoints
 apply-cloud-endpoints: 
