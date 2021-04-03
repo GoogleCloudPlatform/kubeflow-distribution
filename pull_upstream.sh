@@ -25,4 +25,9 @@ if [ -d common/kubeflow-namespace/base ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-namespace/base@$KUBEFLOW_MANIFESTS_VERSION common/kubeflow-namespace
 
+if [ -d common/istio/istio-1-9-0/ ]; then
+    rm -rf common/istio/istio-1-9-0/
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/istio-1-9-0
+
 sudo chmod -R 777 ./

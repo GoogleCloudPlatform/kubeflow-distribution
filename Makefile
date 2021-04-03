@@ -175,12 +175,16 @@ apply-namespaces: hydrate-namespaces
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
 
 # ***********************************************************************************
-# 
+# kubeflow-istio
 .PHONY: hydrate-kubeflow-istio
 hydrate-kubeflow-istio:
 	rm -rf $(BUILD_DIR)/kubeflow-istio
 	mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
+
+.PHONY: apply-kubeflow-istio
+apply-kubeflow-istio: hydrate-kubeflow-istio
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
 
 .PHONY: hydrate-metacontroller
 hydrate-metacontroller:
