@@ -250,12 +250,18 @@ hydrate-iap-ingress:
 apply-iap-ingress: hydrate-iap-ingress
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
 
-
+# ***********************************************************************************
+# kubeflow-apps
 .PHONY: hydrate-kubeflow-apps
 hydrate-kubeflow-apps:
 	rm -rf $(BUILD_DIR)/kubeflow-apps
 	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-apps ./apps/kubeflow-apps
+
+.PHONY: apply-kubeflow-apps
+apply-kubeflow-apps: hydrate-kubeflow-apps
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
+
 
 .PHONY: hydrate-kubeflow-issuer
 hydrate-kubeflow-issuer:
@@ -368,11 +374,6 @@ apply-asm: hydrate
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
-
-
-.PHONY: apply-kubeflow-apps
-apply-kubeflow-apps: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
 
 .PHONY: apply-kubeflow-issuer
 apply-kubeflow-issuer: 
