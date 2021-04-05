@@ -13,14 +13,17 @@ resources:
 - ../../../common/kubeflow-roles/upstream/base
 
 # # kubeflow notebook service: can connect to a notebook, they are independent from others.
-- ../../jupyter/jupyter-web-app/upstream/base
+# - ../../jupyter/jupyter-web-app/upstream/base
+- ../../jupyter/jupyter-web-app/upstream/overlays/istio
 # - ../../jupyter/notebook-controller/upstream/base
+- ../../jupyter/notebook-controller/upstream/overlays/kubeflow
 
 # # no dependency. Other service will depend on this profile controller.
 # # Create a namespace for a new signed-in user.
 # # We can also create namespace manually. provide CRD profile
 # # Profile controller can create namespace and resource for users
 - ../../profiles/upstream/base
+# - ../../profiles/upstream/overlays/kubeflow
 
 # # Training working groups: for distributed training.
 # - ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-job-crds/overlays/application
@@ -54,7 +57,7 @@ resources:
 
 # # AutoML working group: no dependency
 # - ../../../../upstream/manifests/apps/katib/upstream/installs/katib-standalone
-# - ../../katib/upstream/installs/katib-standalone
+- ../../katib/upstream/installs/katib-with-kubeflow-cert-manager
 
 # It will fail to build if uncomment, needs to determine whether it is needed.
 # patchesStrategicMerge:
