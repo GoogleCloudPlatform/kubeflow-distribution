@@ -262,13 +262,19 @@ hydrate-kubeflow-apps:
 apply-kubeflow-apps: hydrate-kubeflow-apps
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-apps
 
-
+# ***********************************************************************************
+# kubeflow-issuer
 .PHONY: hydrate-kubeflow-issuer
 hydrate-kubeflow-issuer:
 	rm -rf $(BUILD_DIR)/kubeflow-issuer
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
 
+.PHONY: apply-kubeflow-issuer
+apply-kubeflow-issuer: hydrate-kubeflow-issuer
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
+
+# ***********************************************************************************
 .PHONY: hydrate-kubeflow
 hydrate-kubeflow:
 	#************************************************************************************
@@ -374,10 +380,6 @@ apply-asm: hydrate
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
-
-.PHONY: apply-kubeflow-issuer
-apply-kubeflow-issuer: 
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
 
 .PHONY: apply-kubeflow
 apply-kubeflow: hydrate
