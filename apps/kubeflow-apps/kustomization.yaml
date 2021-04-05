@@ -1,9 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-patchesStrategicMerge:
-- profiles-config.yaml
-- default-install-config.yaml
-- pipeline-minio-install-config.yaml
-- pipeline-mysql-install-config.yaml
+# patchesStrategicMerge:
+# - profiles-config.yaml
+# - default-install-config.yaml
+# - pipeline-minio-install-config.yaml
+# - pipeline-mysql-install-config.yaml
 resources:
-- apps
+- ./apps

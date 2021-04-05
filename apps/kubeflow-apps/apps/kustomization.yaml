@@ -14,7 +14,7 @@ resources:
 
 # # kubeflow notebook service: can connect to a notebook, they are independent from others.
 - ../../jupyter/jupyter-web-app/upstream/base
-- ../../jupyter/notebook-controller/upstream/base
+# - ../../jupyter/notebook-controller/upstream/base
 
 # # no dependency. Other service will depend on this profile controller.
 # # Create a namespace for a new signed-in user.
@@ -54,10 +54,11 @@ resources:
 
 # # AutoML working group: no dependency
 # - ../../../../upstream/manifests/apps/katib/upstream/installs/katib-standalone
-- ../../katib/upstream/installs/katib-standalone
+# - ../../katib/upstream/installs/katib-standalone
 
-patchesStrategicMerge:
-- workload-identity-bindings-patch.yaml
+# It will fail to build if uncomment, needs to determine whether it is needed.
+# patchesStrategicMerge:
+# - workload-identity-bindings-patch.yaml
 configMapGenerator:
 - envs:
   - ./config/params.env
@@ -79,10 +80,10 @@ vars:
     apiVersion: v1
     kind: ConfigMap
     name: kubeflow-config
-- fieldref:
-    fieldpath: metadata.namespace
-  name: katib-ui-namespace
-  objref:
-    kind: Service
-    name: katib-ui
-    apiVersion: v1
+# - fieldref:
+#     fieldpath: metadata.namespace
+#   name: katib-ui-namespace
+#   objref:
+#     kind: Service
+#     name: katib-ui
+#     apiVersion: v1
