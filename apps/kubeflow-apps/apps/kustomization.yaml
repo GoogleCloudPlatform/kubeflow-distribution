@@ -22,7 +22,7 @@ resources:
 # # Create a namespace for a new signed-in user.
 # # We can also create namespace manually. provide CRD profile
 # # Profile controller can create namespace and resource for users
-- ../../profiles/upstream/base
+- ../../profiles
 # - ../../profiles/upstream/overlays/kubeflow
 
 # # Training working groups: for distributed training.
