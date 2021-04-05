@@ -168,7 +168,7 @@ hydrate-asm:
 hydrate-namespaces:
 	rm -rf $(BUILD_DIR)/namespaces
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace/upstream/base
 
 .PHONY: apply-namespaces
 apply-namespaces: hydrate-namespaces
@@ -223,7 +223,7 @@ hydrate-metacontroller:
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/metacontroller ./contrib/metacontroller
 
 .PHONY: apply-metacontroller
-apply-metacontroller: 
+apply-metacontroller: hydrate-metacontroller
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/metacontroller
 
 # ***********************************************************************************
