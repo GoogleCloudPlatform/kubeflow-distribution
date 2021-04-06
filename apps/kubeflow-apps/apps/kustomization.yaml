@@ -60,8 +60,8 @@ resources:
 - ../../katib/upstream/installs/katib-with-kubeflow-cert-manager
 
 # It will fail to build if uncomment, needs to determine whether it is needed.
-# patchesStrategicMerge:
-# - workload-identity-bindings-patch.yaml
+patchesStrategicMerge:
+- workload-identity-bindings-patch.yaml
 configMapGenerator:
 - envs:
   - ./config/params.env

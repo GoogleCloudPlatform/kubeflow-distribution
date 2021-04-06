@@ -5,4 +5,4 @@ data:
 kind: ConfigMap
 metadata:
   creationTimestamp: null
-  name: profiles-config
+  name: profiles-config-gcp
