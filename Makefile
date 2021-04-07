@@ -168,7 +168,7 @@ hydrate-asm:
 hydrate-namespaces:
 	rm -rf $(BUILD_DIR)/namespaces
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace/upstream/base
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace
 
 .PHONY: apply-namespaces
 apply-namespaces: hydrate-namespaces
