@@ -9,7 +9,3 @@ configMapGenerator:
   - WORKLOAD_IDENTITY=
   - USERID_HEADER="kubeflow-userid"
   - USERID_PREFIX=
-
-
-generatorOptions:
-  disableNameSuffixHash: true

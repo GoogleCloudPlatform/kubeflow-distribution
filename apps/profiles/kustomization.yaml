@@ -25,7 +25,7 @@ patchesStrategicMerge:
 # - ./patches/manager.yaml
 # Below is copied from packages/
 - ./patches/deployment_patch.yaml
-# - ./patches/profiles-config.yaml
+- ./patches/profiles-config.yaml
 
 
 # configurations:
@@ -53,11 +53,11 @@ images:
 configMapGenerator:
 # We need the name to be unique without the suffix because the original name is what
 # gets used with patches
-# - name: profiles-config
-#   behavior: replace
-#   literals:
-#   - admin=
-#   - gcp-sa=
+- name: config
+  behavior: replace
+  literals:
+  - admin=
+  - gcp-sa=
 - name: namespace-labels-data
   files:
   - namespace-labels.yaml
