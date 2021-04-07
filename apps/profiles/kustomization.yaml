@@ -20,12 +20,17 @@ commonLabels:
   kustomize.component: profiles
 
 patchesStrategicMerge:
+<<<<<<< HEAD
 # - ./upstream/overlays/kubeflow/patches/kfam.yaml
 # - patches/remove-namespace.yaml
 # - ./patches/manager.yaml
 # Below is copied from packages/
 - ./patches/deployment_patch.yaml
 - ./patches/profiles-config.yaml
+=======
+- patches/manager.yaml
+- patches/profiles-config.yaml
+>>>>>>> 60808d8... configure profiles deployment
 
 
 # configurations:
