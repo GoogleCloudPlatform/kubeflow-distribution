@@ -2,9 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kubeflow
 resources:
-- ./upstream/base
-- ./upstream/overlays/kubeflow/service.yaml
-- ./upstream/overlays/kubeflow/virtual-service.yaml
+- ./upstream/overlays/kubeflow
+# - ./upstream/base
+# - ./upstream/overlays/kubeflow/service.yaml
+# - ./upstream/overlays/kubeflow/virtual-service.yaml
 # Below is copied from packages/
 # resources:
 # - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/cluster-role-binding.yaml
@@ -19,23 +20,25 @@ commonLabels:
   kustomize.component: profiles
 
 patchesStrategicMerge:
-- ./upstream/overlays/kubeflow/patches/kfam.yaml
+# - ./upstream/overlays/kubeflow/patches/kfam.yaml
 # - patches/remove-namespace.yaml
 # - ./patches/manager.yaml
 # Below is copied from packages/
 - ./patches/deployment_patch.yaml
+# - ./patches/profiles-config.yaml
 
-configurations:
-- ./upstream/overlays/kubeflow/params.yaml
 
-vars:
-- name: PROFILES_NAMESPACE
-  fieldref:
-    fieldpath: metadata.namespace
-  objref:
-    name: profiles-kfam
-    kind: Service
-    apiVersion: v1
+# configurations:
+# - ./upstream/overlays/kubeflow/params.yaml
+
+# vars:
+# - name: PROFILES_NAMESPACE
+#   fieldref:
+#     fieldpath: metadata.namespace
+#   objref:
+#     name: profiles-kfam
+#     kind: Service
+#     apiVersion: v1
   
 images:
 - name: public.ecr.aws/j1r0q0g6/notebooks/access-management
@@ -50,10 +53,11 @@ images:
 configMapGenerator:
 # We need the name to be unique without the suffix because the original name is what
 # gets used with patches
-- name: profiles-config-gcp
-  literals:
-  - admin=
-  - gcp-sa=
+# - name: profiles-config
+#   behavior: replace
+#   literals:
+#   - admin=
+#   - gcp-sa=
 - name: namespace-labels-data
   files:
   - namespace-labels.yaml
