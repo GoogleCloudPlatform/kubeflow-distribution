@@ -13,8 +13,7 @@ resources:
 - ../../../common/kubeflow-roles/upstream/base
 
 # # kubeflow notebook service: can connect to a notebook, they are independent from others.
-# - ../../jupyter/jupyter-web-app/upstream/base
-- ../../jupyter/jupyter-web-app/upstream/overlays/istio
+- ../../jupyter/jupyter-web-app
 # - ../../jupyter/notebook-controller/upstream/base
 - ../../jupyter/notebook-controller/upstream/overlays/kubeflow
 
