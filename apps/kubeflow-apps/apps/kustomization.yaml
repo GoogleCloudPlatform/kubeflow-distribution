@@ -28,18 +28,8 @@ resources:
 - ../../pytorch-job/upstream/overlays/kubeflow
 - ../../tf-training/upstream/overlays/kubeflow
 
-# # pipeline's dependency
-- ../../../contrib/argo/upstream/base_v3
-# - ../../../../upstream/manifests/contrib/metadata/v3
-- ../../pipeline/upstream/base/metadata/base
-
-# # pipeline itself. Minio: object store. mysql: DB.
-# - ../../pipeline/upstream/minio/installs/gcp-pd
-# - ../../pipeline/upstream/mysql/installs/gcp-pd
-# - ../../pipeline/upstream/installs/multi-user
-- ../../pipeline/upstream/third-party/minio/base
-- ../../pipeline/upstream/third-party/mysql/base
-- ../../pipeline/upstream/base/installs/multi-user
+# Kubeflow Pipelines
+- ../../pipeline
 
 # # Depends on Knative, installed in another package.
 # - ../../../../upstream/manifests/apps/kfserving/upstream/installs/generic

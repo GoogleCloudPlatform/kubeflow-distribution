@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+# Refer to upstream/env/platform-agnostic-multi-user as a reference installation
+# of multi-user Kubeflow Pipelines.
+
+# Kubeflow Pipelines' dependencies
+- upstream/third-party/argo/installs/cluster
+# minio is an object store
+# TODO(Bobgy): switch to Cloud Storage (gcs)
+- upstream/third-party/minio/base
+- upstream/third-party/minio/options/istio
+# mysql is a database
+# TODO(Bobgy): switch to Cloud SQL
+- upstream/third-party/mysql/base
+- upstream/third-party/mysql/options/istio
+# metacontroller is already installed in another package
+# - upstream/third-party/metacontroller/base
+
+# Machine Learning Metadata store
+- upstream/base/metadata/base
+
+# Kubeflow Pipelines itself
+- upstream/base/installs/multi-user
+patchesStrategicMerge:
+- ml-pipeline-deployment-patch.yaml
+- ml-pipeline-authorization-policy-patch.yaml
