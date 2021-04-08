@@ -106,6 +106,3 @@ if [ -d contrib/argo/upstream/ ]; then
     rm -rf contrib/argo/upstream/
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/argo/@$KUBEFLOW_MANIFESTS_VERSION contrib/argo/upstream/
-
-
-sudo chmod -R 777 ./
