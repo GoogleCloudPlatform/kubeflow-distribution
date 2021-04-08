@@ -35,6 +35,11 @@ spec:
               key: gcp-sa
       - name: kfam
         env:
+        - name: ADMIN
+          valueFrom:
+            configMapKeyRef:
+              name: profiles-config
+              key: admin
         - name: USERID_HEADER
           valueFrom:
             configMapKeyRef:
