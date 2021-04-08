@@ -3,6 +3,8 @@ kind: Service
 metadata:
   labels:
     app: metadata-envoy
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
   name: metadata-envoy-service
   namespace: kubeflow
 spec:
@@ -11,5 +13,7 @@ spec:
     port: 9090
     protocol: TCP
   selector:
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
     component: metadata-envoy
   type: ClusterIP

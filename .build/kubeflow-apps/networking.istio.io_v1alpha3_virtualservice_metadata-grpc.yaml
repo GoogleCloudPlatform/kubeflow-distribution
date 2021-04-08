@@ -2,8 +2,8 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   labels:
-    app.kubernetes.io/component: ml-pipeline
-    app.kubernetes.io/name: kubeflow-pipelines
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
   name: metadata-grpc
   namespace: kubeflow
 spec:
@@ -19,6 +19,6 @@ spec:
       uri: /ml_metadata
     route:
     - destination:
-        host: ml-pipeline-ui.kubeflow.svc.cluster.local
+        host: metadata-envoy-service.kubeflow.svc.cluster.local
         port:
-          number: 80
+          number: 9090

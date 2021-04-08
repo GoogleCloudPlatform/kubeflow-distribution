@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  labels:
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
+  name: metadata-grpc-service
+  namespace: kubeflow
+spec:
+  host: metadata-grpc-service.kubeflow.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

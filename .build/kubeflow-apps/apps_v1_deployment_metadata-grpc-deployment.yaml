@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
     component: metadata-grpc-server
   name: metadata-grpc-deployment
   namespace: kubeflow
@@ -9,10 +11,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      app.kubernetes.io/component: ml-metadata
+      app.kubernetes.io/name: ml-metadata
       component: metadata-grpc-server
   template:
     metadata:
       labels:
+        app.kubernetes.io/component: ml-metadata
+        app.kubernetes.io/name: ml-metadata
         component: metadata-grpc-server
     spec:
       containers:

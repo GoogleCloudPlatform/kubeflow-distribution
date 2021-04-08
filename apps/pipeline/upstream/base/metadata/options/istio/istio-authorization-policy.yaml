@@ -1,15 +1,11 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  labels:
-    app.kubernetes.io/component: ml-metadata
-    app.kubernetes.io/name: ml-metadata
   name: metadata-grpc-service
-  namespace: kubeflow
 spec:
   action: ALLOW
-  rules:
-  - {}
   selector:
     matchLabels:
       component: metadata-grpc-server
+  rules:
+  - {}

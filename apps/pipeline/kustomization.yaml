@@ -19,6 +19,7 @@ resources:
 
 # Machine Learning Metadata store
 - upstream/base/metadata/base
+- upstream/base/metadata/options/istio
 
 # Kubeflow Pipelines itself
 - upstream/base/installs/multi-user

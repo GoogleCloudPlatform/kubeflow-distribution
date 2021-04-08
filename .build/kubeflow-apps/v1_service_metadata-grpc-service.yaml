@@ -3,6 +3,8 @@ kind: Service
 metadata:
   labels:
     app: metadata
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
   name: metadata-grpc-service
   namespace: kubeflow
 spec:
@@ -11,5 +13,7 @@ spec:
     port: 8080
     protocol: TCP
   selector:
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
     component: metadata-grpc-server
   type: ClusterIP

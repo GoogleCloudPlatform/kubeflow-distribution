@@ -5,7 +5,7 @@ metadata:
 upstream:
   type: git
   git:
-    commit: d36fc9c0555c936c7b71fd273b8e4604985ebba8
-    repo: https://github.com/kubeflow/manifests
-    directory: /apps/pipeline/upstream
-    ref: v1.3.0-rc.0
+    commit: f3bb83b62d8e37b38d70bc474b3d1cca6ccb0788
+    repo: https://github.com/Bobgy/pipelines
+    directory: /manifests/kustomize
+    ref: metadata-manifests-refactor

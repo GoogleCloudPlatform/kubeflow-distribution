@@ -5,6 +5,8 @@ data:
 kind: ConfigMap
 metadata:
   labels:
+    app.kubernetes.io/component: ml-metadata
+    app.kubernetes.io/name: ml-metadata
     component: metadata-grpc-server
   name: metadata-grpc-configmap
   namespace: kubeflow
