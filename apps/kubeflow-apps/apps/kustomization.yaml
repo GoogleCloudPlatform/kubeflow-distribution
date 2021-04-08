@@ -9,7 +9,7 @@ resources:
 # this is Optional, no need for now.
 - ../../admission-webhook/upstream/overlays/cert-manager
 # - ../../centraldashboard/upstream/overlays/stacks
-- ../../centraldashboard/upstream/overlays/istio
+- ../../centraldashboard
 - ../../../common/kubeflow-roles/upstream/base
 
 # # kubeflow notebook service: can connect to a notebook, they are independent from others.
