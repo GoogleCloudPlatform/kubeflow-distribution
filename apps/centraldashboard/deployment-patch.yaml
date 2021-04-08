@@ -20,3 +20,7 @@ spec:
             configMapKeyRef:
               name: kubeflow-config
               key: userid-prefix
+        - name: REGISTRATION_FLOW
+          # Change this value to false to disable self-registration in
+          # Kubeflow Central Dashboard.
+          value: "true"
