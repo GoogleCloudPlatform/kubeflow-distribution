@@ -6,15 +6,12 @@ resources:
 # TODO(https://github.com/kubeflow/manifests/issues/1073): 
 # We need to switch the admission webhook to use cert-manager.
 
-# this is Optional, no need for now.
 - ../../admission-webhook/upstream/overlays/cert-manager
-# - ../../centraldashboard/upstream/overlays/stacks
 - ../../centraldashboard
 - ../../../common/kubeflow-roles/upstream/base
 
-# # kubeflow notebook service: can connect to a notebook, they are independent from others.
+# kubeflow notebook service: can connect to a notebook, they are independent from others.
 - ../../jupyter/jupyter-web-app
-# - ../../jupyter/notebook-controller/upstream/base
 - ../../jupyter/notebook-controller/upstream/overlays/kubeflow
 
 # # no dependency. Other service will depend on this profile controller.
@@ -22,7 +19,6 @@ resources:
 # # We can also create namespace manually. provide CRD profile
 # # Profile controller can create namespace and resource for users
 - ../../profiles
-# - ../../profiles/upstream/overlays/kubeflow
 
 # # Training working groups: for distributed training.
 # - ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-job-crds/overlays/application
