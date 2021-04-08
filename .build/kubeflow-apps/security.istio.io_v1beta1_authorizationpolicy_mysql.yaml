@@ -1,7 +1,7 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: ml-pipeline
+  name: mysql
   namespace: kubeflow
 spec:
   rules:
@@ -14,7 +14,7 @@ spec:
         - cluster.local/ns/kubeflow/sa/ml-pipeline-scheduledworkflow
         - cluster.local/ns/kubeflow/sa/ml-pipeline-viewer-crd-service-account
         - cluster.local/ns/kubeflow/sa/kubeflow-pipelines-cache
-  - when:
-    - key: request.headers[x-goog-authenticated-user-email]
-      notValues:
-      - '*'
+        - cluster.local/ns/kubeflow/sa/metadata-grpc-server
+  selector:
+    matchLabels:
+      app: mysql

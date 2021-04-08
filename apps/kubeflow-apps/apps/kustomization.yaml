@@ -32,8 +32,13 @@ resources:
 # - ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-operator/overlays/application
 # - ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-crds/overlays/application
 # - ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-operator/overlays/application
+<<<<<<< HEAD
 - ../../pytorch-job/upstream/overlays/kubeflow
 - ../../tf-training/upstream/overlays/kubeflow
+=======
+# - ../../pytorch-job/upstream/overlays/kubeflow
+# - ../../tf-training/upstream/overlays/kubeflow
+>>>>>>> c2355e7... feat: include Kubeflow Pipelines multi-user mode
 
 # Kubeflow Pipelines
 - ../../pipeline

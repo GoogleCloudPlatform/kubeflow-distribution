@@ -1,6 +1,9 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
+  labels:
+    app.kubernetes.io/component: ml-pipeline
+    app.kubernetes.io/name: kubeflow-pipelines
   name: ml-pipeline
   namespace: kubeflow
 spec:
@@ -18,3 +21,6 @@ spec:
     - key: request.headers[x-goog-authenticated-user-email]
       notValues:
       - '*'
+  selector:
+    matchLabels:
+      app: ml-pipeline
