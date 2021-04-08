@@ -4,3 +4,4 @@ metadata:
   name: kubeflow
   labels:
     istio.io/rev: asm-192-1 # TODO(zijianjoy): how do we set it automatically
+    istio-injection: null
