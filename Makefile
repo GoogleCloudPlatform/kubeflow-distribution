@@ -103,8 +103,8 @@ update:
 
 .PHONY: install-asm-script
 install-asm-script:
-	mkdir -p ${APP_DIR}/asm;
-	cd ${APP_DIR}/asm && { \
+	mkdir -p $(APP_DIR)/common/asm;
+	cd $(APP_DIR)/common/asm && { \
 		curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9 > install_asm; \
 		curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9.sha256 > install_asm.sha256; \
 		sha256sum -c --ignore-missing install_asm.sha256; \
@@ -113,15 +113,15 @@ install-asm-script:
 
 .PHONY: install-asm
 install-asm: install-asm-script
-	rm -rf ./asm/asm
-	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@release-1.9-asm asm
-	./asm/install_asm \
-	--project_id ${PROJECT} \
-	--cluster_name ${NAME} \
-	--cluster_location ${LOCATION} \
+	rm -rf $(APP_DIR)/common/asm/asm
+	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@1.9.1-asm.1+config3 $(APP_DIR)/common/asm
+	$(APP_DIR)/common/asm/install_asm \
+	--project_id $(PROJECT) \
+	--cluster_name $(NAME) \
+	--cluster_location $(LOCATION) \
 	--mode install \
 	--enable_all \
-	--custom_overlay asm/asm/istio/options/iap-operator.yaml
+	--custom_overlay $(APP_DIR)/common/asm/asm/istio/options/iap-operator.yaml
 
 
 #**************************************************************************************************************************
@@ -280,7 +280,7 @@ hydrate-kubeflow:
 	#************************************************************************************
 	# Hydrate kubeflow applications
 	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  $(KF_DIR)/namespaces
 
 	# TODO(Bobgy): remove application controller, add an issue link here
 	mkdir -p $(BUILD_DIR)/application
@@ -373,10 +373,10 @@ apply-gcp: hydrate
 .PHONY: apply-asm
 apply-asm: hydrate
 	# We need to apply the CRD definitions first
-	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
-	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
 	# TODO(jlewi): Should we use the newer version in asm/asm
-	# istioctl manifest --context=${KFCTXT} apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
+	# istioctl manifest --context=$(KFCTXT) apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 	# TODO(jlewi): Switch to anthoscli once it supports generating manifests
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml
 
@@ -396,8 +396,8 @@ apply-kubeflow: hydrate
 	# Note, insert a * before v1_namespace, because different versions of
 	# kustomize may generate slightly different file names:
 	# https://github.com/kubeflow/gcp-blueprints/issues/164.
-	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/*v1_namespace_knative-serving.yaml
-	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/knative
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/knative/*v1_namespace_knative-serving.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 	# Due to https://github.com/jetstack/cert-manager/issues/2208
 	# We need to skip validation on Kubernetes 1.14
@@ -501,7 +501,7 @@ check-iap:
 # TODO(jlewi): How can we test to make sure CLIENT_ID is set so we don't create an empty secret.
 .PHONY: iap-secret
 iap-secret: check-iap
-	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=${CLIENT_ID} --from-literal=client_secret=${CLIENT_SECRET} --dry-run=client -o yaml | kubectl apply -f -
+	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=$(CLIENT_ID) --from-literal=client_secret=$(CLIENT_SECRET) --dry-run=client -o yaml | kubectl apply -f -
 
 # You may override the variable by env var if you customized the deployment
 # and deploy fewer or more types of resources.
