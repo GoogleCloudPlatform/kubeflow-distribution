@@ -80,6 +80,10 @@ if [ -d common/kubeflow-roles/upstream/ ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-roles/@$KUBEFLOW_MANIFESTS_VERSION common/kubeflow-roles/upstream/
 
+if [ -d common/knative/upstream ]; then
+    rm -rf common/knative/upstream
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/knative/@$KUBEFLOW_MANIFESTS_VERSION common/knative/upstream/
 
 if [ -d common/user-namespace/upstream ]; then
     rm -rf common/user-namespace/upstream
