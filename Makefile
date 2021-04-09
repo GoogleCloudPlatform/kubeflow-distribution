@@ -251,6 +251,18 @@ apply-iap-ingress: hydrate-iap-ingress
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/iap-ingress
 
 # ***********************************************************************************
+# knative
+.PHONY: hydrate-knative
+hydrate-knative:
+	rm -rf $(BUILD_DIR)/knative
+	mkdir -p $(BUILD_DIR)/knative
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/knative ./common/knative
+
+.PHONY: apply-knative
+apply-knative: hydrate-knative
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/knative
+
+# ***********************************************************************************
 # kubeflow-apps
 .PHONY: hydrate-kubeflow-apps
 hydrate-kubeflow-apps:
