@@ -64,6 +64,16 @@ if [ -d apps/volumes-web-app/upstream ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/volumes-web-app/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/volumes-web-app
 
+if [ -d apps/tensorboard/tensorboards-web-app/upstream ]; then
+    rm -rf apps/tensorboard/tensorboards-web-app/upstream
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/tensorboard/tensorboards-web-app/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/tensorboard/tensorboards-web-app
+
+if [ -d apps/tensorboard/tensorboard-controller/upstream ]; then
+    rm -rf apps/tensorboard/tensorboard-controller/upstream
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/tensorboard/tensorboard-controller/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/tensorboard/tensorboard-controller
+
 # common/ related manifest
 if [ -d common/kubeflow-namespace/upstream ]; then
     rm -rf common/kubeflow-namespace/upstream

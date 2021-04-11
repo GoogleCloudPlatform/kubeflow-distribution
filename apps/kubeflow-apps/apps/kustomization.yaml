@@ -14,8 +14,12 @@ resources:
 - ../../jupyter/jupyter-web-app
 - ../../jupyter/notebook-controller/upstream/overlays/kubeflow
 
-# volume web app
+# Volume web app
 - ../../volumes-web-app
+
+# Tensorboard app
+- ../../tensorboard/tensorboards-web-app
+- ../../tensorboard/tensorboard-controller
 
 # # no dependency. Other service will depend on this profile controller.
 # # Create a namespace for a new signed-in user.
