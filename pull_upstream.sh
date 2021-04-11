@@ -59,6 +59,11 @@ if [ -d apps/katib/upstream ]; then
 fi
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/katib/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/katib
 
+if [ -d apps/volumes-web-app/upstream ]; then
+    rm -rf apps/volumes-web-app/upstream
+fi
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/volumes-web-app/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/volumes-web-app
+
 # common/ related manifest
 if [ -d common/kubeflow-namespace/upstream ]; then
     rm -rf common/kubeflow-namespace/upstream
