@@ -22,6 +22,7 @@ commonLabels:
 patchesStrategicMerge:
 - patches/manager.yaml
 - patches/profiles-config.yaml
+- patches/kubeflow.org_profiles_patch.yaml
 
 # configurations:
 # - ./upstream/overlays/kubeflow/params.yaml
