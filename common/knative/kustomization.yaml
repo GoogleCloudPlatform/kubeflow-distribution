@@ -3,4 +3,8 @@ kind: Kustomization
 resources:
 - ./upstream/knative-serving-crds/base
 - ./upstream/knative-serving-install/base
-- ../istio/istio-1-9-0/cluster-local-gateway/base
+namespace: knative-serving
+commonLabels:
+  kustomize.component: knative
+  app.kubernetes.io/component: knative-serving-install
+  app.kubernetes.io/name: knative-serving-install
