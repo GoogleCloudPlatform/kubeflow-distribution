@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: admission-webhook
+upstream:
+  type: git
+  git:
+    commit: d2b21825790c1a33d2a73f88b7f6a70573361301
+    repo: https://github.com/kubeflow/manifests
+    directory: /apps/admission-webhook
+    ref: master
