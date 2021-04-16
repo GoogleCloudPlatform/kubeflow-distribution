@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: upstream
+upstream:
+  type: git
+  git:
+    commit: f3bb83b62d8e37b38d70bc474b3d1cca6ccb0788
+    repo: https://github.com/Bobgy/pipelines
+    directory: /manifests/kustomize
+    ref: metadata-manifests-refactor

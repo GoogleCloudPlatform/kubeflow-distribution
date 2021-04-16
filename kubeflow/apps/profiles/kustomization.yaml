@@ -1,0 +1,59 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubeflow
+resources:
+- ./upstream/overlays/kubeflow
+# - ./upstream/base
+# - ./upstream/overlays/kubeflow/service.yaml
+# - ./upstream/overlays/kubeflow/virtual-service.yaml
+# Below is copied from packages/
+# resources:
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/cluster-role-binding.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/crd.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/deployment.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/service.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/base/service-account.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/overlays/istio/virtual-service.yaml
+# - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/overlays/application/application.yaml
+
+commonLabels:
+  kustomize.component: profiles
+
+patchesStrategicMerge:
+- patches/manager.yaml
+- patches/profiles-config.yaml
+- patches/kubeflow.org_profiles_patch.yaml
+
+# configurations:
+# - ./upstream/overlays/kubeflow/params.yaml
+
+# vars:
+# - name: PROFILES_NAMESPACE
+#   fieldref:
+#     fieldpath: metadata.namespace
+#   objref:
+#     name: profiles-kfam
+#     kind: Service
+#     apiVersion: v1
+  
+images:
+- name: public.ecr.aws/j1r0q0g6/notebooks/access-management
+  newName: public.ecr.aws/j1r0q0g6/notebooks/access-management
+  newTag: v1.3.0-rc.0
+# Added for dynamic namespace label change
+- name: public.ecr.aws/j1r0q0g6/notebooks/profile-controller
+  newName: gcr.io/jamxl-kfp-dev/profile-controller
+  newTag: kf-v1.3-rc0
+
+# Below is copied from packages/
+configMapGenerator:
+# We need the name to be unique without the suffix because the original name is what
+# gets used with patches
+- name: config
+  behavior: replace
+  literals:
+  - admin=
+  - gcp-sa=
+- name: namespace-labels-data
+  files:
+  - namespace-labels.yaml

@@ -1,0 +1,84 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubeflow
+resources:
+# List the Kubeflow applications that should be included 
+# TODO(https://github.com/kubeflow/manifests/issues/1073): 
+# We need to switch the admission webhook to use cert-manager.
+
+- ../../admission-webhook/upstream/overlays/cert-manager
+- ../../centraldashboard
+- ../../../common/kubeflow-roles/upstream/base
+
+# kubeflow notebook service: can connect to a notebook, they are independent from others.
+- ../../jupyter/jupyter-web-app
+- ../../jupyter/notebook-controller/upstream/overlays/kubeflow
+
+# Volume web app
+- ../../volumes-web-app
+
+# Tensorboard app
+- ../../tensorboard/tensorboards-web-app
+- ../../tensorboard/tensorboard-controller
+
+# # no dependency. Other service will depend on this profile controller.
+# # Create a namespace for a new signed-in user.
+# # We can also create namespace manually. provide CRD profile
+# # Profile controller can create namespace and resource for users
+- ../../profiles
+
+# # Training working groups: for distributed training.
+# - ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-job-crds/overlays/application
+# - ../../../../upstream/manifests/apps/pytorch-job/upstream/pytorch-operator/overlays/application
+# - ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-crds/overlays/application
+# - ../../../../upstream/manifests/apps/tf-training/upstream/tf-job-operator/overlays/application
+- ../../pytorch-job/upstream/overlays/kubeflow
+- ../../tf-training/upstream/overlays/kubeflow
+
+# Kubeflow Pipelines
+- ../../pipeline
+
+# # Depends on Knative, installed in another package.
+# - ../../../../upstream/manifests/apps/kfserving/upstream/installs/generic
+- ../../kfserving/upstream/overlays/kubeflow
+
+# # default namespace
+# # This package will create a profile resource so it needs to be installed after the profiles CR
+# - ../../../../upstream/manifests/contrib/default-install/base
+- ../../../common/user-namespace/upstream/base
+
+# # AutoML working group: no dependency
+# - ../../../../upstream/manifests/apps/katib/upstream/installs/katib-standalone
+- ../../katib/upstream/installs/katib-with-kubeflow-cert-manager
+
+# It will fail to build if uncomment, needs to determine whether it is needed.
+patchesStrategicMerge:
+- workload-identity-bindings-patch.yaml
+configMapGenerator:
+- envs:
+  - ./config/params.env
+  name: kubeflow-config
+vars:
+# We need to define vars at the top level otherwise we will get
+# conflicts. 
+- fieldref:
+    fieldPath: data.clusterDomain
+  name: clusterDomain
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kubeflow-config
+- fieldref:
+    fieldPath: metadata.namespace
+  name: namespace
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kubeflow-config
+# - fieldref:
+#     fieldpath: metadata.namespace
+#   name: katib-ui-namespace
+#   objref:
+#     kind: Service
+#     name: katib-ui
+#     apiVersion: v1
