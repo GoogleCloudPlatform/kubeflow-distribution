@@ -1,6 +1,0 @@
-apiVersion: v1
-data:
-  minioPd: KUBEFLOW-NAME-storage-artifact-store # {"$kpt-set":"storage-artifact-store-name"}
-kind: ConfigMap
-metadata:
-  name: pipeline-minio-install-config

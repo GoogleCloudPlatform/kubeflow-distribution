@@ -1,6 +1,0 @@
-apiVersion: v1
-data:
-  mysqlPd: KUBEFLOW-NAME-storage-metadata-store # {"$kpt-set":"metadata-artifact-store-name"}
-kind: ConfigMap
-metadata:
-  name: pipeline-mysql-install-config
