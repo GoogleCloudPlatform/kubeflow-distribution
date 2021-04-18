@@ -51,12 +51,6 @@ fi
 mkdir -p apps/tf-training
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/tf-training/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/tf-training
 
-if [ -d apps/pipeline/upstream ]; then
-    rm -rf apps/pipeline/upstream
-fi
-mkdir -p apps/pipeline
-kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/pipeline/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/pipeline
-
 if [ -d apps/kfserving/upstream ]; then
     rm -rf apps/kfserving/upstream
 fi
@@ -94,11 +88,10 @@ fi
 mkdir -p common/kubeflow-namespace
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-namespace/@$KUBEFLOW_MANIFESTS_VERSION common/kubeflow-namespace/upstream/
 
-if [ -d common/istio/istio-1-9-0/ ]; then
-    rm -rf common/istio/istio-1-9-0/
+if [ -d common/istio/istio-1-9-0 ]; then
+    rm -rf common/istio/istio-1-9-0
 fi
-mkdir -p common/istio/istio-1-9-0
-kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/istio-1-9-0
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/
 
 if [ -d common/cert-manager/upstream/ ]; then
     rm -rf common/cert-manager/upstream/
@@ -112,8 +105,8 @@ fi
 mkdir -p common/kubeflow-roles
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-roles/@$KUBEFLOW_MANIFESTS_VERSION common/kubeflow-roles/upstream/
 
-if [ -d common/knative/upstream ]; then
-    rm -rf common/knative/upstream
+if [ -d common/knative/upstream/ ]; then
+    rm -rf common/knative/upstream/
 fi
 mkdir -p common/knative
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/knative/@$KUBEFLOW_MANIFESTS_VERSION common/knative/upstream/
