@@ -69,10 +69,7 @@ apply-kubeflow: validate-values check-name
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
 
-	# Kubeflow kubeflow-istio
-	rm -rf $(BUILD_DIR)/kubeflow-istio && mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
+	$(MAKE) apply-istio
 
 	# Contrib application
 	rm -rf $(BUILD_DIR)/application && mkdir -p $(BUILD_DIR)/application
@@ -184,13 +181,10 @@ apply-knative:
 	# Common Knative
 	# It has error when trying to patch the resource downloaded from knative because it doesn't match kustomize requirement.
 	# Original release of knative manifest can not be patched by kustomize because of `already registered id`. For now we run kubectl directly.
-	# rm -rf $(BUILD_DIR)/knative && mkdir -p $(BUILD_DIR)/knative
-	# kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/knative ./common/knative
-	# kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/knative
-	kubectl apply -f ./common/knative/knative-0-22-0/serving-crds.yaml
-	kubectl apply -f ./common/knative/knative-0-22-0/serving-core.yaml
-	kubectl apply -f ./common/knative/knative-0-22-0/net-istio.yaml
-	kubectl --context=$(KFCTXT) label namespace knative-serving istio.io/rev=asm-192-1 --overwrite
+	rm -rf $(BUILD_DIR)/knative && mkdir -p $(BUILD_DIR)/knative
+	kustomize build -o $(BUILD_DIR)/knative ./common/knative
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/*v1_namespace_knative-serving.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/knative
 
 .PHONY: apply-kfserving
 apply-kfserving:
@@ -217,6 +211,13 @@ apply-kubeflow-issuer:
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
 
+
+.PHONY: apply-istio
+apply-istio: 
+	# Kubeflow kubeflow-istio
+	rm -rf $(BUILD_DIR)/kubeflow-istio && mkdir -p $(BUILD_DIR)/kubeflow-istio
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
 
 .PHONY: apply-v2
 apply-v2: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm iap-secret apply-kubeflow
