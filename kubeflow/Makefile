@@ -199,17 +199,20 @@ apply-cert-manager:
 	# Common cert-manager
 	rm -rf $(BUILD_DIR)/cert-manager && mkdir -p $(BUILD_DIR)/cert-manager
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager ./common/cert-manager
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
+# Try kpt live apply to simplify this steps.
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager/*v1_namespace_cert-manager.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/cert-manager
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
 
 .PHONY: apply-kubeflow-issuer
 apply-kubeflow-issuer:
-	# Common cert-manager kubeflow-issuer
+	# Common kubeflow-issuer for cert-manager
 	rm -rf $(BUILD_DIR)/kubeflow-issuer && mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/cert-manager-1-3/cert-manager/kubeflow-issuer
+# kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/kubeflow-issuer
 
 
 .PHONY: apply-istio
