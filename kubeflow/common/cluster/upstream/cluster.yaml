@@ -45,16 +45,15 @@ spec:
   releaseChannel:
     # Per https://github.com/GoogleCloudPlatform/k8s-config-connector/issues/194
     # use upper case for the channels
-    channel: UNSPECIFIED
-  nodeVersion: '1.18'
+    channel: STABLE
   # Master version controls the kubernetes API version.
   # Future upgrade of master version might break Kubeflow deployment.
-  # Therefore we need to pin master version and disable minor version upgrade.
-  # Autopilot will enforce automatic node upgrade.
+  # At the time of writing, STABLE release channel is using 0.17.
+  # The kubernetes version requirement is 1.17+. Therefore we don't
+  # need to enforce master version. But make sure to review for future release.
+  # Autopilot mode will enforce automatic node upgrade.
   minMasterVersion: '1.18' 
-  # This feature is very new: https://github.com/GoogleCloudPlatform/k8s-config-connector/releases/tag/v1.46.0
-  # If you encounter an issue that this field is unknown, remove this field from here for now.
-  enableAutopilot: false
+  nodeVersion: '1.18'
   location: LOCATION # {"$kpt-set":"location"}
   workloadIdentityConfig:
     identityNamespace: PROJECT.svc.id.goog # {"$kpt-set":"identity-ns"}
