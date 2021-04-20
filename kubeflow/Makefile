@@ -74,11 +74,6 @@ apply-kubeflow: validate-values check-name
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
 
-	# Contrib application
-	rm -rf $(BUILD_DIR)/application && mkdir -p $(BUILD_DIR)/application
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/application ./contrib/application
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/application
-
 	# Common cert-manager
 	rm -rf $(BUILD_DIR)/cert-manager && mkdir -p $(BUILD_DIR)/cert-manager
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager ./common/cert-manager
