@@ -215,8 +215,8 @@ iap-secret: check-iap
 .PHONY: check-iap
 check-iap:
 	./hack/check_oauth_secret.sh
-	# Delete gcp resources
-
+	
+# Delete gcp resources
 .PHONY: delete-gcp
 delete-gcp:
 	kubectl	--context=$(MGMTCTXT) delete -f $(BUILD_DIR)/gcp_config
