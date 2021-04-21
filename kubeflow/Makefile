@@ -45,12 +45,16 @@ endif
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
-.PHONY: apply-kubeflow
-apply-kubeflow: validate-values check-name 
-	# GCP Resources
+.PHONY: apply-cnrm
+apply-cnrm:
 	rm -rf $(BUILD_DIR)/gcp_config && mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
+
+.PHONY: apply-kubeflow
+apply-kubeflow: validate-values check-name 
+	# GCP Resources
+	$(MAKE) apply-cnrm
 
 	# Wait for GCP Resources to finish.
 	$(MAKE) -C common/cnrm wait-gcp
@@ -207,3 +211,7 @@ iap-secret: check-iap
 check-iap:
 	./hack/check_oauth_secret.sh
 	
+# Delete gcp resources
+.PHONY: delete-gcp
+delete-gcp:
+	kubectl	--context=$(MGMTCTXT) delete -f $(BUILD_DIR)/gcp_config
