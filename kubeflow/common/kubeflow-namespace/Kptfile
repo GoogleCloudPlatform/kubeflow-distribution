@@ -1,9 +1,9 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-  name: profiles
+  name: kubeflow-namespace
 packageMetadata:
-  shortDescription: profile controller config.
+  shortDescription: kubeflow-namespace config.
 openAPI:
   definitions:
     io.k8s.cli.setters.asm-label:
