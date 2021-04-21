@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: kubeflow
+  name: knative-serving
   labels:
     istio.io/rev: ASM-LABEL # {"$kpt-set":"asm-label"}
     istio-injection: null
