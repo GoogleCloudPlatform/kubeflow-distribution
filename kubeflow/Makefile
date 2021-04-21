@@ -73,18 +73,9 @@ apply-kubeflow: validate-values check-name
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/namespaces  ./common/kubeflow-namespace
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
 
-	# Kubeflow kubeflow-istio
-	rm -rf $(BUILD_DIR)/kubeflow-istio && mkdir -p $(BUILD_DIR)/kubeflow-istio
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
+	$(MAKE) apply-istio
 
-	# Common cert-manager
-	rm -rf $(BUILD_DIR)/cert-manager && mkdir -p $(BUILD_DIR)/cert-manager
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager ./common/cert-manager
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager
-	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
-	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
-	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
+	$(MAKE) apply-cert-manager
 
 	# Contrib metacontroller
 	rm -rf $(BUILD_DIR)/metacontroller && mkdir -p $(BUILD_DIR)/metacontroller
@@ -161,10 +152,9 @@ apply-kubeflow: validate-values check-name
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/pipeline ./apps/pipeline
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/pipeline
 
-	# App kfserving
-	rm -rf $(BUILD_DIR)/kfserving && mkdir -p $(BUILD_DIR)/kfserving
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kfserving ./apps/kfserving
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kfserving
+	$(MAKE) apply-knative 
+
+	$(MAKE) apply-kfserving
 
 	# Common user-namespace
 	rm -rf $(BUILD_DIR)/user-namespace && mkdir -p $(BUILD_DIR)/user-namespace
@@ -176,10 +166,7 @@ apply-kubeflow: validate-values check-name
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/katib ./apps/katib
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/katib
 
-	# Common cert-manager kubeflow-issuer
-	rm -rf $(BUILD_DIR)/kubeflow-issuer && mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
-	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
+	$(MAKE) apply-kubeflow-issuer
 
 	# Kick the IAP pod because we will reset the policy and need to patch it.
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
@@ -187,6 +174,52 @@ apply-kubeflow: validate-values check-name
 	# Kick the backend updater pod, because information might be outdated after the apply.
 	# https://github.com/kubeflow/gcp-blueprints/issues/160
 	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
+
+.PHONY: apply-knative
+apply-knative:
+	# Common Knative
+	# It has error when trying to patch the resource downloaded from knative because it doesn't match kustomize requirement.
+	# Original release of knative manifest can not be patched by kustomize because of `already registered id`. For now we run kubectl directly.
+	rm -rf $(BUILD_DIR)/knative && mkdir -p $(BUILD_DIR)/knative
+	kustomize build -o $(BUILD_DIR)/knative ./common/knative
+	kubectl --context=${KFCTXT} apply -f ./$(BUILD_DIR)/knative/*v1_namespace_knative-serving.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/knative
+
+.PHONY: apply-kfserving
+apply-kfserving:
+	# App kfserving
+	rm -rf $(BUILD_DIR)/kfserving && mkdir -p $(BUILD_DIR)/kfserving
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kfserving ./apps/kfserving
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kfserving
+	kubectl --context=$(KFCTXT) patch cm config-domain --namespace knative-serving --type merge -p '{"data":{"$(NAME).endpoints.$(PROJECT).cloud.goog": ""}}'
+
+.PHONY: apply-cert-manager
+apply-cert-manager:
+	# Common cert-manager
+	rm -rf $(BUILD_DIR)/cert-manager && mkdir -p $(BUILD_DIR)/cert-manager
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/cert-manager ./common/cert-manager
+# Try kpt live apply to simplify this steps.
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/cert-manager/*v1_namespace_cert-manager.yaml
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/cert-manager
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
+	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
+
+.PHONY: apply-kubeflow-issuer
+apply-kubeflow-issuer:
+	# Common kubeflow-issuer for cert-manager
+	rm -rf $(BUILD_DIR)/kubeflow-issuer && mkdir -p $(BUILD_DIR)/kubeflow-issuer
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/cert-manager-1-3/cert-manager/kubeflow-issuer
+# kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-issuer ./common/cert-manager/upstream/cert-manager/kubeflow-issuer
+	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(BUILD_DIR)/kubeflow-issuer
+
+
+.PHONY: apply-istio
+apply-istio: 
+	# Kubeflow kubeflow-istio
+	rm -rf $(BUILD_DIR)/kubeflow-istio && mkdir -p $(BUILD_DIR)/kubeflow-istio
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/kubeflow-istio ./common/istio
+	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
 
 .PHONY: apply-v2
 apply-v2: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm iap-secret apply-kubeflow
