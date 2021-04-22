@@ -1,16 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-  name: profiles
+  name: gcp
 packageMetadata:
-  shortDescription: profile controller config.
+  shortDescription: sample description
 openAPI:
   definitions:
-    io.k8s.cli.setters.asm-label:
-      x-k8s-cli:
-        setter:
-          name: asm-label
-          value: ASM-LABEL
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
@@ -21,11 +16,11 @@ openAPI:
         setter:
           name: gcloud.core.project
           value: PROJECT
-    io.k8s.cli.substitutions.admin-sa-ref:
+    io.k8s.cli.substitutions.user-sa-ref:
       x-k8s-cli:
         substitution:
-          name: admin-sa-ref
-          pattern: ${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
+          name: user-sa-ref
+          pattern: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
           values:
           - marker: ${name}
             ref: '#/definitions/io.k8s.cli.setters.name'

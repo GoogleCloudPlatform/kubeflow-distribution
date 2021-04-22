@@ -25,5 +25,6 @@ resources:
 # Kubeflow Pipelines itself
 - upstream/base/installs/multi-user
 patchesStrategicMerge:
-- ml-pipeline-deployment-patch.yaml
-- ml-pipeline-authorization-policy-patch.yaml
+- patches/ml-pipeline-deployment-patch.yaml
+- patches/ml-pipeline-authorization-policy-patch.yaml
+- patches/workload-identity-binding.yaml

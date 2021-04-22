@@ -23,6 +23,7 @@ patchesStrategicMerge:
 - patches/manager.yaml
 - patches/profiles-config.yaml
 - patches/kubeflow.org_profiles_patch.yaml
+- patches/workload-identity-binding.yaml
 
 # configurations:
 # - ./upstream/overlays/kubeflow/params.yaml
