@@ -2,6 +2,7 @@
 # Use kpt to set kustomize values
 
 kpt cfg set -R .  gke.private false
+kpt cfg set -R .  asm-label ${ASM_LABEL}
 
 kpt cfg set -R .  mgmt-ctxt ${MGMT_NAME}
 

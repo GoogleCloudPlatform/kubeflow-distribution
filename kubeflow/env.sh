@@ -1,9 +1,10 @@
-KF_NAME=<kubeflow-cluster-name>
-KF_PROJECT=<gcp-project-id>
-KF_DIR=<kubeflow-download-path>
-MGMT_NAME=<management-cluster-name>
-MGMTCTXT=${MGMT_NAME}
-LOCATION=<zone>
+export KF_NAME=<kubeflow-cluster-name>
+export KF_PROJECT=<gcp-project-id>
+export KF_DIR=<kubeflow-download-path>
+export MGMT_NAME=<management-cluster-name>
+export MGMTCTXT=${MGMT_NAME}
+export LOCATION=<zone>
 
+export ASM_LABEL=asm-192-1
 
 
