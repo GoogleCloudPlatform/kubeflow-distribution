@@ -46,4 +46,4 @@ install-asm: downalod-install-asm-script download-asm-package
 	--cluster_location $(LOCATION) \
 	--mode install \
 	--enable_all \
-	--custom_overlay ./options/ingressgateway-annotations.yaml 
+	--custom_overlay ./options/ingressgateway-annotations.yaml
