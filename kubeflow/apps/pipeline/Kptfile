@@ -1,9 +1,9 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-  name: gcp
+  name: pipeline
 packageMetadata:
-  shortDescription: sample description
+  shortDescription: pipeline config
 openAPI:
   definitions:
     io.k8s.cli.setters.name:
