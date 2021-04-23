@@ -66,7 +66,7 @@ hydrate-cluster: validate-values
 	kustomize build $(PACKAGE_CLUSTER_DIR) -o $(BUILD_DIR)/cluster
 
 .PHONY: apply-cluster
-apply-cluster:
+apply-cluster: hydrate-cluster
 	# Create the cluster
 	anthoscli apply -f $(BUILD_DIR)/cluster
 
@@ -90,7 +90,7 @@ hydrate-kcc: validate-values
 	kustomize build -o ./$(BUILD_DIR)/cnrm-install-system $(PACKAGE_CNRM_SYSTEM_DIR)
 
 .PHONY: apply-kcc
-apply-kcc:
+apply-kcc: hydrate-kcc
 	# The following steps install the config connector according to
 	# https://cloud.google.com/config-connector/docs/how-to/advanced-install
 	# Enable services required by config connector
