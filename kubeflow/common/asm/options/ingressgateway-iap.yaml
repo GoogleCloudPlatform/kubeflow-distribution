@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This overlay adds compatibility for upgrades to clusters using GCLB
-# for certain versions of istioctl
+# This overlay connects istio-ingressgateway to a BackendConfig iap-backendconfig.
+# This BackendConfig enables IAP for incoming requests. Instruction: 
+# https://cloud.google.com/service-mesh/docs/iap-integration#deploying_the_load_balancer
 
 ---
 apiVersion: install.istio.io/v1alpha1
