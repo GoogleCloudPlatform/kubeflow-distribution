@@ -38,4 +38,6 @@ install-asm: downalod-install-asm-script download-asm-package
 	--cluster_location $(LOCATION) \
 	--mode install \
 	--enable_all \
-	--custom_overlay ./asm/istio/options/iap-operator.yaml 
+	--custom_overlay ./asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./options/ingressgateway-iap.yaml 
+
