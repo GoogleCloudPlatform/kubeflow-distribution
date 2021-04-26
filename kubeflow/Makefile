@@ -13,7 +13,7 @@ KFCTXT=$(NAME)
 # TODO(https://github.com/GoogleContainerTools/kpt/issues/539):
 # Using a subdirectory fo the current directory breaks our ability to run kpt set .
 # So as a hack we use a $(BUILD_DIR)/ directory in the parent directory.
-BUILD_DIR=.build
+BUILD_DIR=./build
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-admin must be a valid service account name, so $NAME should be no
@@ -52,26 +52,6 @@ apply-cnrm:
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
-.PHONY: apply-component
-apply-component: validate-values check-name 
-ifeq ($(component_path),)
-	$(error component_path is not set for apply-component rule); 
-endif
-	echo 'Component path: $(component_path)' 
-	$(eval makefile_path = ./$(component_path)/Makefile)
-	echo 'Apply component resources: $(component_path)'
-	@if [ -f $(makefile_path) ] ; then \
-		echo 'Found Makefile, call `make apply` of this component Makefile.'; \
-		NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) $(MAKE) -C $(component_path) apply build_dir=$(BUILD_DIR); \
-	else \
-		echo 'Makefile not found, use kustomize and kubectl to apply resources.'; \
-		component_build_dir=./$(component_path)/$(BUILD_DIR); \
-		rm -rf $$component_build_dir && mkdir -p $$component_build_dir; \
-		kustomize build --load-restrictor LoadRestrictionsNone -o $$component_build_dir ./$(component_path); \
-		kubectl --context=$(KFCTXT) apply -f $$component_build_dir; \
-	fi
-
-
 components= \
 common/cnrm \
 common/asm \
@@ -103,15 +83,10 @@ common/kubeflow-issuer \
 .PHONY: apply-v3
 apply-v3: validate-values check-name 
 	@for component in $(components) ; do \
-	$(MAKE) apply-component component_path=$$component || break ; \
+	BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component; \
 	done
 
-	# Kick the IAP pod because we will reset the policy and need to patch it.
-	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
-	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
-	# Kick the backend updater pod, because information might be outdated after the apply.
-	# https://github.com/kubeflow/gcp-blueprints/issues/160
-	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
+	KFCTXT=$(KFCTXT) $(MAKE) -C common/iap-ingress pod-reset
 
 .PHONY: apply-kubeflow
 apply-kubeflow: validate-values check-name 

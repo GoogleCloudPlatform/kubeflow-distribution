@@ -11,4 +11,4 @@ iap-secret: check-iap
 
 .PHONY: check-iap
 check-iap:
-	../../hack/check_oauth_secret.sh
+	./check_oauth_secret.sh

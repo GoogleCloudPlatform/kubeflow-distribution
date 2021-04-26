@@ -1,6 +1,7 @@
 # The name of the context for your Kubeflow cluster
 # NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 # KFCTXT=$(NAME)
+build_dir?=./build
 
 .PHONY: apply
 apply:
@@ -20,4 +21,4 @@ apply:
 	kubectl --context=${KFCTXT} apply -f ./$(build_dir)/*v1_customresourcedefinition_routes.serving.knative.dev.yaml
 	kubectl --context=${KFCTXT} apply -f ./$(build_dir)/*v1_customresourcedefinition_serverlessservices.networking.internal.knative.dev.yaml
 	kubectl --context=${KFCTXT} apply -f ./$(build_dir)/*v1_customresourcedefinition_services.serving.knative.dev.yaml
-	kubectl --context=$(KFCTXT) apply --recursive=true -f ./$(build_dir)
+	kubectl --context=$(KFCTXT) apply --recursive=true -f $(build_dir)
