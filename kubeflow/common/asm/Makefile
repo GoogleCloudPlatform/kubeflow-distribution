@@ -3,7 +3,13 @@
 # For example: 1.9.2-asm.1+config4:install_asm_1.9.2-asm.1-config4
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for INSTALL_ASM_SCRIPT_VERSION.
-# You might need to change corresponding kpt value in kubeflow/kpt-set.sh if you upgrade 
+# IMPORTANT: You must change corresponding kpt value in kubeflow/env.sh if you upgrade 
+# For example: export ASM_LABEL=asm-193-2
+# Then go back to kubeflow/ directory, run the following commands:
+# 1. source ./env.sh
+# 2. bash ./kpt-set.sh
+# 3. make apply
+# The above commands allow you to set new namespace labels and re-apply your resources.
 ASM_PACKAGE_VERSION=1.9.2-asm.1+config4
 INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.2-asm.1-config4
 
