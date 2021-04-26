@@ -41,3 +41,6 @@ install-asm: downalod-install-asm-script download-asm-package
 	--custom_overlay ./asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml 
 
+
+.PHONY: apply
+apply: install-asm

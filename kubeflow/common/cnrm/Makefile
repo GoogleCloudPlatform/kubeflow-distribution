@@ -1,9 +1,9 @@
 
 # The name of the context for your Kubeflow cluster
-MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
-NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+# MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
+# NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+# LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+# PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 
 # You may override the variable by env var if you customized the deployment
 # and deploy fewer or more types of resources.
@@ -30,3 +30,19 @@ create-ctxt:
 	PROJECT=$(PROJECT) \
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ../../hack/create_context.sh
+
+.PHONY: apply-cnrm
+apply-cnrm:
+ifeq ($(build_dir),)
+	$(error build_dir is not set for apply rule); 
+endif
+	rm -rf $(build_dir) && mkdir -p $(build_dir)
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(build_dir) ./
+	kubectl --context=$(MGMTCTXT) apply -f ./$(build_dir)
+
+.PHONY: apply
+apply:
+	echo $(build_dir)
+	$(MAKE) apply-cnrm build_dir=$(build_dir)
+	$(MAKE) wait-gcp
+	$(MAKE) create-ctxt
