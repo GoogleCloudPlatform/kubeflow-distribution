@@ -2,8 +2,8 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.3.0-rc.0
-# export KUBEFLOW_MANIFESTS_VERSION=v1.3.0
+# export KUBEFLOW_MANIFESTS_VERSION=v1.3.0-rc.0
+export KUBEFLOW_MANIFESTS_VERSION=v1.3.0
 # export KUBEFLOW_MANIFESTS_VERSION=v1.2.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
