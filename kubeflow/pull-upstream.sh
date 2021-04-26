@@ -7,6 +7,9 @@ export KUBEFLOW_MANIFESTS_VERSION=v1.3.0-rc.0
 # export KUBEFLOW_MANIFESTS_VERSION=v1.2.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
+export KUBEFLOW_PIPELINES_VERSION=1.5.0
+export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
+
 # apps/ related manifest
 if [ -d apps/admission-webhook/upstream ]; then
     rm -rf apps/admission-webhook/upstream
@@ -32,6 +35,13 @@ if [ -d apps/jupyter/notebook-controller/upstream ]; then
 fi
 mkdir -p apps/jupyter/notebook-controller
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/apps/jupyter/notebook-controller/upstream@$KUBEFLOW_MANIFESTS_VERSION apps/jupyter/notebook-controller
+
+if [ -d apps/pipeline/upstream ]; then
+    rm -rf apps/pipeline/upstream
+fi
+mkdir -p apps/pipeline/upstream
+kpt pkg get $KUBEFLOW_PIPELINES_REPO/manifests/kustomize/@$KUBEFLOW_PIPELINES_VERSION apps/pipeline/upstream
+mv apps/pipeline/upstream/kustomize/* apps/pipeline/upstream
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream

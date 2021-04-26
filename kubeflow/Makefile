@@ -1,3 +1,4 @@
+
 # The name of the context for the management cluster
 # These are read using yq from the Kptfile.
 MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
@@ -50,6 +51,67 @@ apply-cnrm:
 	rm -rf $(BUILD_DIR)/gcp_config && mkdir -p $(BUILD_DIR)/gcp_config
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
+
+.PHONY: apply-component
+apply-component: validate-values check-name 
+ifeq ($(component_path),)
+	$(error component_path is not set for apply-component rule); 
+endif
+	echo 'Component path: $(component_path)' 
+	$(eval makefile_path = ./$(component_path)/Makefile)
+	echo 'Apply component resources: $(component_path)'
+	@if [ -f $(makefile_path) ] ; then \
+		echo 'Found Makefile, call `make apply` of this component Makefile.'; \
+		NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) $(MAKE) -C $(component_path) apply build_dir=$(BUILD_DIR); \
+	else \
+		echo 'Makefile not found, use kustomize and kubectl to apply resources.'; \
+		component_build_dir=./$(component_path)/$(BUILD_DIR); \
+		rm -rf $$component_build_dir && mkdir -p $$component_build_dir; \
+		kustomize build --load-restrictor LoadRestrictionsNone -o $$component_build_dir ./$(component_path); \
+		kubectl --context=$(KFCTXT) apply -f $$component_build_dir; \
+	fi
+
+
+components= \
+common/cnrm \
+common/asm \
+common/iap-secret \
+common/kubeflow-namespace \
+common/istio \
+common/cert-manager \
+contrib/metacontroller \
+common/cloud-endpoints \
+common/iap-ingress \
+common/config-kubeflow \
+apps/admission-webhook \
+apps/centraldashboard \
+common/kubeflow-roles \
+apps/jupyter \
+apps/volumes-web-app \
+apps/tensorboard \
+apps/profiles \
+apps/pytorch-job \
+apps/tf-training \
+apps/pipeline \
+common/knative \
+apps/kfserving \
+common/user-namespace \
+apps/katib \
+common/kubeflow-issuer \
+
+
+.PHONY: apply-v3
+apply-v3: validate-values check-name 
+	@for component in $(components) ; do \
+	$(MAKE) apply-component component_path=$$component || break ; \
+	done
+
+	# Kick the IAP pod because we will reset the policy and need to patch it.
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+	# Kick the backend updater pod, because information might be outdated after the apply.
+	# https://github.com/kubeflow/gcp-blueprints/issues/160
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
 
 .PHONY: apply-kubeflow
 apply-kubeflow: validate-values check-name 
