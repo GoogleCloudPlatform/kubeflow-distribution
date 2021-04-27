@@ -98,10 +98,10 @@ fi
 mkdir -p common/kubeflow-namespace
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-namespace/@$KUBEFLOW_MANIFESTS_VERSION common/kubeflow-namespace/upstream/
 
-if [ -d common/istio/istio-1-9-0 ]; then
-    rm -rf common/istio/istio-1-9-0
+if [ -d common/istio/upstream/ ]; then
+    rm -rf common/istio/upstream/
 fi
-kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/
+kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/upstream/
 
 if [ -d common/cert-manager/upstream/ ]; then
     rm -rf common/cert-manager/upstream/
@@ -145,9 +145,3 @@ if [ -d contrib/metacontroller/upstream/ ]; then
 fi
 mkdir -p contrib/metacontroller
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/metacontroller/@$KUBEFLOW_MANIFESTS_VERSION contrib/metacontroller/upstream/
-
-if [ -d contrib/argo/upstream/ ]; then
-    rm -rf contrib/argo/upstream/
-fi
-mkdir -p contrib/argo
-kpt pkg get $KUBEFLOW_MANIFESTS_REPO/contrib/argo/@$KUBEFLOW_MANIFESTS_VERSION contrib/argo/upstream/
