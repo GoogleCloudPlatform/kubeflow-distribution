@@ -11,3 +11,7 @@ apply:
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-webhook
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager
 	kubectl --context=$(KFCTXT) -n cert-manager wait --for=condition=Available --timeout=600s deploy cert-manager-cainjector
+
+	# Common kubeflow-issuer
+	kustomize build -o $(build_dir) ./cert-manager-1-3/cert-manager/kubeflow-issuer
+	kubectl --context=$(KFCTXT) apply --recursive=true -f $(build_dir)
