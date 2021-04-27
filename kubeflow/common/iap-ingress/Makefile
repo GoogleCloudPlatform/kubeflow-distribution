@@ -1,10 +1,18 @@
 build_dir?=./build
 
 .PHONY: apply
-apply: 
+apply: iap-secret
 	rm -rf $(build_dir) && mkdir -p $(build_dir)
 	kustomize build -o $(build_dir) ./
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)
+
+.PHONY: iap-secret
+iap-secret: check-iap
+	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=$(CLIENT_ID) --from-literal=client_secret=$(CLIENT_SECRET) --dry-run=client -o yaml | kubectl apply -f -
+
+.PHONY: check-iap
+check-iap:
+	./check_oauth_secret.sh
 
 .PHONY: pod-reset
 pod-reset:

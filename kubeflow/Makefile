@@ -55,7 +55,6 @@ apply-cnrm:
 components= \
 common/cnrm \
 common/asm \
-common/iap-secret \
 common/kubeflow-namespace \
 common/istio \
 common/cert-manager \
@@ -77,7 +76,6 @@ common/knative \
 apps/kfserving \
 common/user-namespace \
 apps/katib \
-common/kubeflow-issuer \
 
 
 .PHONY: apply-v3
