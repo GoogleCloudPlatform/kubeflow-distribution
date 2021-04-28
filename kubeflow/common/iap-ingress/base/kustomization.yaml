@@ -1,4 +1,3 @@
-# This is the V3 version of the kustomization.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -28,16 +27,8 @@ images:
 - name: gcr.io/cloud-solutions-group/esp-sample-app
   newName: gcr.io/cloud-solutions-group/esp-sample-app
   newTag: 1.0.0
+# TODO(Bobgy): migrate kustomize vars to kpt setters?
 vars:
-# TODO(jlewi): Now that its a separate kustomize package do we need this because
-# we will use kustomize to set the namespace?
-#- name: namespace
-#  objref:
-#    kind: ConfigMap
-#    name: parameters
-#    apiVersion: v1
-#  fieldref:
-#    fieldpath: data.namespace
 - name: appName
   objref:
     kind: ConfigMap
