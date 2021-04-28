@@ -5,6 +5,4 @@ export MGMT_NAME=<management-cluster-name>
 export MGMTCTXT=${MGMT_NAME}
 export LOCATION=<zone>
 
-export ASM_LABEL=asm-192-1
-
-
+source ./common/asm/env.sh
