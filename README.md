@@ -1,15 +1,19 @@
-# Kubeflow Blueprint
+# Kubeflow Blueprint On GCP (Google Cloud Platform)
 
-Blueprints for Kubeflow.
+Follow the instruction to deploy full fledged Kubeflow on GCP cluster. 
 
 Kubeflow is deployed as follows
 
-* A mangement cluster is setup using the manifests in **management**
+* Deploy mangement cluster using the manifests in **management**.
   * The management cluster runs KCC and optionally ConfigSync
   * The management cluster is used to create all GCP resources for Kubeflow (e.g. the GKE cluster)
   * A single management cluster could be used for multiple projects or multiple KF deployments
 
-* Once the Kubeflow cluster is created we use kustomize to deploy the KF applications on it.
+* Deploy Kubeflow cluster using the manifests in **kubeflow**.
+  * kubeflow contains kustomization rule for each component.
+  * Component manifests is pulled from upstream `kubeflow/manifests` repository to individual folder's `upstream/` directory.
+  * `Makefile` uses kustomize and kubectl to generate and apply resources.
+
 
 For more information about packages refer to the [kpt packages guide](https://googlecontainertools.github.io/kpt/guides/producer/packages/)
 
