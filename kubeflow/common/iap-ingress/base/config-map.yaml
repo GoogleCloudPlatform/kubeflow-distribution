@@ -178,11 +178,11 @@ data:
         gcloud --project=${PROJECT} compute health-checks update http ${HEALTH_CHECK_URI} --request-path=${HEALTHCHECK_PATH}
       else
         # /healthz/ready is the health check path for istio-ingressgateway
-        echo Running health checks update ${HEALTH_CHECK_URI} with /healthz/ready
-        gcloud --project=${PROJECT} compute health-checks update http ${HEALTH_CHECK_URI} --request-path=/healthz/ready
         # We need the nodeport for istio-ingressgateway status-port
         STATUS_NODE_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="status-port")].nodePort}')
-        gcloud --project=${PROJECT} compute health-checks update http ${HEALTH_CHECK_URI} --port=${STATUS_NODE_PORT}
+        # Use kubectl patch.
+        echo patch BackendConfig health check port: ${STATUS_NODE_PORT}
+        kubectl patch BackendConfig iap-backendconfig -n ${NAMESPACE} --type json -p '[{"op": "replace", "path": "/spec/healthCheck/port", "value": '${STATUS_NODE_PORT}'}]'
       fi      
     }
 
