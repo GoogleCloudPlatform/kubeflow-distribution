@@ -1,0 +1,21 @@
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  labels:
+    kustomize.component: iap-ingress
+  name: iap-backendconfig
+  namespace: istio-system
+spec:
+  healthCheck:
+    checkIntervalSec: 2
+    healthyThreshold: 1
+    port: 31223
+    requestPath: /healthz/ready
+    timeoutSec: 1
+    type: HTTP
+    unhealthyThreshold: 10
+  iap:
+    enabled: true
+    oauthclientCredentials:
+      secretName: kubeflow-oauth
+  timeoutSec: 3600

@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  labels:
+    kustomize.component: iap-ingress
+  name: ingress-jwt
+  namespace: istio-system
+spec:
+  jwtRules:
+  - audiences:
+    - TO_BE_PATCHED
+    fromHeaders:
+    - name: x-goog-iap-jwt-assertion
+    issuer: https://cloud.google.com/iap
+    jwksUri: https://www.gstatic.com/iap/verify/public_key-jwk
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
