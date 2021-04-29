@@ -21,11 +21,26 @@ openAPI:
         setter:
           name: gcloud.core.project
           value: PROJECT
+    io.k8s.cli.setters.email:
+      x-k8s-cli:
+        setter:
+          name: email
+          value: EMAIL
     io.k8s.cli.substitutions.admin-sa-ref:
       x-k8s-cli:
         substitution:
           name: admin-sa-ref
           pattern: ${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.gcp-sa:
+      x-k8s-cli:
+        substitution:
+          name: gcp-sa
+          pattern: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
           values:
           - marker: ${name}
             ref: '#/definitions/io.k8s.cli.setters.name'

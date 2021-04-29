@@ -44,3 +44,7 @@ install-asm: downalod-install-asm-script download-asm-package
 
 .PHONY: apply
 apply: install-asm
+
+.PHONY: hydrate
+hydrate: 
+# There is no hydration for ASM, it is taken care by install_asm.

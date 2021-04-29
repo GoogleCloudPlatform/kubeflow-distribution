@@ -101,6 +101,7 @@ kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/kubeflow-namespace/@$KUBEFLOW_MANIFE
 if [ -d common/istio/upstream/ ]; then
     rm -rf common/istio/upstream/
 fi
+mkdir -p common/istio
 kpt pkg get $KUBEFLOW_MANIFESTS_REPO/common/istio-1-9-0/@$KUBEFLOW_MANIFESTS_VERSION common/istio/upstream/
 
 if [ -d common/cert-manager/upstream/ ]; then

@@ -19,7 +19,6 @@ openAPI:
         setter:
           name: gcloud.core.project
           value: PROJECT
-          isSet: true
     io.k8s.cli.substitutions.name-label:
       x-k8s-cli:
         substitution:
@@ -33,19 +32,16 @@ openAPI:
         setter:
           name: name
           value: KUBEFLOW-NAME
-          isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           name: location
           value: "LOCATION"
-          isSet: true
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
           name: mgmt-ctxt
           value: MANAGEMENT-CTXT
-          isSet: true
     io.k8s.cli.setters.kustomize_manifests_path:
       x-k8s-cli:
         setter:
@@ -168,13 +164,11 @@ openAPI:
         setter:
           name: gke.private
           value: "false"
-          isSet: true
     io.k8s.cli.setters.email:
       x-k8s-cli:
         setter:
           name: email
           value: EMAIL
-          isSet: true
     io.k8s.cli.substitutions.gcp-sa:
       x-k8s-cli:
         substitution:

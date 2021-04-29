@@ -116,6 +116,32 @@ gcloud config set compute/zone $LOCATION
 Deploy Kubeflow cluster, required Google Cloud resources and all Kubeflow components:
 
 ```
-make apply-v3
+make apply-all
 ```
 
+## Other Commands
+
+
+### Hydrate all manifests but not apply them
+
+If you want to check the resource in `/build` directories before applying them. You can use `hydrate-all` before running `apply-all`:
+
+```
+make hydrate-all
+```
+
+### Clean up the hydration result from all components
+
+After hydration or apply, you will have `build` folder in each component for manifest yaml files. If you want to cleean them up, you can run:
+
+```
+make clean-build
+```
+
+### Uninstall the whole Kubeflow cluster
+
+Deleting cluster itself doesn't necessarily remove all resources created by this instruction. You can run the following command to clean them up:
+
+```
+make delete-gcp
+```
