@@ -1,12 +1,12 @@
-# Kubeflow Blueprint On GCP (Google Cloud Platform)
+# Kubeflow Blueprint On Google Cloud
 
-Follow the instruction to deploy full fledged Kubeflow on GCP cluster. 
+Follow the instruction to deploy full fledged Kubeflow on Google Cloud Kubernetes cluster. 
 
 Kubeflow is deployed as follows
 
 * Deploy mangement cluster using the manifests in **management**.
   * The management cluster runs KCC and optionally ConfigSync
-  * The management cluster is used to create all GCP resources for Kubeflow (e.g. the GKE cluster)
+  * The management cluster is used to create all Google Cloud resources for Kubeflow (e.g. the GKE cluster)
   * A single management cluster could be used for multiple projects or multiple KF deployments
 
 * Deploy Kubeflow cluster using the manifests in **kubeflow**.
