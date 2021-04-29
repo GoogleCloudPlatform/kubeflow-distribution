@@ -14,4 +14,4 @@ kpt cfg set -R .  gcloud.compute.zone ${LOCATION}
 kpt cfg set -R .  location ${LOCATION}
 kpt cfg set -R .  log-firewalls false
 
-kpt cfg set -R .  email ADMIN_EMAIL
+kpt cfg set -R .  email ${ADMIN_EMAIL}
