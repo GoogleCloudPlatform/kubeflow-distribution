@@ -18,7 +18,7 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.2-asm.1-config4
 # 4: Follow official doc: https://cloud.google.com/service-mesh/docs/scripted-install/gke-upgrade#deploying_and_redeploying_workloads
 #    to migrate workloads in each namespace, including user namespace created
 #    in https://www.kubeflow.org/docs/components/multi-tenancy/getting-started/.
-# 5: Alternatively, hydrate all Kubeflow resources to keep track of latest changes.
+# 5: (Optional) Hydrate all Kubeflow resources to keep track of latest changes in build/.
 
 # The name of the context for your Kubeflow cluster
 NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
