@@ -79,4 +79,4 @@ vars:
   fieldref:
     fieldpath: data.istioNamespace
 configurations:
-- ../base/params.yaml
+- params.yaml
