@@ -1,9 +1,12 @@
 build_dir?=./build
 
-.PHONY: apply
-apply: iap-secret
+.PHONY: hydrate
+hydrate: 
 	rm -rf $(build_dir) && mkdir -p $(build_dir)
-	kustomize build -o $(build_dir) ./
+	kustomize build --load-restrictor LoadRestrictionsNone -o $(build_dir) ./
+
+.PHONY: apply
+apply: hydrate iap-secret
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)
 
 .PHONY: iap-secret

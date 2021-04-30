@@ -32,10 +32,13 @@ create-ctxt:
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ../../hack/create_context.sh
 
-.PHONY: apply-cnrm
-apply-cnrm:
+.PHONY: hydrate
+hydrate: 
 	rm -rf $(build_dir) && mkdir -p $(build_dir)
 	kustomize build -o $(build_dir) ./
+
+.PHONY: apply-cnrm
+apply-cnrm: hydrate
 	kubectl --context=$(MGMTCTXT) apply -f $(build_dir)
 
 .PHONY: apply
