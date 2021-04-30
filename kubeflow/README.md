@@ -116,7 +116,7 @@ gcloud config set compute/zone $LOCATION
 Deploy Kubeflow cluster, required Google Cloud resources and all Kubeflow components:
 
 ```
-make apply-all
+make apply
 ```
 
 ## Other Commands
@@ -127,7 +127,7 @@ make apply-all
 If you want to check the resource in `/build` directories before applying them. You can use `hydrate-all` before running `apply-all`:
 
 ```
-make hydrate-all
+make hydrate
 ```
 
 ### Clean up the hydration result from all components
@@ -143,5 +143,5 @@ make clean-build
 Deleting cluster itself doesn't necessarily remove all resources created by this instruction. You can run the following command to clean them up:
 
 ```
-make delete-gcp
+make delete
 ```
