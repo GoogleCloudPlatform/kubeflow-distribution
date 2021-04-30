@@ -46,12 +46,6 @@ endif
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
-.PHONY: apply-cnrm
-apply-cnrm:
-	rm -rf $(BUILD_DIR)/gcp_config && mkdir -p $(BUILD_DIR)/gcp_config
-	kustomize build --load-restrictor LoadRestrictionsNone -o $(BUILD_DIR)/gcp_config ./common/cnrm
-	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
-
 components= \
 common/cnrm \
 common/asm \
@@ -83,14 +77,14 @@ clean-build:
 	(BUILD_DIR=$(BUILD_DIR) ./hack/clean_build.sh -path $$component) || exit 1; \
 	done
 
-.PHONY: hydrate-all
-hydrate-all: validate-values check-name 
+.PHONY: hydrate
+hydrate: validate-values check-name 
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component -hydrate_only) || exit 1; \
 	done
 
-.PHONY: apply-all
-apply-all: validate-values check-name 
+.PHONY: apply
+apply: validate-values check-name 
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component) || exit 1; \
 	done
@@ -98,6 +92,6 @@ apply-all: validate-values check-name
 	KFCTXT=$(KFCTXT) $(MAKE) -C common/iap-ingress pod-reset
 
 # Delete gcp resources
-.PHONY: delete-gcp
-delete-gcp:
-	kubectl	--context=$(MGMTCTXT) delete -f common/cnrm/$(BUILD_DIR)
+.PHONY: delete
+delete:
+	BUILD_DIR=$(BUILD_DIR) MGMTCTXT=$(MGMTCTXT) ./hack/delete_gcp.sh
