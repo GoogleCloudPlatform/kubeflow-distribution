@@ -96,6 +96,14 @@ openAPI:
             ref: '#/definitions/io.k8s.cli.setters.name'
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.managed-project-policy-name:
+      x-k8s-cli:
+        substitution:
+          name: managed-project-policy-name
+          pattern: cnrm-system-${managed-project}-owner
+          values:
+          - marker: ${managed-project}
+            ref: '#/definitions/io.k8s.cli.setters.managed-project'
     io.k8s.cli.setters.managed-project:
       x-k8s-cli:
         setter:
