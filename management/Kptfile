@@ -86,3 +86,18 @@ openAPI:
           values:
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.managed-project-owner-member:
+      x-k8s-cli:
+        substitution:
+          name: managed-project-owner-member
+          pattern: serviceAccount:${name}-cnrm-system@${gcloud.core.project}.iam.gserviceaccount.com
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.setters.managed-project:
+      x-k8s-cli:
+        setter:
+          name: managed-project
+          value: MANAGED_PROJECT
