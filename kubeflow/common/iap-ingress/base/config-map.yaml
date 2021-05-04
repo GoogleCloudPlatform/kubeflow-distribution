@@ -148,10 +148,8 @@ data:
       while [[ -z ${BACKEND_NAME} ]]; do
         BACKENDS=$(kubectl --namespace=${NAMESPACE} get ingress ${INGRESS_NAME} -o jsonpath='{.metadata.annotations.ingress\.kubernetes\.io/backends}')
         echo "fetching backends info with ${INGRESS_NAME}: ${BACKENDS}"
-
         BACKEND_NAME=$(echo $BACKENDS | grep -o "k8s-be-${NODE_PORT}--[0-9a-z]\+")
         echo "backend name is ${BACKEND_NAME}"
-
         sleep 2
       done
 
