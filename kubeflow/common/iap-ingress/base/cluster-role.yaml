@@ -17,8 +17,10 @@ rules:
 - apiGroups:
   - extensions
   - networking.k8s.io
+  - apps
   resources:
   - ingresses
+  - deployments
   verbs:
   - get
   - list

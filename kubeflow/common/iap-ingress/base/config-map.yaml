@@ -127,13 +127,12 @@ data:
     [ -z ${NAMESPACE} ] && echo Error NAMESPACE must be set && exit 1
 
     set_health_check () {
-      # We need the nodeport for istio-ingressgateway status-port
       # See: https://cloud.google.com/service-mesh/docs/iap-integration#deploying_the_load_balancer
       HC_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="status-port")].nodePort}')
       HC_INGRESS_PATH=$(kubectl -n istio-system get deployments istio-ingressgateway -o jsonpath='{.spec.template.spec.containers[?(@.name=="istio-proxy")].readinessProbe.httpGet.path}')
 
       echo Setting BackendConfig healthCheck.port to: ${HC_INGRESS_PORT} and healthCheck.requestPath to ${HC_INGRESS_PATH}
-      kubectl patch iap-backendconfig -n ${NAMESPACE} --type json -p '[{"op": "replace", "path": "/spec/healthCheck/port", "value": '${HC_INGRESS_PORT}'}, {"op": "replace", "path": "/spec/healthCheck/requestPath", "value": "${HC_INGRESS_PATH}"}]'
+      kubectl patch backendconfig iap-backendconfig -n ${NAMESPACE} --type json -p '[{"op": "replace", "path": "/spec/healthCheck/port", "value": '${HC_INGRESS_PORT}'}, {"op": "replace", "path": "/spec/healthCheck/requestPath", "value": "'${HC_INGRESS_PATH}'"}]'
     }
 
     while true; do
