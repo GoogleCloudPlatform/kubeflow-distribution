@@ -17,8 +17,10 @@ rules:
 - apiGroups:
   - extensions
   - networking.k8s.io
+  - apps
   resources:
   - ingresses
+  - deployments
   verbs:
   - get
   - list
@@ -39,3 +41,12 @@ rules:
   - virtualservices
   verbs:
   - '*'
+- apiGroups:
+  - cloud.google.com
+  resources:
+  - backendconfigs
+  verbs:
+  - get
+  - list
+  - patch
+  - update

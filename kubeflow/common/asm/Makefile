@@ -21,9 +21,9 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.2-asm.1-config4
 # 5: (Optional) Hydrate all Kubeflow resources to keep track of latest changes in build/.
 
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+# NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+# LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+# PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 
 .PHONY: downalod-install-asm-script
 downalod-install-asm-script:
@@ -56,3 +56,7 @@ install-asm: downalod-install-asm-script download-asm-package
 
 .PHONY: apply
 apply: install-asm
+
+.PHONY: hydrate
+hydrate: 
+# There is no hydration for ASM, it is taken care by install_asm.
