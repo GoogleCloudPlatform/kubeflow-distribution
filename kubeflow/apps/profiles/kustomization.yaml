@@ -40,11 +40,11 @@ patchesStrategicMerge:
 images:
 - name: public.ecr.aws/j1r0q0g6/notebooks/access-management
   newName: public.ecr.aws/j1r0q0g6/notebooks/access-management
-  newTag: v1.3.0-rc.0
+  newTag: v1.3.0-rc.1
 # Added for dynamic namespace label change
 - name: public.ecr.aws/j1r0q0g6/notebooks/profile-controller
-  newName: gcr.io/jamxl-kfp-dev/profile-controller
-  newTag: kf-v1.3-rc0
+  newName: gcr.io/kubeflow-images-public/profile-controller
+  newTag: v1.3.0-gcp
 
 # Below is copied from packages/
 configMapGenerator:
@@ -57,4 +57,4 @@ configMapGenerator:
   - gcp-sa=
 - name: namespace-labels-data
   files:
-  - namespace-labels.yaml
+  - patches/namespace-labels.yaml
