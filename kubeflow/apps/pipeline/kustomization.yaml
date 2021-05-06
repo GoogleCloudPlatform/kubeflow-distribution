@@ -2,29 +2,40 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kubeflow
 resources:
+# Kubeflow Pipelines' dependencies
+- upstream/third-party/argo/installs/cluster
 # Refer to upstream/env/platform-agnostic-multi-user as a reference installation
 # of multi-user Kubeflow Pipelines.
 
-# Kubeflow Pipelines' dependencies
-- upstream/third-party/argo/installs/cluster
-# minio is an object store
-# TODO(Bobgy): switch to Cloud Storage (gcs)
-- upstream/third-party/minio/base
+# object store
+# recommended, use gcs for easier maintenance
+- gcs/minio-gateway
+# alternatively, use in-cluster MinIO
+# - upstream/third-party/minio/base
+
+# istio config needed by both options
 - upstream/third-party/minio/options/istio
-# mysql is a database
-# TODO(Bobgy): switch to Cloud SQL
-- upstream/third-party/mysql/base
+
+# database
+# recommended, use cloud sql for easier maintenance
+- cloudsql/proxy
+# altenatively, use in-cluster mysql
+# - upstream/third-party/mysql/base
+
+# istio config needed by both options
 - upstream/third-party/mysql/options/istio
+
 # metacontroller is already installed in another package
 # - upstream/third-party/metacontroller/base
 
 # Machine Learning Metadata store
 - upstream/base/metadata/base
 - upstream/base/metadata/options/istio
-
 # Kubeflow Pipelines itself
 - upstream/base/installs/multi-user
 patchesStrategicMerge:
 - patches/ml-pipeline-deployment-patch.yaml
 - patches/ml-pipeline-authorization-policy-patch.yaml
 - patches/workload-identity-binding.yaml
+- gcs/pipeline-install-config-patch.yaml
+- cloudsql/pipeline-install-config-patch.yaml

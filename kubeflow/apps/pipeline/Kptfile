@@ -11,11 +11,13 @@ openAPI:
         setter:
           name: name
           value: KUBEFLOW-NAME
+          isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
           value: PROJECT
+          isSet: true
     io.k8s.cli.substitutions.user-sa-ref:
       x-k8s-cli:
         substitution:
@@ -24,5 +26,93 @@ openAPI:
           values:
           - marker: ${name}
             ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.mysql-name:
+      x-k8s-cli:
+        substitution:
+          name: mysql-name
+          pattern: ${name}-kfp
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.setters.gcloud.compute.region:
+      x-k8s-cli:
+        setter:
+          name: gcloud.compute.region
+          value: asia-east1
+          isSet: true
+    io.k8s.cli.setters.gcloud.compute.zone:
+      x-k8s-cli:
+        setter:
+          name: gcloud.compute.zone
+          value: ZONE
+          isSet: true
+    io.k8s.cli.setters.mgmt-ctxt:
+      x-k8s-cli:
+        setter:
+          name: mgmt-ctxt
+          value: MANAGEMENT-CTXT
+          isSet: true
+    io.k8s.cli.substitutions.cloudsql-instance-connection-name:
+      x-k8s-cli:
+        substitution:
+          name: cloudsql-instance-connection-name
+          pattern: ${gcloud.core.project}:${gcloud.compute.region}:${mysql-name}
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+          - marker: ${gcloud.compute.region}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.compute.region'
+          - marker: ${mysql-name}
+            ref: '#/definitions/io.k8s.cli.substitutions.mysql-name'
+    io.k8s.cli.substitutions.cloudsql-ql-sa:
+      x-k8s-cli:
+        substitution:
+          name: cloudsql-ql-sa
+          pattern: ${name}-kfp-cloudsql
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.cloudsql-gsa:
+      x-k8s-cli:
+        substitution:
+          name: cloudsql-gsa
+          pattern: ${name}-kfp-cloudsql
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.cloudsql-gsa-ref:
+      x-k8s-cli:
+        substitution:
+          name: cloudsql-gsa-ref
+          pattern: ${cloudsql-gsa}@${gcloud.core.project}.iam.gserviceaccount.com
+          values:
+          - marker: ${cloudsql-gsa}
+            ref: '#/definitions/io.k8s.cli.substitutions.cloudsql-gsa'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.projects:
+      x-k8s-cli:
+        substitution:
+          name: projects
+          pattern: projects/${gcloud.core.project}
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.cloudsql-proxy-ksa-member:
+      x-k8s-cli:
+        substitution:
+          name: cloudsql-proxy-ksa-member
+          pattern: serviceAccount:${gcloud.core.project}.svc.id.goog[kubeflow/kubeflow-pipelines-cloudsql-proxy]
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.bucket:
+      x-k8s-cli:
+        substitution:
+          name: bucket
+          pattern: ${gcloud.core.project}-kfp-artifacts
+          values:
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
