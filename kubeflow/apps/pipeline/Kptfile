@@ -11,13 +11,11 @@ openAPI:
         setter:
           name: name
           value: KUBEFLOW-NAME
-          isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
           value: PROJECT
-          isSet: true
     io.k8s.cli.substitutions.user-sa-ref:
       x-k8s-cli:
         substitution:
@@ -41,19 +39,16 @@ openAPI:
         setter:
           name: gcloud.compute.region
           value: asia-east1
-          isSet: true
     io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
         setter:
           name: gcloud.compute.zone
           value: ZONE
-          isSet: true
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
           name: mgmt-ctxt
           value: MANAGEMENT-CTXT
-          isSet: true
     io.k8s.cli.substitutions.cloudsql-instance-connection-name:
       x-k8s-cli:
         substitution:
