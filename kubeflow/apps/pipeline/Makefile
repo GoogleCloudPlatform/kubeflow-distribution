@@ -31,7 +31,7 @@ hydrate:
 	kustomize build -o $(build_dir)/k8s .
 
 .PHONY: apply
-apply: apply-cnrm wait-cnrm apply-k8s
+apply: apply-cnrm status-cnrm wait-cnrm apply-k8s
 
 .PHONY: apply-cnrm
 apply-cnrm: hydrate
@@ -49,4 +49,10 @@ wait-cnrm:
 	# For resources with READY=False, debug by:
 	@echo "kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) describe <KIND>/<NAME>"
 	@echo
-	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s -f $(build_dir)/cnrm
+	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=100s -f $(build_dir)/cnrm \
+		|| kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) get -f $(build_dir)/cnrm
+	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=500s -f $(build_dir)/cnrm
+
+.PHONY: status-cnrm
+status-cnrm:
+	kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) get -f $(build_dir)/cnrm

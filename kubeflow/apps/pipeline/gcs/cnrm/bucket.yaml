@@ -23,6 +23,7 @@ metadata:
 spec:
   resourceID: PROJECT-kfp-artifacts # {"$kpt-set": "bucket"}
   location: asia-east1 # {"$kpt-set":"gcloud.compute.region"}
+  uniformBucketLevelAccess: true
   # Uncomment the following to GC objects after 7 days.
   # lifecycleRule:
   # - action:

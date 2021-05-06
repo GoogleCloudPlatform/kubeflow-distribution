@@ -111,3 +111,29 @@ openAPI:
           values:
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.kfp-gcs-gateway-ksa-member:
+      x-k8s-cli:
+        substitution:
+          name: kfp-gcs-gateway-ksa-member
+          pattern: serviceAccount:${gcloud.core.project}.svc.id.goog[kubeflow/kubeflow-pipelines-minio-gcs-gateway]
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.user-sa-name:
+      x-k8s-cli:
+        substitution:
+          name: user-sa-name
+          pattern: ${name}-user
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.user-sa-entity:
+      x-k8s-cli:
+        substitution:
+          name: user-sa-entity
+          pattern: user-${name}-user@${gcloud.core.project}.iam.gserviceaccouont.com
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
