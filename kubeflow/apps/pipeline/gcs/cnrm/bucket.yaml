@@ -17,13 +17,11 @@ kind: StorageBucket
 metadata:
   annotations:
     cnrm.cloud.google.com/force-destroy: "false"
-  name: kubeflow-pipelines-artifacts
+  name: dev-4-28-kfp-artifacts # {"$kpt-set":"bucket-name"}
 # Reference:
 # https://cloud.google.com/config-connector/docs/reference/resource-docs/storage/storagebucket
 spec:
-  resourceID: PROJECT-kfp-artifacts # {"$kpt-set": "bucket"}
   location: asia-east1 # {"$kpt-set":"gcloud.compute.region"}
-  uniformBucketLevelAccess: true
   # Uncomment the following to GC objects after 7 days.
   # lifecycleRule:
   # - action:

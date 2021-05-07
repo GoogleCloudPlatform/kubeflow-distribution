@@ -19,5 +19,5 @@ metadata:
 # Reference:
 # https://github.com/kubeflow/pipelines/blob/1.5.0/manifests/kustomize/base/installs/generic/pipeline-install-config.yaml
 data:
-  bucketName: PROJECT-kfp-artifacts # {"$kpt-set": "bucket"}
-  gcsProjectId: PROJECT # {"$kpt-set": "gcloud.core.project"}
+  bucketName: dev-4-28-kfp-artifacts # {"$kpt-set":"bucket-name"}
+  gcsProjectId: gongyuan-dev # {"$kpt-set": "gcloud.core.project"}

@@ -15,10 +15,10 @@
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLUser
 metadata:
-  name: kubeflow-pipelines-root
+  name: dev-4-28-kfp-root # {"$kpt-set":"cloudsql-user-kfp-root"}
 spec:
   resourceID: root
   instanceRef:
-    name: kubeflow-pipelines-mysql
+    name: dev-4-28-kfp-4 # {"$kpt-set":"cloudsql-name"}
   password:
     value: "" # override with your own password, TODO(Bobgy): document how to change password

@@ -15,13 +15,12 @@
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLInstance
 metadata:
-  name: kubeflow-pipelines-mysql
+  name: dev-4-28-kfp-4 # {"$kpt-set":"cloudsql-name"}
 # Spec reference:
 # https://cloud.google.com/config-connector/docs/reference/resource-docs/sql/sqlinstance
 # Other examples to enable private cloudsql or high availability:
 # https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/master/config-connector/solutions/sql/kpt
 spec:
-  resourceID: KUBEFLOW-NAME-kfp # {"$kpt-set":"mysql-name"}
   databaseVersion: MYSQL_5_7
   region: asia-east1 # {"$kpt-set":"gcloud.compute.region"}
   settings:

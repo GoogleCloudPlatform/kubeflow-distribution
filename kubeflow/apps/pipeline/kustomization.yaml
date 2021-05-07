@@ -1,37 +1,42 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kubeflow
+# Refer to upstream/env/platform-agnostic-multi-user as a reference installation
+# of platform-agnostic multi-user Kubeflow Pipelines.
 resources:
 # Kubeflow Pipelines' dependencies
+# ==== Argo Workflows ====
 - upstream/third-party/argo/installs/cluster
-# Refer to upstream/env/platform-agnostic-multi-user as a reference installation
-# of multi-user Kubeflow Pipelines.
-
-# object store
+# ==== Object Store ====
 # recommended, use gcs for easier maintenance
 - gcs/minio-gateway
-# alternatively, use in-cluster MinIO
+# Alternatively, use in-cluster MinIO by:
+# 1. remove cloudsql/pipeline-install-config-patch.yaml from patchesStrategicMerge
+# 2. remove ../gcs/cnrm from ./cnrm/kustomization.yaml
+# 3. comment gcs/minio-gateway above, and uncomment the following line
 # - upstream/third-party/minio/base
 
 # istio config needed by both options
 - upstream/third-party/minio/options/istio
-
-# database
+# ==== Database ====
 # recommended, use cloud sql for easier maintenance
 - cloudsql/proxy
-# altenatively, use in-cluster mysql
+# Altenatively, use in-cluster mysql by:
+# 1. remove gcs/pipeline-install-config-patch.yaml from patchesStrategicMerge
+# 2. remove ../cloudsql/cnrm from ./cnrm/kustomization.yaml
+# 3. comment cloudsql/proxy above, and uncomment the following line
 # - upstream/third-party/mysql/base
 
 # istio config needed by both options
 - upstream/third-party/mysql/options/istio
-
+# ==== Metacontroller ====
 # metacontroller is already installed in another package
 # - upstream/third-party/metacontroller/base
 
-# Machine Learning Metadata store
+# ==== Machine Learning Metadata store ====
 - upstream/base/metadata/base
 - upstream/base/metadata/options/istio
-# Kubeflow Pipelines itself
+# ==== Multi-User Kubeflow Pipelines ====
 - upstream/base/installs/multi-user
 patchesStrategicMerge:
 - patches/ml-pipeline-deployment-patch.yaml

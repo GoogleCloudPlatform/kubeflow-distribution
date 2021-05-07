@@ -14,9 +14,9 @@
 
 NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 KF_PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
-# The context for your management cluster
+# The kubectl context for your management cluster
 MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
-# The context for your Kubeflow cluster
+# The kubectl context for your Kubeflow cluster
 KFCTXT=$(NAME)
 build_dir?=./build
 
@@ -31,28 +31,41 @@ hydrate:
 	kustomize build -o $(build_dir)/k8s .
 
 .PHONY: apply
-apply: apply-cnrm status-cnrm wait-cnrm apply-k8s
+apply: apply-cnrm wait-cnrm apply-k8s
+
+.PHONY: delete
+delete: delete-k8s delete-cnrm
 
 .PHONY: apply-cnrm
 apply-cnrm: hydrate
 	kubectl --context=$(MGMTCTXT) apply -f $(build_dir)/cnrm
 
+.PHONY: delete-cnrm
+delete-cnrm:
+	kubectl --context=$(MGMTCTXT) delete -f $(build_dir)/cnrm
+
 .PHONY: apply-k8s
 apply-k8s: hydrate
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)/k8s
+
+.PHONY: delete-k8s
+delete-k8s:
+	kubectl --context=$(KFCTXT) delete -f $(build_dir)/k8s
 
 .PHONY: wait-cnrm
 wait-cnrm:
 	# Wait for all Google Cloud resources to get created and become ready.
 	# If this takes long, you can view status by:
-	@echo "kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) get -f $(build_dir)/cnrm"
+	@echo "kubectl --context=$(MGMTCTXT) get -f $(build_dir)/cnrm"
+	# or:
+	@echo "cd kubeflow/apps/pipeline && make status-cnrm"
 	# For resources with READY=False, debug by:
 	@echo "kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) describe <KIND>/<NAME>"
 	@echo
 	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=100s -f $(build_dir)/cnrm \
-		|| kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) get -f $(build_dir)/cnrm
+		|| kubectl --context=$(MGMTCTXT) get -f $(build_dir)/cnrm
 	kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=500s -f $(build_dir)/cnrm
 
 .PHONY: status-cnrm
 status-cnrm:
-	kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) get -f $(build_dir)/cnrm
+	kubectl --context=$(MGMTCTXT) get -f $(build_dir)/cnrm
