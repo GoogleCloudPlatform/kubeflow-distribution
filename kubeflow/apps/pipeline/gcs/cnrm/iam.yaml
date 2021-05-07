@@ -1,17 +1,17 @@
 apiVersion: storage.cnrm.cloud.google.com/v1beta1
 kind: StorageBucketAccessControl
 metadata:
-  name: dev-4-28-kfp-gcs-acl # {"$kpt-set":"gcs-acl"}
+  name: KUBEFLOW-NAME-kfp-gcs-acl # {"$kpt-set":"gcs-acl"}
 spec:
   bucketRef:
     name: dev-4-28-kfp-artifacts # {"$kpt-set":"bucket-name"}
-  entity: user-dev-4-28-user@gongyuan-dev.iam.gserviceaccount.com # {"$kpt-set": "user-sa-entity"}
+  entity: user-KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # {"$kpt-set": "user-sa-entity"}
   role: OWNER
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: dev-4-28-kfp-gcs-wi-user # {"$kpt-set":"gcs-wi-user"}
+  name: KUBEFLOW-NAME-kfp-gcs-wi-user # {"$kpt-set":"gcs-wi-user"}
 spec:
   member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kubeflow-pipelines-minio-gcs-gateway] # {"$kpt-set":"kfp-gcs-gateway-ksa-member"}
   role: roles/iam.workloadIdentityUser
