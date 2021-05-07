@@ -22,7 +22,7 @@ metadata:
 # https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/master/config-connector/solutions/sql/kpt
 spec:
   databaseVersion: MYSQL_5_7
-  region: asia-east1 # {"$kpt-set":"gcloud.compute.region"}
+  region: REGION # {"$kpt-set":"gcloud.compute.region"}
   settings:
     # db-custom-1-3840 means a machine with 1 vCPU and 3840 MBs memory.
     # For other tier options, refer to https://cloud.google.com/sql/docs/mysql/create-instance#machine-types.

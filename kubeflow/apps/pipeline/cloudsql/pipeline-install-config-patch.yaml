@@ -19,4 +19,4 @@ metadata:
 # Reference:
 # https://github.com/kubeflow/pipelines/blob/1.5.0/manifests/kustomize/base/installs/generic/pipeline-install-config.yaml
 data:
-  gcsCloudSqlInstanceName: PROJECT:asia-east1:dev-4-28-kfp-4 # {"$kpt-set": "cloudsql-instance-connection-name"}
+  gcsCloudSqlInstanceName: PROJECT:REGION:dev-4-28-kfp-4 # {"$kpt-set": "cloudsql-instance-connection-name"}

@@ -32,7 +32,8 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gcloud.compute.region
-          value: asia-east1
+          value: REGION
+          isSet: true
     io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
         setter:
