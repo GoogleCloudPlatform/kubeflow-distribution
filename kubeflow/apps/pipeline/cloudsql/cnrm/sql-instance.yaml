@@ -1,0 +1,32 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: sql.cnrm.cloud.google.com/v1beta1
+kind: SQLInstance
+metadata:
+  name: dev-4-28-kfp-4 # {"$kpt-set":"cloudsql-name"}
+# Spec reference:
+# https://cloud.google.com/config-connector/docs/reference/resource-docs/sql/sqlinstance
+# Other examples to enable private cloudsql or high availability:
+# https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/master/config-connector/solutions/sql/kpt
+spec:
+  databaseVersion: MYSQL_5_7
+  region: REGION # {"$kpt-set":"gcloud.compute.region"}
+  settings:
+    # db-custom-1-3840 means a machine with 1 vCPU and 3840 MBs memory.
+    # For other tier options, refer to https://cloud.google.com/sql/docs/mysql/create-instance#machine-types.
+    tier: db-custom-1-3840
+    availabilityType: ZONAL
+    locationPreference:
+      zone: ZONE # {"$kpt-set":"gcloud.compute.zone"}

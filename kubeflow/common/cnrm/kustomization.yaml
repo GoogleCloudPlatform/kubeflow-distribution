@@ -13,7 +13,6 @@ resources:
 - ../cluster/upstream
 - ../ingress/upstream
 - ../iam/upstream
-- ../pipelines/upstream
 - gcp-services.yaml
 # Add additional Google Cloud resources by including resources here.
 # For example, uncomment the following line to include an additional example
