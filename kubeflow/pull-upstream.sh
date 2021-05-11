@@ -34,12 +34,12 @@ fi
 mkdir -p apps/jupyter/notebook-controller
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/jupyter/notebook-controller
 
-if [ -d apps/pipeline/upstream ]; then
-    rm -rf apps/pipeline/upstream
+if [ -d apps/pipelines/upstream ]; then
+    rm -rf apps/pipelines/upstream
 fi
-mkdir -p apps/pipeline/upstream
-kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" apps/pipeline/upstream
-mv apps/pipeline/upstream/kustomize/* apps/pipeline/upstream
+mkdir -p apps/pipelines/upstream
+kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" apps/pipelines/upstream
+mv apps/pipelines/upstream/kustomize/* apps/pipelines/upstream
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream
