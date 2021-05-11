@@ -17,5 +17,5 @@ kpt cfg set -R .  log-firewalls false
 kpt cfg set -R .  email "${ADMIN_EMAIL}"
 
 # Default values for Kubeflow Pipelines, you can override as you like.
-kpt cfg set apps/pipeline cloudsql-name "${KF_NAME}-kfp"
-kpt cfg set apps/pipeline bucket-name "${KF_NAME}-kfp-artifacts"
+kpt cfg set apps/pipelines cloudsql-name "${KF_NAME}-kfp"
+kpt cfg set apps/pipelines bucket-name "${KF_NAME}-kfp-artifacts"

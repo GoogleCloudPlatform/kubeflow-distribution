@@ -65,7 +65,7 @@ apps/tensorboard \
 apps/profiles \
 apps/pytorch-job \
 apps/tf-training \
-apps/pipeline \
+apps/pipelines \
 common/knative \
 apps/kfserving \
 common/user-namespace \
