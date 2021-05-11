@@ -58,7 +58,7 @@ wait-cnrm:
 	# If this takes long, you can view status by:
 	@echo "kubectl --context=$(MGMTCTXT) get -f $(build_dir)/cnrm"
 	# or:
-	@echo "cd kubeflow/apps/pipeline && make status-cnrm"
+	@echo "cd kubeflow/apps/pipelines && make status-cnrm"
 	# For resources with READY=False, debug by:
 	@echo "kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) describe <KIND>/<NAME>"
 	@echo
