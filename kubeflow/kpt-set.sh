@@ -1,7 +1,7 @@
 
 # Use kpt to set kustomize values
 
-bash common/asm/kpt-set.sh
+set -ex
 
 kpt cfg set -R .  gke.private false
 
@@ -17,5 +17,5 @@ kpt cfg set -R .  log-firewalls false
 kpt cfg set -R .  email "${ADMIN_EMAIL}"
 
 # Default values for Kubeflow Pipelines, you can override as you like.
-kpt cfg set kubeflow/apps/pipeline cloudsql-name "${KF_NAME}-kfp"
-kpt cfg set kubeflow/apps/pipeline bucket-name "${KF_NAME}-kfp-artifacts"
+kpt cfg set apps/pipeline cloudsql-name "${KF_NAME}-kfp"
+kpt cfg set apps/pipeline bucket-name "${KF_NAME}-kfp-artifacts"
