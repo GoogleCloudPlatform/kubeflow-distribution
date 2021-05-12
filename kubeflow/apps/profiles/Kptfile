@@ -10,8 +10,7 @@ openAPI:
       x-k8s-cli:
         setter:
           name: asm-label
-          value: asm-192-1
-          isSet: true
+          value: ASM-LABEL
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
@@ -37,7 +36,6 @@ openAPI:
             ref: '#/definitions/io.k8s.cli.setters.name'
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
-<<<<<<< Updated upstream
     io.k8s.cli.substitutions.gcp-sa:
       x-k8s-cli:
         substitution:
@@ -48,5 +46,3 @@ openAPI:
             ref: '#/definitions/io.k8s.cli.setters.name'
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
-=======
->>>>>>> Stashed changes
