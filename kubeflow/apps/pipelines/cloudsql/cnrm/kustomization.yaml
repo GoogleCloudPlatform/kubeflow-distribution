@@ -14,10 +14,7 @@
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-commonLabels:
-  component: db
 resources:
 - iam.yaml
-- sql-instance.yaml
 - sql-user-root.yaml
 - proxy-gsa.yaml

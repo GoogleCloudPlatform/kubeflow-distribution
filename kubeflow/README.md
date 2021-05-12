@@ -62,7 +62,6 @@ Provide actual value for the following variables in `env.sh`:
 ```
 KF_NAME=<kubeflow-cluster-name>
 KF_PROJECT=<gcp-project-id>
-KF_DIR=<current-kubeflow-directory-path>
 MGMT_NAME=<management-cluster-name>
 MGMTCTXT=${MGMT_NAME}
 LOCATION=<zone>
