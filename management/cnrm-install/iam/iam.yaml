@@ -1,7 +1,7 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMServiceAccount
 metadata:
-  name: KUBEFLOW-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
+  name: MANAGEMENT-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
 spec:
   displayName: Service account for CNRM
 ---
@@ -12,12 +12,12 @@ spec:
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicy
 metadata:
-  name: KUBEFLOW-NAME-cnrm-system-wi # {"$kpt-set":"cnrm-system-wi"}
+  name: MANAGEMENT-NAME-cnrm-system-wi # {"$kpt-set":"cnrm-system-wi"}
 spec:
   resourceRef:
     apiVersion: iam.cnrm.cloud.google.com/v1alpha1
     kind: IAMServiceAccount
-    name: KUBEFLOW-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
+    name: MANAGEMENT-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
   bindings:
   - role: roles/iam.workloadIdentityUser
     members:
