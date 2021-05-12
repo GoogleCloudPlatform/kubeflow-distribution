@@ -9,11 +9,11 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.2-asm.1-config4
 # 1: Determine the ASM version you want to upgrade, follow the instruction above
 #     to update ASM_PACKAGE_VERSION and INSTALL_ASM_SCRIPT_VERSION. Then run
 #     `make install-asm` to install new ASM version.
-# 2: Update kubeflow/common/asm/env.sh for the ASM version, this looks like 
-#     asm-192-1, and you can find the exact value in istiod pod's label as well.
+# 2: Update kubeflow/env.sh for the ASM version, this looks like asm-192-1,
+#     and you can find the exact value in istiod pod's label as well.
 #     For example: You can find label `istio.io/rev: asm-192-1` in istiod-asm-192-1
-#     service. Then run `source env.sh` under `common/asm/` folder.
-# 3: Run `bash kpt-set.sh` under `common/asm` folder. It will configure kpt setter
+#     service. Then run `source env.sh` under `kubeflow/` folder.
+# 3: Run `bash kpt-set.sh` under `kubeflow/` folder. It will configure kpt setter
 #     value for all components which requires to set ASM namespace label.
 # 4: Follow official doc: https://cloud.google.com/service-mesh/docs/scripted-install/gke-upgrade#deploying_and_redeploying_workloads
 #    to migrate workloads in each namespace, including user namespace created

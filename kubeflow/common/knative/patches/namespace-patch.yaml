@@ -3,5 +3,5 @@ kind: Namespace
 metadata:
   name: knative-serving
   labels:
-    istio.io/rev: ASM-LABEL # {"$kpt-set":"asm-label"}
+    istio.io/rev: asm-192-1 # {"$kpt-set":"asm-label"}
     istio-injection: null
