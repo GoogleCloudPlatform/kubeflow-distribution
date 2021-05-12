@@ -5,7 +5,7 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerCluster
 metadata:
-  name: NAME # {"$kpt-set":"name"}
+  name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   annotations:
     # We are defining the nodepool in nodepool.yaml
     cnrm.cloud.google.com/remove-default-node-pool: "true"

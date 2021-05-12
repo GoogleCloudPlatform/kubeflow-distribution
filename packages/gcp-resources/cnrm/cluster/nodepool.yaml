@@ -15,8 +15,8 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerNodePool
 metadata:
-  clusterName: "project-id/location/name" # {"$kpt-set":"cluster-name"}
-  name: name-cpu-pool-v1 # {"$kpt-set":"node-pool-cpu"}
+  clusterName: "PROJECT/LOCATION/KUBEFLOW-NAME" # {"$kpt-set":"cluster-name"}
+  name: KUBEFLOW-NAME-cpu-pool-v1 # {"$kpt-set":"node-pool-cpu"}
 spec:
   initialNodeCount: 2
   autoscaling:
@@ -28,8 +28,8 @@ spec:
     metadata:
       disable-legacy-endpoints: "true"
     serviceAccountRef:
-      name: name-vm@project-id.iam.gserviceaccount.com # {"$kpt-set":"vm-sa-ref"}
+      name: KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-sa-ref"}
     workloadMetadataConfig:
       nodeMetadata: GKE_METADATA_SERVER
   clusterRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}

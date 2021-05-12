@@ -19,6 +19,6 @@ metadata:
 spec:
   resourceID: root
   instanceRef:
-    name: dev-4-28-kfp-4 # {"$kpt-set":"cloudsql-name"}
+    name: CLOUDSQL-NAME # {"$kpt-set":"cloudsql-name"}
   password:
     value: "" # override with your own password, TODO(Bobgy): document how to change password

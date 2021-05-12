@@ -11,33 +11,40 @@ openAPI:
         setter:
           name: name
           value: KUBEFLOW-NAME
+          isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
           value: PROJECT
+          isSet: true
     io.k8s.cli.setters.gcloud.compute.region:
       x-k8s-cli:
         setter:
           name: gcloud.compute.region
           value: REGION
+          isSet: true
     io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
         setter:
           name: gcloud.compute.zone
           value: ZONE
+          isSet: true
     io.k8s.cli.setters.cloudsql-name:
       x-k8s-cli:
         setter:
           name: cloudsql-name
-          value: dev-4-28-kfp-4
+          value: CLOUDSQL-NAME
+          isSet: true
     io.k8s.cli.setters.bucket-name:
       x-k8s-cli:
         setter:
           name: bucket-name
-          value: dev-4-28-kfp-artifacts
+          value: BUCKET-NAME
+          isSet: true
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
           name: mgmt-ctxt
-          value: MGMTCTXT
+          value: MANAGEMENT-CTXT
+          isSet: true

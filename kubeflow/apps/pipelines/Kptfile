@@ -170,11 +170,11 @@ openAPI:
       x-k8s-cli:
         setter:
           name: cloudsql-name
-          value: dev-4-28-kfp-4
+          value: CLOUDSQL-NAME
           isSet: true
     io.k8s.cli.setters.bucket-name:
       x-k8s-cli:
         setter:
           name: bucket-name
-          value: dev-4-28-kfp-artifacts
+          value: BUCKET-NAME
           isSet: true

@@ -4,7 +4,7 @@ metadata:
   name: cnrm-system-MANAGED_PROJECT-owner # {"$kpt-set":"managed-project-policy-name"}
   namespace: MANAGED_PROJECT # {"$kpt-set":"managed-project"}
 spec:
-  member: serviceAccount:NAME-cnrm-system@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"managed-project-owner-member"}
+  member: serviceAccount:KUBEFLOW-NAME-cnrm-system@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"managed-project-owner-member"}
   role: roles/owner
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1

@@ -10,13 +10,13 @@ openAPI:
       x-k8s-cli:
         setter:
           name: location
-          value: us-east1
+          value: LOCATION
           isSet: true
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
           name: name
-          value: NAME
+          value: KUBEFLOW-NAME
           isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:

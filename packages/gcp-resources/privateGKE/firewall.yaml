@@ -1,7 +1,7 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-deny-egress # {"$kpt-set":"name-deny-egress"}
+  name: KUBEFLOW-NAME-deny-egress # {"$kpt-set":"name-deny-egress"}
 spec:
   description: "Deny all internet traffic by default"
   deny:
@@ -13,14 +13,14 @@ spec:
   direction: EGRESS
   priority: 1100
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-health-ingress # {"$kpt-set":"name-health-ingress"}
+  name: KUBEFLOW-NAME-health-ingress # {"$kpt-set":"name-health-ingress"}
 spec:
   description: "Allow health check ingress"
   allow:
@@ -35,14 +35,14 @@ spec:
   - 35.191.0.0/16
   direction: INGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-health-egress # {"$kpt-set":"name-health-egress"}
+  name: KUBEFLOW-NAME-health-egress # {"$kpt-set":"name-health-egress"}
 spec:
   description: "Allow health check egress"
   allow:
@@ -57,14 +57,14 @@ spec:
   - 35.191.0.0/16
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-apis-egress # {"$kpt-set":"name-apis-egress"}
+  name: KUBEFLOW-NAME-apis-egress # {"$kpt-set":"name-apis-egress"}
 spec:
   description: "Allow egress to google APIs"
   allow:
@@ -75,14 +75,14 @@ spec:
   - 199.36.153.4/30
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-master-egress # {"$kpt-set":"name-master-egress"}
+  name: KUBEFLOW-NAME-master-egress # {"$kpt-set":"name-master-egress"}
 spec:
   description: "Allow master node egress"
   allow:
@@ -99,14 +99,14 @@ spec:
 
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-int-egress # {"$kpt-set":"name-int-egress"}
+  name: KUBEFLOW-NAME-int-egress # {"$kpt-set":"name-int-egress"}
 spec:
   description: "Allow traffic to internal ips"
   allow:
@@ -119,7 +119,7 @@ spec:
   - 192.168.0.0/16
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
@@ -129,7 +129,7 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-istio # {"$kpt-set":"name-istio"}
+  name: KUBEFLOW-NAME-istio # {"$kpt-set":"name-istio"}
 spec:
   description: "Allow traffic to ISTIO webhook"
   allow:
@@ -142,7 +142,7 @@ spec:
   - 172.16.0.32/28 # {"$kpt-set":"master-ip-cidr-block"}
   direction: INGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
@@ -151,7 +151,7 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-cm # {"$kpt-set":"name-cm"}
+  name: KUBEFLOW-NAME-cm # {"$kpt-set":"name-cm"}
 spec:
   description: "Allow traffic to cert manager webhook"
   allow:
@@ -163,7 +163,7 @@ spec:
   - 172.16.0.32/28 # {"$kpt-set":"master-ip-cidr-block"}
   direction: INGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
@@ -176,7 +176,7 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-dockerhub # {"$kpt-set":"name-dockerhub"}
+  name: KUBEFLOW-NAME-dockerhub # {"$kpt-set":"name-dockerhub"}
 spec:
   description: "Allow egress to dockerhub and quay.io"
   allow:
@@ -219,14 +219,14 @@ spec:
   - "13.35.101.104"
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: name-iap-jwks # {"$kpt-set":"name-iap-jwks"}
+  name: KUBEFLOW-NAME-iap-jwks # {"$kpt-set":"name-iap-jwks"}
 spec:
   description: "Allow traffic to www.gstatic.com to get IAP JWKs"
   allow:
@@ -250,6 +250,6 @@ spec:
   - "23.202.231.169"
   direction: EGRESS
   networkRef:
-    name: name # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
   # Enable logging to help debugging
   enableLogging: false # {"$kpt-set":"log-firewalls"}
