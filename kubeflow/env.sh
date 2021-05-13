@@ -16,7 +16,9 @@ export MGMT_NAME=<management-cluster-name>
 # followed the above guide.
 export MGMTCTXT="${MGMT_NAME}"
 
-# The following env vars are also configurable.
+######################
+# NOTICE: The following env vars have a default value, but they are also configurable.
+######################
 
 # KF_NAME is your Kubeflow cluster name.
 # It should satisfy the following conditions:
