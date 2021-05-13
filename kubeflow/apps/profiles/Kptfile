@@ -16,16 +16,19 @@ openAPI:
         setter:
           name: name
           value: KUBEFLOW-NAME
+          isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
           value: PROJECT
+          isSet: true
     io.k8s.cli.setters.email:
       x-k8s-cli:
         setter:
           name: email
           value: EMAIL
+          isSet: true
     io.k8s.cli.substitutions.admin-sa-ref:
       x-k8s-cli:
         substitution:

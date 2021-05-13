@@ -10,32 +10,38 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
-          value: project-id
+          value: PROJECT
+          isSet: true
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:
           name: name
-          value: name
+          value: KUBEFLOW-NAME
+          isSet: true
     io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
         setter:
           name: gcloud.compute.zone
           value: ZONE
+          isSet: true
     io.k8s.cli.setters.gcloud.compute.region:
       x-k8s-cli:
         setter:
           name: gcloud.compute.region
           value: REGION
+          isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           name: location
-          value: location
+          value: LOCATION
+          isSet: true
     io.k8s.cli.setters.log-firewalls:
       x-k8s-cli:
         setter:
           name: log-firewalls
           value: "false"
+          isSet: true
     io.k8s.cli.substitutions.name-storage-metadata-store:
       x-k8s-cli:
         substitution:
@@ -696,7 +702,8 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gcloud.project.projectNumber
-          value: projectNumber
+          value: PROJECT_NUMBER
+          isSet: true
     io.k8s.cli.substitutions.asm-gcp-metadata:
       x-k8s-cli:
         substitution:
