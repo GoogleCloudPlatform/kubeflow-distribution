@@ -9,14 +9,14 @@ Install the necessary tools if not already.
 
 1. Install gcloud SDK and deployment tools:
 
-```
+```bash
 gcloud components install kubectl kpt beta
 gcloud components update
 ```
 
 2. Install Kustomize
 
-```
+```bash
 # Detect your OS and download corresponding latest Kustomize binary
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 
@@ -28,13 +28,13 @@ sudo mv ./kustomize /usr/local/bin/kustomize
 
 Follow the yq v3 [installation instruction](https://github.com/mikefarah/yq#install). For example, if using wget, you can run following commands: 
 
-```
+```bash
 sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
 ```
 
 4. Install jq https://stedolan.github.io/jq/, for example, we can run the following command on Linux:
 
-```
+```bash
 sudo apt install jq
 ```
 
@@ -42,13 +42,13 @@ sudo apt install jq
 
 Go to Kubeflow Cluster
 
-```
+```bash
 cd kubeflow
 ```
 
 `kubeflow/gcp-blueprints` utilizes upstream repositority `kubeflow/manifests` for versioned manifests of multiple Kubeflow components. We need to first fetch upstream manifests by running command:
 
-```
+```bash
 bash ./pull_upstream.sh
 ```
 
@@ -57,36 +57,24 @@ bash ./pull_upstream.sh
 
 
 
-Provide actual value for the following variables in `env.sh`:
+Provide actual value for the following variables in `env.sh`, refer to detailed
+documentation in env.sh.
 
-```
-KF_NAME=<kubeflow-cluster-name>
-KF_PROJECT=<gcp-project-id>
-MGMT_NAME=<management-cluster-name>
-MGMTCTXT=${MGMT_NAME}
-LOCATION=<zone>
-```
+Set the environment variables in your shell:
 
-Provide the actual value for the following variables in `kpt-set.sh`:
-
-```
-kpt cfg set -R .  gcloud.project.projectNumber <KF_PROJECT_NUMBER>
-kpt cfg set -R .  email <YOUR_EMAIL_ADDRESS>
-```
-
-Run the following commands to set environment variables and kpt setter
-
-```
+```bash
 source env.sh
 ```
 
-```
+Configure kpt setters as environement variables in packages:
+
+```bash
 bash kpt-set.sh
 ```
 
-Set the Client ID and Secret from IAP Oauth step:
+Set the Client ID and Secret from IAP OAuth step:
 
-```
+```bash
 export CLIENT_ID=<Your CLIENT_ID>
 export CLIENT_SECRET=<Your CLIENT_SECRET>
 ```
@@ -94,27 +82,20 @@ export CLIENT_SECRET=<Your CLIENT_SECRET>
 ### Deploy Kubeflow Cluster
 
 
-Run following command to login
+Run following command to login:
 
-```
+```bash
 gcloud auth login
 ```
 
-
 Set the google project you want to deploy.
-```
+```bash
 gcloud config set project $KF_PROJECT
-```
-
-
-Set default cluster location
-```
-gcloud config set compute/zone $LOCATION
 ```
 
 Deploy Kubeflow cluster, required Google Cloud resources and all Kubeflow components:
 
-```
+```bash
 make apply
 ```
 
@@ -123,17 +104,18 @@ make apply
 
 ### Hydrate all manifests but not apply them
 
-If you want to check the resource in `/build` directories before applying them. You can use `hydrate-all` before running `apply-all`:
+If you want to check the resources in `build` directories first, run the
+following command before `make apply`:
 
-```
+```bash
 make hydrate
 ```
 
 ### Clean up the hydration result from all components
 
-After hydration or apply, you will have `build` folder in each component for manifest yaml files. If you want to cleean them up, you can run:
+After hydration or apply, you will have `build` folder in each component for manifest yaml files. If you want to clean them up, you can run:
 
-```
+```bash
 make clean-build
 ```
 
@@ -141,6 +123,6 @@ make clean-build
 
 Deleting cluster itself doesn't necessarily remove all resources created by this instruction. You can run the following command to clean them up:
 
-```
+```bash
 make delete
 ```
