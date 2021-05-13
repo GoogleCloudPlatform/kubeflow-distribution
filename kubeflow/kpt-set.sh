@@ -4,30 +4,39 @@ set -ex
 
 if [[ -z "${KF_NAME}" ]]; then
     echo "KF_NAME env var is required"
+    exit 1
 fi
 if [[ -z "${MGMT_NAME}" ]]; then
     echo "MGMT_NAME env var is required"
+    exit 1
 fi
 if [[ -z "${KF_PROJECT}" ]]; then
     echo "KF_PROJECT env var is required"
+    exit 1
 fi
 if [[ -z "${KF_PROJECT_NUMBER}" ]]; then
     echo "KF_PROJECT_NUMBER env var is required"
+    exit 1
 fi
 if [[ -z "${LOCATION}" ]]; then
     echo "LOCATION env var is required"
+    exit 1
 fi
 if [[ -z "${ZONE}" ]]; then
     echo "ZONE env var is required"
+    exit 1
 fi
 if [[ -z "${REGION}" ]]; then
     echo "REGION env var is required"
+    exit 1
 fi
 if [[ -z "${ADMIN_EMAIL}" ]]; then
     echo "ADMIN_EMAIL env var is required"
+    exit 1
 fi
 if [[ -z "${ASM_LABEL}" ]]; then
     echo "ASM_LABEL env var is required"
+    exit 1
 fi
 
 # kpt setter documentation:

@@ -47,6 +47,7 @@ check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
 components= \
+common/managed-storage \
 common/cnrm \
 common/asm \
 common/kubeflow-namespace \
@@ -78,13 +79,13 @@ clean-build:
 	done
 
 .PHONY: hydrate
-hydrate: validate-values check-name 
+hydrate: validate-values check-name
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component -hydrate_only) || exit 1; \
 	done
 
 .PHONY: apply
-apply: validate-values check-name 
+apply: validate-values check-name
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component) || exit 1; \
 	done
