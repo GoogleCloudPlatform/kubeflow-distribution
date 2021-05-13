@@ -40,6 +40,7 @@ resources:
 - upstream/base/installs/multi-user
 patchesStrategicMerge:
 - patches/ml-pipeline-deployment-patch.yaml
+- patches/ml-pipeline-ui-deployment-patch.yaml
 - patches/ml-pipeline-authorization-policy-patch.yaml
 - patches/workload-identity-binding.yaml
 - gcs/pipeline-install-config-patch.yaml
