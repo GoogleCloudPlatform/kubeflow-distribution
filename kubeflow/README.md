@@ -98,6 +98,11 @@ make apply
 
 ## Other Commands
 
+Reminder, all the following commands assume you already set up env vars by:
+
+```bash
+source env.sh
+```
 
 ### Hydrate all manifests but not apply them
 
@@ -121,5 +126,19 @@ make clean-build
 Deleting cluster itself doesn't necessarily remove all resources created by this instruction. You can run the following command to clean them up:
 
 ```bash
+make delete
+```
+
+#### Delete managed storage
+
+Managed storage -- CloudSQL and Cloud Storage (GCS) bucket contains Kubeflow
+Pipelines data, they are not deleted by default when deleting the Kubeflow
+cluster, because you can re-deploy a new Kubeflow cluster using existing managed
+storages.
+
+Run the following commands to delete managed storage:
+
+```bash
+cd common/managed-storage
 make delete
 ```
