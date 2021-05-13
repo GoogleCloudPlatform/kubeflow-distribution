@@ -15,7 +15,7 @@
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLInstance
 metadata:
-  name: dev-4-28-kfp-4 # {"$kpt-set":"cloudsql-name"}
+  name: CLOUDSQL-NAME # {"$kpt-set":"cloudsql-name"}
 # Spec reference:
 # https://cloud.google.com/config-connector/docs/reference/resource-docs/sql/sqlinstance
 # Other examples to enable private cloudsql or high availability:

@@ -16,7 +16,7 @@ openAPI:
       x-k8s-cli:
         setter:
           name: name
-          value: NAME
+          value: MANAGEMENT-NAME
           isSet: true
     io.k8s.cli.setters.gcloud.core.project:
       x-k8s-cli:

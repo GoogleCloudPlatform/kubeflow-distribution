@@ -26,7 +26,7 @@ kind: ServiceAccount
 metadata:
   annotations:
     cnrm.cloud.google.com/version: 1.27.2
-    iam.gke.io/gcp-service-account: NAME-cnrm-system@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"cnrm-system"}
+    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-cnrm-system@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"cnrm-system"}
   labels:
     cnrm.cloud.google.com/system: "true"
   name: cnrm-controller-manager

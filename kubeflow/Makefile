@@ -46,6 +46,7 @@ endif
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
+
 # Load components to deploy from config.yaml
 components=$(shell yq r config.yaml 'components.*')
 
@@ -69,7 +70,7 @@ apply: validate-values check-name
 
 	KFCTXT=$(KFCTXT) $(MAKE) -C common/iap-ingress pod-reset
 
-# Delete gcp resources
 .PHONY: delete
 delete:
+	# Delete gcp resources except managed storage
 	BUILD_DIR=$(BUILD_DIR) MGMTCTXT=$(MGMTCTXT) ./hack/delete_gcp.sh
