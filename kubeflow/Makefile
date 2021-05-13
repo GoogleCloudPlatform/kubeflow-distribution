@@ -46,30 +46,8 @@ endif
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
-components= \
-common/cnrm \
-common/asm \
-common/kubeflow-namespace \
-common/istio \
-common/cert-manager \
-contrib/metacontroller \
-common/cloud-endpoints \
-common/iap-ingress \
-common/config-kubeflow \
-apps/admission-webhook \
-apps/centraldashboard \
-common/kubeflow-roles \
-apps/jupyter \
-apps/volumes-web-app \
-apps/tensorboard \
-apps/profiles \
-apps/pytorch-job \
-apps/tf-training \
-apps/pipelines \
-common/knative \
-apps/kfserving \
-common/user-namespace \
-apps/katib \
+# Load components to deploy from config.yaml
+components=$(shell yq r config.yaml 'components.*')
 
 .PHONY: clean-build
 clean-build:
@@ -78,13 +56,13 @@ clean-build:
 	done
 
 .PHONY: hydrate
-hydrate: validate-values check-name 
+hydrate: validate-values check-name
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component -hydrate_only) || exit 1; \
 	done
 
 .PHONY: apply
-apply: validate-values check-name 
+apply: validate-values check-name
 	@for component in $(components) ; do \
 	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component) || exit 1; \
 	done
