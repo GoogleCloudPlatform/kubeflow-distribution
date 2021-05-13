@@ -26,8 +26,9 @@ export MGMTCTXT="${MGMT_NAME}"
 ######################
 
 # KF_NAME env var is name of your new Kubeflow cluster.
-# It should satisfy the following conditions:
-# * be unique within your project
+# It should satisfy the following prerequisites:
+# * be unique within your project, e.g. if you already deployed cluster with the
+# name "kubeflow", use a different name when deploying another Kubeflow cluster.
 # * start with a lowercase letter
 # * only contain lowercase letters, numbers and "-"s (hyphens)
 # * end with a number or a letter

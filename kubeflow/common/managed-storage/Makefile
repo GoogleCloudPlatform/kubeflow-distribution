@@ -38,9 +38,7 @@ apply-cnrm: hydrate
 wait:
 	# Wait for all Google Cloud resources to get created and become ready.
 	# If this takes long, you can view status by:
-	@echo "kubectl --context=$(MGMTCTXT) get -f $(build_dir)"
-	# or:
-	@echo "cd kubeflow/common/managed-storage && make status"
+	@echo "cd common/managed-storage && make status"
 	# For resources with READY=False, debug by:
 	@echo "kubectl --context=$(MGMTCTXT) -n $(KF_PROJECT) describe <KIND>/<NAME>"
 	@echo
