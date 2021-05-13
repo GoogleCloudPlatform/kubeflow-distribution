@@ -14,7 +14,7 @@ gcloud components install kubectl kpt beta
 gcloud components update
 ```
 
-2. Install Kustomize
+2. Install Kustomize:
 
 ```bash
 # Detect your OS and download corresponding latest Kustomize binary
@@ -52,10 +52,7 @@ cd kubeflow
 bash ./pull_upstream.sh
 ```
 
-
 ### Environment Variables
-
-
 
 Provide actual value for the following variables in `env.sh`, refer to detailed
 documentation in env.sh.
