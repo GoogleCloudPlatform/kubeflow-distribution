@@ -1,0 +1,121 @@
+# This config file specifies which Kubeflow components to deploy.
+# Each line has a relative path from this folder to manifests of a component to
+# deploy.
+# Each component may have a comment like: `dependencies: [ xxx ]`
+# It means this component depends on listed components.
+# Note, that the information may not be fully accurate at the moment. Welcome
+# feedback if you find any mistakes.
+
+# You can delete/comment lines to selectively pick the components you want to
+# deploy.
+# If you want to customize one component, edit or overlay manifests of that
+# component.
+components:
+# CloudSQL instance and Cloud Storage bucket for Kubeflow Pipelines data.
+- common/managed-storage
+
+# Kubeflow Google Cloud resources in Config Connector spec.
+# Required.
+# Reference: https://cloud.google.com/config-connector/docs/overview
+# This includes GKE cluster, Google Service Accounts and other resources.
+- common/cnrm
+
+# Anthos Service Mesh (alternative of Istio with the same API interface)
+# Required.
+# https://cloud.google.com/service-mesh/docs/overview
+- common/asm
+
+# Kubeflow Kubernetes namespace
+# Required.
+- common/kubeflow-namespace
+
+# Common Kubeflow Istio configurations
+# Required.
+- common/istio
+
+# Some Kubeflow global configs
+# Required.
+- common/config-kubeflow
+- common/kubeflow-roles
+
+# Cert Manager
+# https://cert-manager.io/docs/
+- common/cert-manager
+
+# Metacontroller
+# https://metacontroller.github.io/metacontroller/
+- contrib/metacontroller
+
+# Cloud Endpoints Controller
+# https://github.com/danisla/cloud-endpoints-controller
+- common/cloud-endpoints
+
+# Resources to deploy a Cloud Endpoint + IAP ingress.
+# dependencies: [ common/cloud-endpoints ]
+- common/iap-ingress
+
+# PodDefault controller and webhook
+# https://github.com/kubeflow/kubeflow/tree/master/components/admission-webhook
+# dependencies: [ common/cert-manager ]
+- apps/admission-webhook
+
+# Kubeflow Profile controller and Access Management service
+# https://github.com/kubeflow/kubeflow/tree/master/components/profile-controller
+# https://github.com/kubeflow/kubeflow/tree/master/components/access-management
+# dependencies: [ common/cert-manager, common/kubeflow-roles ]
+- apps/profiles
+
+# Kubeflow Central Dashboard
+# https://www.kubeflow.org/docs/components/central-dash/overview/
+# https://github.com/kubeflow/kubeflow/tree/master/components/centraldashboard
+# dependencies: [ apps/profiles ]
+- apps/centraldashboard
+
+# Kubeflow Notebook Controller and Webapp Server
+# https://www.kubeflow.org/docs/components/notebooks/
+# dependencies: [ common/cert-manager, apps/profiles ]
+- apps/jupyter
+
+# Volumes web app
+# https://github.com/kubeflow/kubeflow/tree/master/components/crud-web-apps/volumes
+# dependencies: [ apps/profiles ]
+- apps/volumes-web-app
+
+# Tensorboard web app
+# dependencies: [ apps/profiles ]
+# https://github.com/kubeflow/kubeflow/tree/master/components/crud-web-apps/tensorboards
+- apps/tensorboard
+
+# Pytorch operator
+# https://www.kubeflow.org/docs/components/training/pytorch/
+# dependencies: []
+- apps/pytorch-job
+
+# Tensorflow operator
+# https://www.kubeflow.org/docs/components/training/tftraining/
+# dependencies: []
+- apps/tf-training
+
+# Kubeflow Pipelines
+# https://www.kubeflow.org/docs/components/pipelines/overview/pipelines-overview/
+# dependencies:
+# - common/managed-storage
+# - common/metacontroller
+# - common/iap-ingress
+# - apps/profiles
+# - apps/centraldashboard
+- apps/pipelines
+
+# Knative
+# https://knative.dev/
+# dependencies: [ common/cert-manager ]
+- common/knative
+
+# KFServing
+# dependencies: [ common/knative ]
+- apps/kfserving
+
+# Katib
+# https://www.kubeflow.org/docs/components/katib/overview/
+# dependencies: [ apps/centraldashboard ]
+- apps/katib

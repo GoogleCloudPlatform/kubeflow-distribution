@@ -46,31 +46,9 @@ endif
 check-name:
 	PROJECT=$(PROJECT) NAME=$(NAME) ./hack/check_domain_length.sh
 
-components= \
-common/managed-storage \
-common/cnrm \
-common/asm \
-common/kubeflow-namespace \
-common/istio \
-common/cert-manager \
-contrib/metacontroller \
-common/cloud-endpoints \
-common/iap-ingress \
-common/config-kubeflow \
-apps/admission-webhook \
-apps/centraldashboard \
-common/kubeflow-roles \
-apps/jupyter \
-apps/volumes-web-app \
-apps/tensorboard \
-apps/profiles \
-apps/pytorch-job \
-apps/tf-training \
-apps/pipelines \
-common/knative \
-apps/kfserving \
-common/user-namespace \
-apps/katib \
+
+# Load components to deploy from config.yaml
+components=$(shell yq r config.yaml 'components.*')
 
 .PHONY: clean-build
 clean-build:
