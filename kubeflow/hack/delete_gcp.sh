@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 if [[ -z "${MGMTCTXT}" ]]; then
     echo "MGMTCTXT env var is required"
