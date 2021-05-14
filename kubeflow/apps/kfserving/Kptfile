@@ -1,16 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-  name: knative
+  name: KFServing
 packageMetadata:
-  shortDescription: knative config.
+  shortDescription: KFServing package
 openAPI:
   definitions:
-    io.k8s.cli.setters.asm-label:
-      x-k8s-cli:
-        setter:
-          name: asm-label
-          value: ASM-LABEL
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:

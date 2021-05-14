@@ -1,15 +1,24 @@
 # This config file specifies which Kubeflow components to deploy.
 # Each line has a relative path from this folder to manifests of a component to
 # deploy.
+
+## Component dependencies
 # Each component may have a comment like: `dependencies: [ xxx ]`
 # It means this component depends on listed components.
 # Note, that the information may not be fully accurate at the moment. Welcome
 # feedback if you find any mistakes.
 
-# You can delete/comment lines to selectively pick the components you want to
-# deploy.
-# If you want to customize one component, edit or overlay manifests of that
-# component.
+## Select a subset of components
+# You can delete/comment components to selectively pick the components you want
+# to deploy.
+
+## Customize a component
+# Edit or overlay manifests of that component.
+
+## Order of components
+# The ordering of this list matters. When deploying, the components are
+# deployed in the same order as this file.
+
 components:
 # CloudSQL instance and Cloud Storage bucket for Kubeflow Pipelines data.
 - common/managed-storage
@@ -101,7 +110,6 @@ components:
 # dependencies:
 # - common/managed-storage
 # - common/metacontroller
-# - common/iap-ingress
 # - apps/profiles
 # - apps/centraldashboard
 - apps/pipelines

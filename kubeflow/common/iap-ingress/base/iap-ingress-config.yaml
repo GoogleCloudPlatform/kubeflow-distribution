@@ -6,7 +6,7 @@ data:
   appName: KUBEFLOW-NAME # {"$kpt-set":"name-label"}
   hostname: KUBEFLOW-NAME.endpoints.PROJECT.cloud.goog # {"$kpt-set":"hostname"}
   ipName: KUBEFLOW-NAME-ip # {"$kpt-set":"ip-name"}
-  project: "PROJECT" # {"$kpt-set":"project"}
+  project: "PROJECT" # {"$kpt-set":"gcloud.core.project"}
 kind: ConfigMap
 metadata:
   creationTimestamp: null
