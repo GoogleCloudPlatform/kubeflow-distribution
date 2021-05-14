@@ -12,3 +12,8 @@ openAPI:
           name: name
           value: KUBEFLOW-NAME
           isSet: true
+    io.k8s.cli.setters.gcloud.core.project:
+      x-k8s-cli:
+        setter:
+          name: gcloud.core.project
+          value: PROJECT
