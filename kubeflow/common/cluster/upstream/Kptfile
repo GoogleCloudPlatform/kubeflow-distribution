@@ -12,6 +12,20 @@ openAPI:
           name: gcloud.core.project
           value: PROJECT
           isSet: true
+    io.k8s.cli.setters.gcloud.project.projectNumber:
+      x-k8s-cli:
+        setter:
+          name: gcloud.project.projectNumber
+          value: "PROJECT_NUMBER"
+          isSet: true
+    io.k8s.cli.substitutions.asm-mesh-id:
+      x-k8s-cli:
+        substitution:
+          name: asm-mesh-id
+          pattern: proj-${gcloud.project.projectNumber}
+          values:
+          - marker: ${gcloud.project.projectNumber}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.project.projectNumber'
     io.k8s.cli.setters.name:
       x-k8s-cli:
         setter:

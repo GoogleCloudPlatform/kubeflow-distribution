@@ -6,6 +6,7 @@ reset-cfg-values:
 	kpt cfg set -R . mgmt-ctxt MANAGEMENT-CTXT
 
 	kpt cfg set -R . gcloud.core.project PROJECT
+	kpt cfg set -R . gcloud.project.projectNumber PROJECT_NUMBER
 	kpt cfg set -R . location LOCATION
 	kpt cfg set -R . gcloud.compute.zone ZONE
 	kpt cfg set -R . gcloud.compute.region REGION
