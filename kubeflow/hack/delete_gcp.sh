@@ -6,7 +6,7 @@ if [[ -z "${MGMTCTXT}" ]]; then
     exit 1
 fi
 
-echo "Deleting all GCP resources will cause destruction of all services and data on this cluster. Confirm? [y/N]";
+echo "Deleting all Google Cloud resources including your GKE cluster and data in the cluster, except the Cloud SQL instance and GCS bucket. Confirm? [y/N]";
 read REPLY;
 if [[ "${REPLY}" =~ ^[Yy]$ ]]
 then
