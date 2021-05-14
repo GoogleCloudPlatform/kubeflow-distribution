@@ -4,10 +4,6 @@
 # The KF_PROJECT env var contains the Google Cloud project ID where Kubeflow
 # cluster will be deployed to.
 export KF_PROJECT=<google-cloud-project-id>
-# You can get your project number by running this command
-# (replace ${KF_PROJECT} with the actual project ID):
-# gcloud projects describe --format='value(projectNumber)' "${KF_PROJECT}"
-export KF_PROJECT_NUMBER=<google-cloud-project-number>
 # ADMIN_EMAIL env var is the Kubeflow admin's email address, it should be
 # consistent with login email on Google Cloud.
 # Example: admin@gmail.com

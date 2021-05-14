@@ -59,16 +59,16 @@ clean-build:
 .PHONY: hydrate
 hydrate: validate-values check-name
 	@for component in $(components) ; do \
-	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component -hydrate_only) || exit 1; \
+	(BUILD_DIR=$(BUILD_DIR) KFCTXT=$(KFCTXT) ./hack/apply_component.sh -path $$component -hydrate_only) || exit 1; \
 	done
 
 .PHONY: apply
 apply: validate-values check-name
 	@for component in $(components) ; do \
-	(BUILD_DIR=$(BUILD_DIR) NAME=$(NAME) KFCTXT=$(KFCTXT) LOCATION=$(LOCATION) PROJECT=$(PROJECT) ./hack/apply_component.sh -path $$component) || exit 1; \
+	(BUILD_DIR=$(BUILD_DIR) KFCTXT=$(KFCTXT) ./hack/apply_component.sh -path $$component) || exit 1; \
 	done
 
-	KFCTXT=$(KFCTXT) $(MAKE) -C common/iap-ingress pod-reset
+	$(MAKE) -C common/iap-ingress pod-reset
 
 .PHONY: delete
 delete:

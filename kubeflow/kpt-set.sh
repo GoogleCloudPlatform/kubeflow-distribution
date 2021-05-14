@@ -14,10 +14,6 @@ if [[ -z "${KF_PROJECT}" ]]; then
     echo "KF_PROJECT env var is required"
     exit 1
 fi
-if [[ -z "${KF_PROJECT_NUMBER}" ]]; then
-    echo "KF_PROJECT_NUMBER env var is required"
-    exit 1
-fi
 if [[ -z "${LOCATION}" ]]; then
     echo "LOCATION env var is required"
     exit 1
@@ -53,7 +49,6 @@ kpt cfg set -R .  mgmt-ctxt "${MGMT_NAME}"
 
 kpt cfg set -R .  name "${KF_NAME}"
 kpt cfg set -R .  gcloud.core.project "${KF_PROJECT}"
-kpt cfg set -R .  gcloud.project.projectNumber "${KF_PROJECT_NUMBER}"
 kpt cfg set -R .  location "${LOCATION}"
 kpt cfg set -R .  gcloud.compute.zone "${ZONE}"
 kpt cfg set -R .  gcloud.compute.region "${REGION}"
