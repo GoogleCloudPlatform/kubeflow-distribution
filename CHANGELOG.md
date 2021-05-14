@@ -18,4 +18,4 @@ The Kubeflow on Google Cloud distribution versioning is following the versioning
 *  Update profile controller to allow kustomization of namespace label injection. https://github.com/kubeflow/kubeflow/pull/5761
 *  Rework of Kubeflow on Google Cloud documentations.
 
-Other items can be found in [gcp-blueprints 1.3 release](https://github.com/kubeflow/gcp-blueprints/projects/2) and [Kubeflow Pipelines 1.3 release ](https://github.com/kubeflow/pipelines/projects/12).
+Other items can be found in [gcp-blueprints 1.3 release](https://github.com/kubeflow/gcp-blueprints/projects/2) and [Kubeflow Pipelines 1.3 release](https://github.com/kubeflow/pipelines/projects/12).
