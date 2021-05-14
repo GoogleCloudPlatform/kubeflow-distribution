@@ -1,7 +1,10 @@
 build_dir?=./build
+NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+# The kubectl context for your Kubeflow cluster
+KFCTXT=$(NAME)
 
 .PHONY: hydrate
-hydrate: 
+hydrate:
 	rm -rf $(build_dir) && mkdir -p $(build_dir)
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(build_dir) ./
 
@@ -11,6 +14,7 @@ apply: hydrate iap-secret
 
 .PHONY: iap-secret
 iap-secret: check-iap
+# TODO: report error if CLIENT_SECRET and CLIENT_ID are empty.
 	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=$(CLIENT_ID) --from-literal=client_secret=$(CLIENT_SECRET) --dry-run -o yaml | kubectl apply -f -
 
 .PHONY: check-iap

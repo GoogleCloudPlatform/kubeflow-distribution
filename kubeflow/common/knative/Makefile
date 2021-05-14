@@ -1,7 +1,7 @@
-# The name of the context for your Kubeflow cluster
-# NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-# KFCTXT=$(NAME)
 build_dir?=./build
+NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+# The kubectl context for your Kubeflow cluster
+KFCTXT=$(NAME)
 
 .PHONY: hydrate
 hydrate:
