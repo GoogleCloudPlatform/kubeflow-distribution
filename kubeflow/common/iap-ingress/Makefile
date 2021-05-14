@@ -14,7 +14,6 @@ apply: hydrate iap-secret
 
 .PHONY: iap-secret
 iap-secret: check-iap
-# TODO: report error if CLIENT_SECRET and CLIENT_ID are empty.
 	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=$(CLIENT_ID) --from-literal=client_secret=$(CLIENT_SECRET) --dry-run -o yaml | kubectl apply -f -
 
 .PHONY: check-iap
