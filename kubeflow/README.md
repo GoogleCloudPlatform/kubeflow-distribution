@@ -4,7 +4,6 @@ This instruction is for the deployment steps to create Kubeflow Cluster on GCP. 
 
 ### Prerequisite
 
-
 Install the necessary tools if not already.
 
 1. Install gcloud SDK and deployment tools:
@@ -142,3 +141,43 @@ Run the following commands to delete managed storage:
 cd common/managed-storage
 make delete
 ```
+
+### Working with individual components
+
+The Makefile helps you apply all components in one batch, but you can apply
+each component individually too. It has the same effect as doing it in one batch.
+
+Before you start, confirm:
+
+* You've ran above commands in Kubeflow root folder:
+
+    ```bash
+    source ./env.sh
+    bash ./pull_upstream.sh
+    bash ./kpt-set.sh
+    ```
+* You've deployed all required components and dependencies of the component you
+choose.
+
+Then for example, if you have a component at `apps/pipelines`, visit the component
+folder:
+
+```bash
+cd apps/pipelines
+ls Makefile
+```
+
+If there's a Makefile, you can:
+
+* apply by `make apply`
+* hydrate by `make hydrate`
+* delete by `make delete`
+
+There may be other commands supported depending on the component, you can read
+the README.md or the Makefile to learn more.
+
+If not, you can:
+
+* apply by `kustomize build . | kubectl --context "${KF_NAME}" apply -f -`
+* hydrate by `mkdir -p build && kustomize build . -o ./build/`
+* delete by `kustomize build . | kubectl --context "${KF_NAME}" delete -f -`

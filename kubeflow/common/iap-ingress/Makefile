@@ -1,7 +1,10 @@
 build_dir?=./build
+NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+# The kubectl context for your Kubeflow cluster
+KFCTXT=$(NAME)
 
 .PHONY: hydrate
-hydrate: 
+hydrate:
 	rm -rf $(build_dir) && mkdir -p $(build_dir)
 	kustomize build --load-restrictor LoadRestrictionsNone -o $(build_dir) ./
 
