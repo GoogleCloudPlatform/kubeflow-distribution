@@ -6,8 +6,7 @@ if [[ -z "${MGMTCTXT}" ]]; then
     exit 1
 fi
 
-echo "Deleting all Google Cloud resources including your GKE cluster and data in the cluster, except the Cloud SQL instance and GCS bucket. Confirm? [y/N]";
-read REPLY;
+read -p "Deleting all Google Cloud resources including your GKE cluster and data in the cluster, except the Cloud SQL instance and GCS bucket. Confirm? [y/N] " REPLY;
 if [[ "${REPLY}" =~ ^[Yy]$ ]]
 then
     BUILD_DIR="${BUILD_DIR:-build}"
