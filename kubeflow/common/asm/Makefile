@@ -3,13 +3,13 @@
 # For example: 1.9.2-asm.1+config4:install_asm_1.9.2-asm.1-config4
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for INSTALL_ASM_SCRIPT_VERSION.
-ASM_PACKAGE_VERSION=1.9.2-asm.1+config4
-INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.2-asm.1-config4
+ASM_PACKAGE_VERSION=1.9.3-asm.2+config2
+INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.3-asm.2-config2
 # ASM Upgrade Guide
 # 1: Determine the ASM version you want to upgrade, follow the instruction above
 #     to update ASM_PACKAGE_VERSION and INSTALL_ASM_SCRIPT_VERSION. Then run
 #     `make install-asm` to install new ASM version.
-# 2: Update kubeflow/env.sh for the ASM version, this looks like asm-192-1,
+# 2: Update kubeflow/env.sh for the ASM version, this looks like asm-192-1 format,
 #     and you can find the exact value in istiod pod's label as well.
 #     For example: You can find label `istio.io/rev: asm-192-1` in istiod-asm-192-1
 #     service. Then run `source env.sh` under `kubeflow/` folder.
