@@ -12,6 +12,7 @@ reset-cfg-values:
 	kpt cfg set -R . gcloud.compute.region REGION
 	kpt cfg set -R . bucket-name BUCKET-NAME
 	kpt cfg set -R . cloudsql-name CLOUDSQL-NAME
+	kpt cfg set kubeflow/apps/pipelines default-pipeline-root "minio://mlpipeline/v2/artifacts"
 
 	kpt cfg set -R . email EMAIL
 

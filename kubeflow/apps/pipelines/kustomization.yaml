@@ -13,7 +13,8 @@ resources:
 # Alternatively, use in-cluster MinIO by:
 # 1. remove cloudsql/pipeline-install-config-patch.yaml from patchesStrategicMerge
 # 2. remove ../gcs/cnrm from ./cnrm/kustomization.yaml
-# 3. comment gcs/minio-gateway above, and uncomment the following line
+# 3. set default-pipeline-root to MinIO: `kpt cfg set . default-pipeline-root minio://mlpipeline/v2/artifacts`
+# 4. comment gcs/minio-gateway above, and uncomment the following line
 # - upstream/third-party/minio/base
 
 # istio config needed by both options

@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
+#
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 set -ex
 
 export KUBEFLOW_MANIFESTS_VERSION=v1.3.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
-export KUBEFLOW_PIPELINES_VERSION=1.5.0
-export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
+# Pull Kubeflow Pipelines upstream manifests.
+./apps/pipelines/pull-upstream.sh
 
 # apps/ related manifest
 if [ -d apps/admission-webhook/upstream ]; then
@@ -14,7 +28,6 @@ if [ -d apps/admission-webhook/upstream ]; then
 fi
 mkdir -p apps/admission-webhook
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/admission-webhook/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/admission-webhook
-
 
 if [ -d apps/centraldashboard/upstream ]; then
     rm -rf apps/centraldashboard/upstream
@@ -33,13 +46,6 @@ if [ -d apps/jupyter/notebook-controller/upstream ]; then
 fi
 mkdir -p apps/jupyter/notebook-controller
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/jupyter/notebook-controller
-
-if [ -d apps/pipelines/upstream ]; then
-    rm -rf apps/pipelines/upstream
-fi
-mkdir -p apps/pipelines/upstream
-kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" apps/pipelines/upstream
-mv apps/pipelines/upstream/kustomize/* apps/pipelines/upstream
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream

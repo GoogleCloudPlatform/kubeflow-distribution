@@ -178,3 +178,9 @@ openAPI:
           name: bucket-name
           value: BUCKET-NAME
           isSet: true
+    io.k8s.cli.setters.default-pipeline-root:
+      x-k8s-cli:
+        setter:
+          name: default-pipeline-root
+          value: minio://mlpipeline/v2/artifacts
+          isSet: true

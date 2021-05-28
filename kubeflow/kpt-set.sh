@@ -67,3 +67,4 @@ kpt cfg set common/managed-storage bucket-name "${BUCKET_NAME}"
 # apps/pipelines uses specified CloudSQL and Cloud Storage bucket.
 kpt cfg set apps/pipelines cloudsql-name "${CLOUDSQL_NAME}"
 kpt cfg set apps/pipelines bucket-name "${BUCKET_NAME}"
+kpt cfg set apps/pipelines default-pipeline-root "gs://${BUCKET_NAME}/v2/artifacts/"
