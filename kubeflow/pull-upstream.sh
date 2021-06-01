@@ -34,9 +34,7 @@ kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstrea
 if [ -d apps/pipelines/upstream ]; then
     rm -rf apps/pipelines/upstream
 fi
-# mkdir -p apps/pipelines/upstream
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/pipeline/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/pipelines
-# mv apps/pipelines/upstream/kustomize/* apps/pipelines/upstream
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream
