@@ -61,6 +61,10 @@ spec:
   monitoringService: monitoring.googleapis.com/kubernetes
   nodeConfig:
     machineType: e2-standard-8
+    # To avoid issue with Kubernetes 1.19 or above: https://github.com/kubeflow/pipelines/issues/5714.
+    # Set the image type be Container-Optimized OS with Docker (cos):
+    # https://cloud.google.com/kubernetes-engine/docs/concepts/node-images
+    imageType: cos
     metadata:
       disable-legacy-endpoints: "true"
     oauthScopes:
