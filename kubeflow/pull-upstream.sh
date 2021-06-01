@@ -5,9 +5,6 @@ set -ex
 export KUBEFLOW_MANIFESTS_VERSION=v1.3.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
-export KUBEFLOW_PIPELINES_VERSION=1.5.0
-export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
-
 # apps/ related manifest
 if [ -d apps/admission-webhook/upstream ]; then
     rm -rf apps/admission-webhook/upstream
@@ -37,9 +34,9 @@ kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstrea
 if [ -d apps/pipelines/upstream ]; then
     rm -rf apps/pipelines/upstream
 fi
-mkdir -p apps/pipelines/upstream
-kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" apps/pipelines/upstream
-mv apps/pipelines/upstream/kustomize/* apps/pipelines/upstream
+# mkdir -p apps/pipelines/upstream
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/pipeline/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/pipelines
+# mv apps/pipelines/upstream/kustomize/* apps/pipelines/upstream
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream
