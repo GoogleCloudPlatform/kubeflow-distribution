@@ -2,7 +2,7 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.3.0
+export KUBEFLOW_MANIFESTS_VERSION=v1.3.1-rc.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
 export KUBEFLOW_PIPELINES_VERSION=1.5.0
@@ -100,7 +100,7 @@ if [ -d common/istio/upstream/ ]; then
     rm -rf common/istio/upstream/
 fi
 mkdir -p common/istio
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-9-0/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-9/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
 
 if [ -d common/cert-manager/upstream/ ]; then
     rm -rf common/cert-manager/upstream/
