@@ -69,3 +69,7 @@ wait-cnrm:
 .PHONY: status-cnrm
 status-cnrm:
 	kubectl --context=$(MGMTCTXT) get -f $(build_dir)/cnrm
+
+.PHONY: pull-upstream
+pull-upstream:
+	./pull-upstream.sh

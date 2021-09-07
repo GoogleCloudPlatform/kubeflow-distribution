@@ -17,3 +17,4 @@ openAPI:
         setter:
           name: gcloud.core.project
           value: PROJECT
+          isSet: true
