@@ -56,5 +56,6 @@ configMapGenerator:
   - admin=
   - gcp-sa=
 - name: namespace-labels-data
+  behavior: replace
   files:
   - patches/namespace-labels.yaml
