@@ -95,15 +95,14 @@ components:
 # https://github.com/kubeflow/kubeflow/tree/master/components/crud-web-apps/tensorboards
 - apps/tensorboard
 
-# Pytorch operator
+# training-operator: Includes Pytorch operator and Tensorflow operator
 # https://www.kubeflow.org/docs/components/training/pytorch/
 # dependencies: []
-- apps/pytorch-job
-
-# Tensorflow operator
-# https://www.kubeflow.org/docs/components/training/tftraining/
-# dependencies: []
-- apps/tf-training
+- apps/training-operator
+    # Tensorflow operator
+    # https://www.kubeflow.org/docs/components/training/tftraining/
+    # dependencies: []
+    # - apps/tf-training
 
 # Kubeflow Pipelines
 # https://www.kubeflow.org/docs/components/pipelines/overview/pipelines-overview/
