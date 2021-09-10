@@ -60,3 +60,47 @@ apply: install-asm
 .PHONY: hydrate
 hydrate:
 # There is no hydration for ASM, it is taken care by install_asm.
+
+.PHONY: download-asmcli
+download-asmcli: 
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
+	chmod +x asmcli
+
+.PHONY: asmcli-validate
+asmcli-validate:
+	./asmcli validate \
+	--project_id jamxl-kfp-dev  \
+	--cluster_name kf-ref17   \
+	--cluster_location us-west1-b   \
+	--output_dir asmcli_output \
+	-v \
+	--option legacy-default-ingressgateway
+
+
+.PHONY: asmcli-install
+asmcli-install:
+	# fleet_id is optional. If not specified, use project_id
+	./asmcli install \
+	--project_id jamxl-kfp-dev \
+	--cluster_name kf-ref17 \
+	--cluster_location us-west1-b \
+	--fleet_id jamxl-kfp-dev \
+	--output_dir asmcli_output \
+	--enable_all \
+	--ca mesh_ca \
+	--custom_overlay ./asmcli_output/asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./options/ingressgateway-iap.yaml \
+	--option legacy-default-ingressgateway
+
+.PHONY: asmcli-precheck
+asmcli-precheck:
+	cd ./asmcli_output && ./istioctl experimental precheck
+
+
+# Note about install gateways
+# kubectl create namespace ingress-gateway
+# kubectl -n istio-system get pods -l app=istiod --show-labels
+# kubectl label namespace ingress-gateway istio-injection- istio.io/rev=asm-1104-6 --overwrite
+# export INGRESS_GATEWAY=https://raw.githubusercontent.com/GoogleCloudPlatform/anthos-service-mesh-packages/release-1.10-asm/samples/gateways/istio-ingressgateway.yaml
+# kubectl apply -n ingress-gateway -f ${INGRESS_GATEWAY}
