@@ -24,9 +24,10 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.3-asm.2-config2
 NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
 LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
 PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+UPSTREAM=upstream
 
-.PHONY: downalod-install-asm-script
-downalod-install-asm-script:
+.PHONY: download-install-asm-script
+download-install-asm-script:
 	curl https://storage.googleapis.com/csm-artifacts/asm/$(INSTALL_ASM_SCRIPT_VERSION) > install_asm;
 # Official documentation of downloading install_asm: https://cloud.google.com/service-mesh/docs/scripted-install/asm-onboarding#downloading_the_script
 # It cannot control the patch version so we won't use this approach for now.
@@ -43,7 +44,7 @@ download-asm-package:
 	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@$(ASM_PACKAGE_VERSION) ./
 
 .PHONY: install-asm
-install-asm: downalod-install-asm-script download-asm-package
+install-asm: download-install-asm-script download-asm-package
 	./install_asm \
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
@@ -58,47 +59,55 @@ install-asm: downalod-install-asm-script download-asm-package
 apply: install-asm
 
 .PHONY: hydrate
-hydrate:
-# There is no hydration for ASM, it is taken care by install_asm.
+hydrate: # download-asmcli asmcli-validate asmcli-precheck
+# There is no hydration for ASM, it is taken care by asmcli. But you can validate readiness using following commands.
+# Require existence of a cluster before running MAKE commands:
+# asmcli-validate asmcli-precheck
 
 .PHONY: download-asmcli
 download-asmcli: 
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.10.4-asm.6-config1-alpha > asmcli
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.10.4-asm.6-config1-alpha.sha256 > asmcli.sha256
+	# curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
+	# curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
 	chmod +x asmcli
 
 .PHONY: asmcli-validate
 asmcli-validate:
 	./asmcli validate \
-	--project_id jamxl-kfp-dev  \
-	--cluster_name kf-ref17   \
-	--cluster_location us-west1-b   \
-	--output_dir asmcli_output \
-	-v \
-	--option legacy-default-ingressgateway
+	--project_id $(PROJECT) \
+	--cluster_name $(NAME) \
+	--cluster_location $(LOCATION) \
+	--output_dir $(UPSTREAM) \
+	--ca mesh_ca \
+	--custom_overlay ./$(UPSTREAM)/asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./options/ingressgateway-iap.yaml \
+	--option legacy-default-ingressgateway \
+	--verbose
 
 
 .PHONY: asmcli-install
-asmcli-install:
-	# fleet_id is optional. If not specified, use project_id
+asmcli-install: download-asmcli
+# --fleet_id is optional. If not specified, use project_id
 	./asmcli install \
-	--project_id jamxl-kfp-dev \
-	--cluster_name kf-ref17 \
-	--cluster_location us-west1-b \
-	--fleet_id jamxl-kfp-dev \
-	--output_dir asmcli_output \
+	--project_id $(PROJECT) \
+	--cluster_name $(NAME) \
+	--cluster_location $(LOCATION) \
+	--output_dir $(UPSTREAM) \
 	--enable_all \
 	--ca mesh_ca \
-	--custom_overlay ./asmcli_output/asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./$(UPSTREAM)/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml \
-	--option legacy-default-ingressgateway
+	--option legacy-default-ingressgateway \
+	--verbose
 
 .PHONY: asmcli-precheck
 asmcli-precheck:
-	cd ./asmcli_output && ./istioctl experimental precheck
+	pushd $(UPSTREAM) && ./istioctl experimental precheck && popd
 
 
 # Note about install gateways
+# https://cloud.google.com/service-mesh/docs/unified-install/install#install_gateways
 # kubectl create namespace ingress-gateway
 # kubectl -n istio-system get pods -l app=istiod --show-labels
 # kubectl label namespace ingress-gateway istio-injection- istio.io/rev=asm-1104-6 --overwrite
