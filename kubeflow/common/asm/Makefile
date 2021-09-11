@@ -3,8 +3,8 @@
 # For example: 1.9.2-asm.1+config4:install_asm_1.9.2-asm.1-config4
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for INSTALL_ASM_SCRIPT_VERSION.
-ASM_PACKAGE_VERSION=1.9.3-asm.2+config2
-INSTALL_ASM_SCRIPT_VERSION=install_asm_1.9.3-asm.2-config2
+ASM_PACKAGE_VERSION=1.10.4-asm.6+config2
+INSTALL_ASM_SCRIPT_VERSION=install_asm_1.10.4-asm.6-config2
 # ASM Upgrade Guide
 # 1: Determine the ASM version you want to upgrade, follow the instruction above
 #     to update ASM_PACKAGE_VERSION and INSTALL_ASM_SCRIPT_VERSION. Then run
