@@ -29,6 +29,7 @@ UPSTREAM=upstream
 .PHONY: download-install-asm-script
 download-install-asm-script:
 	curl https://storage.googleapis.com/csm-artifacts/asm/$(INSTALL_ASM_SCRIPT_VERSION) > install_asm;
+	chmod +x install_asm
 # Official documentation of downloading install_asm: https://cloud.google.com/service-mesh/docs/scripted-install/asm-onboarding#downloading_the_script
 # It cannot control the patch version so we won't use this approach for now.
 # cd ./asm && { \
