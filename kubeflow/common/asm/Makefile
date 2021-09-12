@@ -61,16 +61,17 @@ apply: install-asm
 
 .PHONY: hydrate
 hydrate: # download-asmcli asmcli-validate asmcli-precheck
-# There is no hydration for ASM, it is taken care by asmcli. But you can validate readiness using following commands.
-# Require existence of a cluster before running MAKE commands:
-# asmcli-validate asmcli-precheck
+# There is no hydration for ASM, it is taken care by install_asm/asmcli. 
+# In the future, we will migrate to use asmcli, you can validate readiness using following commands.
+# make asmcli-validate 
+# make asmcli-precheck
+# Note: Require existence of a cluster before running the commands above.
 
+# Commands below are for asmcli, asmcli is in alpha state, we plan to migrate from install_asm to asmcli when ready.
 .PHONY: download-asmcli
 download-asmcli: 
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.10.4-asm.6-config1-alpha > asmcli
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.10.4-asm.6-config1-alpha.sha256 > asmcli.sha256
-	# curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
-	# curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
+	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
 	chmod +x asmcli
 
 .PHONY: asmcli-validate
@@ -106,11 +107,5 @@ asmcli-install: download-asmcli
 asmcli-precheck:
 	pushd $(UPSTREAM) && ./istioctl experimental precheck && popd
 
-
 # Note about install gateways
 # https://cloud.google.com/service-mesh/docs/unified-install/install#install_gateways
-# kubectl create namespace ingress-gateway
-# kubectl -n istio-system get pods -l app=istiod --show-labels
-# kubectl label namespace ingress-gateway istio-injection- istio.io/rev=asm-1104-6 --overwrite
-# export INGRESS_GATEWAY=https://raw.githubusercontent.com/GoogleCloudPlatform/anthos-service-mesh-packages/release-1.10-asm/samples/gateways/istio-ingressgateway.yaml
-# kubectl apply -n ingress-gateway -f ${INGRESS_GATEWAY}
