@@ -97,12 +97,9 @@ components:
 
 # training-operator: Includes Pytorch operator and Tensorflow operator
 # https://www.kubeflow.org/docs/components/training/pytorch/
+# https://www.kubeflow.org/docs/components/training/tftraining/
 # dependencies: []
 - apps/training-operator
-    # Tensorflow operator
-    # https://www.kubeflow.org/docs/components/training/tftraining/
-    # dependencies: []
-    # - apps/tf-training
 
 # Kubeflow Pipelines
 # https://www.kubeflow.org/docs/components/pipelines/overview/pipelines-overview/
