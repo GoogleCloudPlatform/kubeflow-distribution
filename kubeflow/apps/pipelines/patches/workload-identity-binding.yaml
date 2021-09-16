@@ -3,11 +3,11 @@ kind: ServiceAccount
 metadata:
   name: ml-pipeline-ui
   annotations:
-    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"user-sa-ref"}
+    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # kpt-set: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ml-pipeline-visualizationserver
   annotations:
-    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"user-sa-ref"}
+    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # kpt-set: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com

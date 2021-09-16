@@ -19,4 +19,4 @@ metadata:
 # Reference:
 # https://github.com/kubeflow/pipelines/blob/1.5.0/manifests/kustomize/base/installs/generic/pipeline-install-config.yaml
 data:
-  gcsCloudSqlInstanceName: PROJECT:REGION:CLOUDSQL-NAME # {"$kpt-set": "cloudsql-instance-connection-name"}
+  gcsCloudSqlInstanceName: PROJECT:REGION:CLOUDSQL-NAME # kpt-set: ${gcloud.core.project}:${gcloud.compute.region}:${cloudsql-name}

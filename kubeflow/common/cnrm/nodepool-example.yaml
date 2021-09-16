@@ -11,18 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 # This file is an example of your own nodepool. It's not applied by default,
 # you need to edit `./kustomization.yaml` and add `nodepool-example.yaml` in
 # resources field to include this.
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerNodePool
 metadata:
-  name: KUBEFLOW-NAME-example # {"$kpt-set":"node-pool-example"}
+  name: KUBEFLOW-NAME-example # kpt-set: ${name}-example
 # Refer to https://cloud.google.com/config-connector/docs/reference/resource-docs/container/containernodepool
 # for detailed fields and documentation.
 spec:
-  location: LOCATION # {"$kpt-set":"location"}
+  location: LOCATION # kpt-set: ${location}
   # You can adjust node zones by:
   # nodeLocations:
   # - gcp-zone-1
@@ -37,8 +36,8 @@ spec:
     metadata:
       disable-legacy-endpoints: "true"
     serviceAccountRef:
-      name: KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-sa-ref"}
+      name: KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: ${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
     workloadMetadataConfig:
       nodeMetadata: GKE_METADATA_SERVER
   clusterRef:
-    name: KUBEFLOW-NAME # {"$kpt-set":"name"}
+    name: KUBEFLOW-NAME # kpt-set: ${name}

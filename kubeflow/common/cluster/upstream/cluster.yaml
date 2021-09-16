@@ -17,10 +17,10 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerCluster
 metadata:
-  clusterName: "PROJECT/LOCATION/KUBEFLOW-NAME" # {"$kpt-set":"cluster-name"}
+  clusterName: "PROJECT/LOCATION/KUBEFLOW-NAME" # kpt-set: ${gcloud.core.project}/${location}/${name}
   labels:
-    mesh_id: "proj-PROJECT_NUMBER" # {"$kpt-set":"asm-mesh-id"}
-  name: KUBEFLOW-NAME # {"$kpt-set":"name"}
+    mesh_id: "proj-PROJECT_NUMBER" # kpt-set: proj-${gcloud.project.projectNumber}
+  name: KUBEFLOW-NAME # kpt-set: ${name}
 spec:
   initialNodeCount: 2
   addonsConfig:
@@ -34,7 +34,7 @@ spec:
       - https://www.googleapis.com/auth/monitoring
       - https://www.googleapis.com/auth/devstorage.read_only
       serviceAccountRef:
-        name: KUBEFLOW-NAME-vm # {"$kpt-set":"name-vm"}
+        name: KUBEFLOW-NAME-vm # kpt-set: ${name}-vm
     resourceLimits:
     - resourceType: cpu
       maximum: 128
@@ -54,9 +54,9 @@ spec:
   # Autopilot mode will enforce automatic node upgrade.
   minMasterVersion: '1.18'
   nodeVersion: '1.18'
-  location: LOCATION # {"$kpt-set":"location"}
+  location: LOCATION # kpt-set: ${location}
   workloadIdentityConfig:
-    identityNamespace: PROJECT.svc.id.goog # {"$kpt-set":"identity-ns"}
+    identityNamespace: PROJECT.svc.id.goog # kpt-set: ${gcloud.core.project}.svc.id.goog
   loggingService: logging.googleapis.com/kubernetes
   monitoringService: monitoring.googleapis.com/kubernetes
   nodeConfig:
@@ -72,6 +72,6 @@ spec:
     - https://www.googleapis.com/auth/monitoring
     - https://www.googleapis.com/auth/devstorage.read_only
     serviceAccountRef:
-      name: KUBEFLOW-NAME-vm # {"$kpt-set":"name-vm"}
+      name: KUBEFLOW-NAME-vm # kpt-set: ${name}-vm
     workloadMetadataConfig:
       nodeMetadata: GKE_METADATA_SERVER

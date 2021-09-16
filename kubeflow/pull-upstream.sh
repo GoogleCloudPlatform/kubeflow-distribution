@@ -18,9 +18,11 @@ set -ex
 
 export KUBEFLOW_MANIFESTS_VERSION=v1.4.0-rc.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
+export ZIJIANJOY_MANIFESTS_REPO=https://github.com/zijianjoy/manifests.git
 
 # Pull Kubeflow Pipelines upstream manifests.
 ./apps/pipelines/pull-upstream.sh
+# TODO: kpt get strategy: --strategy force-delete-replace
 
 # apps/ related manifest
 if [ -d apps/admission-webhook/upstream ]; then
@@ -35,17 +37,18 @@ fi
 mkdir -p apps/centraldashboard
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/centraldashboard/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/centraldashboard
 
+# TODO: use actual kubeflow manifests instead of zijianjoy for jupyter.
 if [ -d apps/jupyter/jupyter-web-app/upstream ]; then
     rm -rf apps/jupyter/jupyter-web-app/upstream
 fi
 mkdir -p apps/jupyter/jupyter-web-app
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/jupyter-web-app/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/jupyter/jupyter-web-app
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/jupyter/jupyter-web-app/upstream@krmignore" apps/jupyter/jupyter-web-app
 
 if [ -d apps/jupyter/notebook-controller/upstream ]; then
     rm -rf apps/jupyter/notebook-controller/upstream
 fi
 mkdir -p apps/jupyter/notebook-controller
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/jupyter/notebook-controller
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/jupyter/notebook-controller/upstream@krmignore" apps/jupyter/notebook-controller
 
 if [ -d apps/profiles/upstream ]; then
     rm -rf apps/profiles/upstream
@@ -63,31 +66,31 @@ if [ -d apps/kfserving/upstream ]; then
     rm -rf apps/kfserving/upstream
 fi
 mkdir -p apps/kfserving
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/kfserving/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/kfserving
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/kfserving/upstream@krmignore" apps/kfserving
 
 if [ -d apps/katib/upstream ]; then
     rm -rf apps/katib/upstream
 fi
 mkdir -p apps/katib
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/katib/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/katib
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/katib/upstream@krmignore" apps/katib
 
 if [ -d apps/volumes-web-app/upstream ]; then
     rm -rf apps/volumes-web-app/upstream
 fi
 mkdir -p apps/volumes-web-app
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/volumes-web-app/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/volumes-web-app
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/volumes-web-app/upstream@krmignore" apps/volumes-web-app
 
 if [ -d apps/tensorboard/tensorboards-web-app/upstream ]; then
     rm -rf apps/tensorboard/tensorboards-web-app/upstream
 fi
 mkdir -p apps/tensorboard/tensorboards-web-app
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/tensorboard/tensorboards-web-app/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/tensorboard/tensorboards-web-app
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/tensorboard/tensorboards-web-app/upstream@krmignore" apps/tensorboard/tensorboards-web-app
 
 if [ -d apps/tensorboard/tensorboard-controller/upstream ]; then
     rm -rf apps/tensorboard/tensorboard-controller/upstream
 fi
 mkdir -p apps/tensorboard/tensorboard-controller
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/tensorboard/tensorboard-controller/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/tensorboard/tensorboard-controller
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/tensorboard/tensorboard-controller/upstream@krmignore" apps/tensorboard/tensorboard-controller
 
 # common/ related manifest
 if [ -d common/kubeflow-namespace/upstream ]; then
@@ -106,7 +109,7 @@ if [ -d common/cert-manager/upstream/ ]; then
     rm -rf common/cert-manager/upstream/
 fi
 mkdir -p common/cert-manager
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/cert-manager/@${KUBEFLOW_MANIFESTS_VERSION}" common/cert-manager/upstream/
+kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/common/cert-manager/@krmignore" common/cert-manager/upstream/
 
 if [ -d common/kubeflow-roles/upstream/ ]; then
     rm -rf common/kubeflow-roles/upstream/

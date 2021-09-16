@@ -14,9 +14,9 @@
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: PROJECT # {"$kpt-set":"gcloud.core.project"}
+namespace: PROJECT # kpt-set: ${gcloud.core.project}
 commonLabels:
-  kf-name: KUBEFLOW-NAME # {"$kpt-set":"name"}
+  kf-name: KUBEFLOW-NAME # kpt-set: ${name}
   app: kubeflow-pipelines
 resources:
 - ../cloudsql/cnrm

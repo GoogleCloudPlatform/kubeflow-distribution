@@ -23,4 +23,4 @@ pipelines.kubeflow.org/enabled: 'true'
 app.kubernetes.io/part-of: 'kubeflow-profile'
 # Below is a list of labels to be enforced.
 istio-injection: ''
-istio.io/rev: asm-192-1 # {"$kpt-set":"asm-label"}
+istio.io/rev: asm-1104-6 # kpt-set: ${asm-label}

@@ -1,71 +1,71 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-logging # {"$kpt-set":"name-vm-policy-logging"}
+  name: KUBEFLOW-NAME-vm-logging # kpt-set: ${name}-vm-logging
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/logging.logWriter
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-policy-monitoring # {"$kpt-set":"name-vm-policy-monitoring"}
+  name: KUBEFLOW-NAME-vm-policy-monitoring # kpt-set: ${name}-vm-policy-monitoring
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/monitoring.metricWriter
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-policy-meshtelemetry # {"$kpt-set":"name-vm-policy-meshtelemetry"}
+  name: KUBEFLOW-NAME-vm-policy-meshtelemetry # kpt-set: ${name}-vm-policy-meshtelemetry
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/meshtelemetry.reporter
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-policy-cloudtrace # {"$kpt-set":"name-vm-policy-cloudtrace"}
+  name: KUBEFLOW-NAME-vm-policy-cloudtrace # kpt-set: ${name}-vm-policy-cloudtrace
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/cloudtrace.agent
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-policy-monitoring-viewer # {"$kpt-set":"name-vm-policy-monitoring-viewer"}
+  name: KUBEFLOW-NAME-vm-policy-monitoring-viewer # kpt-set: ${name}-vm-policy-monitoring-viewer
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/monitoring.viewer
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-vm-policy-storage # {"$kpt-set":"name-vm-policy-storage"}
+  name: KUBEFLOW-NAME-vm-policy-storage # kpt-set: ${name}-vm-policy-storage
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"vm-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-vm@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-vm@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/storage.objectViewer
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}

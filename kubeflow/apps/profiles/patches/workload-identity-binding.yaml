@@ -6,4 +6,4 @@ metadata:
   # unique ID not found issue if we specify profiles- in patch.
   name: controller-service-account
   annotations:
-    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-sa-ref"}
+    iam.gke.io/gcp-service-account: KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: ${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com

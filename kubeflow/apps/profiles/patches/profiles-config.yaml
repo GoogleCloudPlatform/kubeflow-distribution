@@ -1,8 +1,8 @@
 apiVersion: v1
 data:
   $patch: replace # We do not need some of the original fields.
-  admin: EMAIL # {"$kpt-set":"email"}
-  gcp-sa: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"gcp-sa"}
+  admin: EMAIL # kpt-set: ${email}
+  gcp-sa: KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # kpt-set: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
 kind: ConfigMap
 metadata:
   name: config

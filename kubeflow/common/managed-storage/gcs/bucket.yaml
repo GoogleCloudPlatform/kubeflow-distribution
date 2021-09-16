@@ -19,11 +19,11 @@ metadata:
     # If set to true, the force-destroy directive cleans up the objects within a
     # storage bucket before issuing the delete command.
     cnrm.cloud.google.com/force-destroy: "true"
-  name: BUCKET-NAME # {"$kpt-set":"bucket-name"}
+  name: BUCKET-NAME # kpt-set: ${bucket-name}
 # Reference:
 # https://cloud.google.com/config-connector/docs/reference/resource-docs/storage/storagebucket
 spec:
-  location: REGION # {"$kpt-set":"gcloud.compute.region"}
+  location: REGION # kpt-set: ${gcloud.compute.region}
   # Uncomment the following to GC objects after 7 days.
   # lifecycleRule:
   # - action:

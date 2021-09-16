@@ -8,9 +8,9 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.10.4-asm.6-config2
 # ASM Upgrade Guide: Check out README.md of the same directory.
 
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+NAME=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data.name')
+LOCATION=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data.location')
+PROJECT=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
 UPSTREAM=upstream
 
 .PHONY: download-install-asm-script
@@ -28,8 +28,12 @@ download-install-asm-script:
 
 .PHONY: download-asm-package
 download-asm-package:
-	rm -rf ./asm
-	kpt pkg get https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages.git/asm@$(ASM_PACKAGE_VERSION) ./
+	rm -rf asm.tar.gz
+	curl -LJ https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages/archive/refs/tags/$(ASM_PACKAGE_VERSION).tar.gz -o asm.tar.gz 
+	
+	rm -rf ./package
+	mkdir package
+	tar -xf asm.tar.gz --strip-components=1 -C package 
 
 .PHONY: install-asm
 install-asm: download-install-asm-script download-asm-package
@@ -39,7 +43,7 @@ install-asm: download-install-asm-script download-asm-package
 	--cluster_location $(LOCATION) \
 	--mode install \
 	--enable_all \
-	--custom_overlay ./asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml
 
 

@@ -1,21 +1,21 @@
 apiVersion: storage.cnrm.cloud.google.com/v1beta1
 kind: StorageBucketAccessControl
 metadata:
-  name: KUBEFLOW-NAME-kfp-gcs-acl # {"$kpt-set":"gcs-acl"}
+  name: KUBEFLOW-NAME-kfp-gcs-acl # kpt-set: ${name}-kfp-gcs-acl
 spec:
   bucketRef:
-    name: BUCKET-NAME # {"$kpt-set":"bucket-name"}
-  entity: user-KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # {"$kpt-set": "user-sa-entity"}
+    name: BUCKET-NAME # kpt-set: ${bucket-name}
+  entity: user-KUBEFLOW-NAME-user@PROJECT.iam.gserviceaccount.com # kpt-set: user-${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
   role: OWNER
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-kfp-gcs-wi-user # {"$kpt-set":"gcs-wi-user"}
+  name: KUBEFLOW-NAME-kfp-gcs-wi-user # kpt-set: ${name}-kfp-gcs-wi-user
 spec:
-  member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kubeflow-pipelines-minio-gcs-gateway] # {"$kpt-set":"kfp-gcs-gateway-ksa-member"}
+  member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kubeflow-pipelines-minio-gcs-gateway] # kpt-set: serviceAccount:${gcloud.core.project}.svc.id.goog[kubeflow/kubeflow-pipelines-minio-gcs-gateway]
   role: roles/iam.workloadIdentityUser
   resourceRef:
     apiVersion: iam.cnrm.cloud.google.com/v1beta1
     kind: IAMServiceAccount
-    name: KUBEFLOW-NAME-user # {"$kpt-set":"user-sa-name"}
+    name: KUBEFLOW-NAME-user # kpt-set: ${name}-user
