@@ -1,167 +1,167 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-source # {"$kpt-set":"admin-source-iam"}
+  name: KUBEFLOW-NAME-admin-source # kpt-set: ${name}-admin-source
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/source.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-servicemanagement # {"$kpt-set":"admin-servicemanagement-iam"}
+  name: KUBEFLOW-NAME-admin-servicemanagement # kpt-set: ${name}-admin-servicemanagement
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/servicemanagement.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-network # {"$kpt-set":"admin-network-iam"}
+  name: KUBEFLOW-NAME-admin-network # kpt-set: ${name}-admin-network
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/compute.networkAdmin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-cloudbuild # {"$kpt-set":"admin-cloudbuild-iam"}
+  name: KUBEFLOW-NAME-admin-cloudbuild # kpt-set: ${name}-admin-cloudbuild
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/cloudbuild.builds.editor
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-viewer # {"$kpt-set":"admin-viewer-iam"}
+  name: KUBEFLOW-NAME-admin-viewer # kpt-set: ${name}-admin-viewer
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/viewer
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-storage # {"$kpt-set":"admin-storage-iam"}
+  name: KUBEFLOW-NAME-admin-storage # kpt-set: ${name}-admin-storage
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/storage.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-bigquery # {"$kpt-set":"admin-bigquery-iam"}
+  name: KUBEFLOW-NAME-admin-bigquery # kpt-set: ${name}-admin-bigquery
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/bigquery.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-dataflow # {"$kpt-set":"admin-dataflow-iam"}
+  name: KUBEFLOW-NAME-admin-dataflow # kpt-set: ${name}-admin-dataflow
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/dataflow.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-ml # {"$kpt-set":"admin-ml-iam"}
+  name: KUBEFLOW-NAME-admin-ml # kpt-set: ${name}-admin-ml
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/ml.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-dataproc # {"$kpt-set":"admin-dataproc-iam"}
+  name: KUBEFLOW-NAME-admin-dataproc # kpt-set: ${name}-admin-dataproc
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/dataproc.editor
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-cloudsql # {"$kpt-set":"admin-cloudsql-iam"}
+  name: KUBEFLOW-NAME-admin-cloudsql # kpt-set: ${name}-admin-cloudsql
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/cloudsql.admin
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-logging # {"$kpt-set":"admin-logging-iam"}
+  name: KUBEFLOW-NAME-admin-logging # kpt-set: ${name}-admin-logging
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/logging.logWriter
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-metricwriter # {"$kpt-set":"admin-metricwriter-iam"}
+  name: KUBEFLOW-NAME-admin-metricwriter # kpt-set: ${name}-admin-metricwriter
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/monitoring.metricWriter
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-admin-monitoringviewer # {"$kpt-set":"admin-monitoringviewer-iam"}
+  name: KUBEFLOW-NAME-admin-monitoringviewer # kpt-set: ${name}-admin-monitoringviewer
 spec:
-  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # {"$kpt-set":"admin-service-account"}
+  member: serviceAccount:KUBEFLOW-NAME-admin@PROJECT.iam.gserviceaccount.com # kpt-set: serviceAccount:${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
   role: roles/monitoring.viewer
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}

@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-KF_PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+NAME=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.name')
+KF_PROJECT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
 # The kubectl context for your management cluster
-MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
+MGMTCTXT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
 # The kubectl context for your Kubeflow cluster
 KFCTXT=$(NAME)
 build_dir?=./build

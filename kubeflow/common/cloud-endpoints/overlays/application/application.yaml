@@ -23,8 +23,8 @@ spec:
     maintainers: []
     owners: []
     keywords:
-     - cloud-endpoints
-     - kubeflow
+    - cloud-endpoints
+    - kubeflow
     links:
     - description: About
       url: ""

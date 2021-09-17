@@ -1,25 +1,25 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-kfp-cloudsql-client # {"$kpt-set": "kfp-cloudsql-client"}
+  name: KUBEFLOW-NAME-kfp-cloudsql-client # kpt-set: ${name}-kfp-cloudsql-client
 spec:
   memberFrom:
     serviceAccountRef:
-      name: KUBEFLOW-NAME-kfp-cloudsql # {"$kpt-set":"cloudsql-gsa"}
+      name: KUBEFLOW-NAME-kfp-cloudsql # kpt-set: ${name}-kfp-cloudsql
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-    external: projects/PROJECT # {"$kpt-set":"projects"}
+    external: projects/PROJECT # kpt-set: projects/${gcloud.core.project}
     kind: Project
   role: roles/cloudsql.client
 ---
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicyMember
 metadata:
-  name: KUBEFLOW-NAME-kfp-cloudsql-proxy-wi-user # {"$kpt-set":"kfp-cloudsql-proxy-wi-user"}
+  name: KUBEFLOW-NAME-kfp-cloudsql-proxy-wi-user # kpt-set: ${name}-kfp-cloudsql-proxy-wi-user
 spec:
-  member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kubeflow-pipelines-cloudsql-proxy] # {"$kpt-set":"cloudsql-proxy-ksa-member"}
+  member: serviceAccount:PROJECT.svc.id.goog[kubeflow/kubeflow-pipelines-cloudsql-proxy] # kpt-set: serviceAccount:${gcloud.core.project}.svc.id.goog[kubeflow/kubeflow-pipelines-cloudsql-proxy]
   role: roles/iam.workloadIdentityUser
   resourceRef:
     apiVersion: iam.cnrm.cloud.google.com/v1beta1
     kind: IAMServiceAccount
-    name: KUBEFLOW-NAME-kfp-cloudsql # {"$kpt-set":"cloudsql-gsa"}
+    name: KUBEFLOW-NAME-kfp-cloudsql # kpt-set: ${name}-kfp-cloudsql

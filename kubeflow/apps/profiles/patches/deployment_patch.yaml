@@ -11,59 +11,59 @@ spec:
             # Provide the name of the ConfigMap containing labels
             name: namespace-labels-data
       containers:
-      - command:
-        - /manager 
-        - "-userid-header"
-        - $(USERID_HEADER)
-        - "-userid-prefix"
-        - $(USERID_PREFIX)
-        - "-workload-identity"
-        - $(WORKLOAD_IDENTITY)
-        args: []
-        name: manager
-        volumeMounts:
-        - name: namespace-labels
-          mountPath: /etc/config/labels
-          readOnly: true 
-        env:
-        - name: USERID_HEADER
-          valueFrom:
-            configMapKeyRef:
-              name: kubeflow-config
-              key: userid-header
-        - name: USERID_PREFIX
-          valueFrom:
-            configMapKeyRef:
-              name: kubeflow-config
-              key: userid-prefix
-        - name: WORKLOAD_IDENTITY
-          valueFrom:
-            configMapKeyRef:
-              name: config
-              key: gcp-sa
-      - command:
-        - /access-management
-        - "-cluster-admin"
-        - $(CLUSTER_ADMIN)
-        - "-userid-header"
-        - $(USERID_HEADER)
-        - "-userid-prefix"
-        - $(USERID_PREFIX)
-        args: []
-        name: kfam
-        env:
-        - name: USERID_HEADER
-          valueFrom:
-            configMapKeyRef:
-              name: kubeflow-config
-              key: userid-header
-        - name: USERID_PREFIX
-          valueFrom:
-            configMapKeyRef:
-              name: kubeflow-config
-              key: userid-prefix
-        - name: CLUSTER_ADMIN
-          valueFrom:
-            configMapKeyRef:
-              name: config
-              key: admin
+        - command:
+            - /manager
+            - "-userid-header"
+            - $(USERID_HEADER)
+            - "-userid-prefix"
+            - $(USERID_PREFIX)
+            - "-workload-identity"
+            - $(WORKLOAD_IDENTITY)
+          args: []
+          name: manager
+          volumeMounts:
+            - name: namespace-labels
+              mountPath: /etc/config/labels
+              readOnly: true
+          env:
+            - name: USERID_HEADER
+              valueFrom:
+                configMapKeyRef:
+                  name: kubeflow-config
+                  key: userid-header
+            - name: USERID_PREFIX
+              valueFrom:
+                configMapKeyRef:
+                  name: kubeflow-config
+                  key: userid-prefix
+            - name: WORKLOAD_IDENTITY
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: gcp-sa
+        - command:
+            - /access-management
+            - "-cluster-admin"
+            - $(CLUSTER_ADMIN)
+            - "-userid-header"
+            - $(USERID_HEADER)
+            - "-userid-prefix"
+            - $(USERID_PREFIX)
+          args: []
+          name: kfam
+          env:
+            - name: USERID_HEADER
+              valueFrom:
+                configMapKeyRef:
+                  name: kubeflow-config
+                  key: userid-header
+            - name: USERID_PREFIX
+              valueFrom:
+                configMapKeyRef:
+                  name: kubeflow-config
+                  key: userid-prefix
+            - name: CLUSTER_ADMIN
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: admin

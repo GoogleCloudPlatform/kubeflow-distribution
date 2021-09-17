@@ -32,7 +32,7 @@ components:
 # Anthos Service Mesh (alternative of Istio with the same API interface)
 # Required.
 # https://cloud.google.com/service-mesh/docs/overview
-- common/asm
+- asm
 
 # Kubeflow Kubernetes namespace
 # Required.

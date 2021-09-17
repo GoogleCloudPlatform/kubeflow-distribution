@@ -5,9 +5,9 @@ kind: Kustomization
 # namespace should match the project.
 # This assumes we are running a config connector in namespace mode and
 # namespaces match project names.
-namespace: PROJECT # {"$kpt-set":"project"}
+namespace: PROJECT # kpt-set: ${gcloud.core.project}
 commonLabels:
-  kf-name: KUBEFLOW-NAME # {"$kpt-set":"name-label"}
+  kf-name: KUBEFLOW-NAME # kpt-set: ${name}
 resources:
 # The default Google Cloud resources.
 - ../cluster/upstream

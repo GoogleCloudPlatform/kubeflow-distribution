@@ -1,9 +1,9 @@
 
 # The name of the context for your Kubeflow cluster
-MGMTCTXT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.mgmt-ctxt".x-k8s-cli.setter.value')
-NAME=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r ./Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+MGMTCTXT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
+NAME=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.name')
+LOCATION=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.location')
+PROJECT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
 build_dir?=./build
 
 # You may override the variable by env var if you customized the deployment
