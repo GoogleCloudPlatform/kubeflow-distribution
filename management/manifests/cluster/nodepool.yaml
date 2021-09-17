@@ -2,7 +2,7 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerNodePool
 metadata:
-  name: MANAGEMENT-NAME-pool # {"$kpt-set":"pool"}
+  name: MANAGEMENT-NAME-pool # kpt-set: ${name}-pool
 spec:
   autoscaling:
     minNodeCount: 1
@@ -25,4 +25,4 @@ spec:
     autoRepair: true
     autoUpgrade: true
   clusterRef:
-    name: MANAGEMENT-NAME # {"$kpt-set":"name"}
+    name: MANAGEMENT-NAME # kpt-set: ${name}

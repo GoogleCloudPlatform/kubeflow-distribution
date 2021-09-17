@@ -1,7 +1,7 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMServiceAccount
 metadata:
-  name: MANAGEMENT-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
+  name: MANAGEMENT-NAME-cnrm-system # kpt-set: ${name}-cnrm-system
 spec:
   displayName: Service account for CNRM
 ---
@@ -12,13 +12,13 @@ spec:
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMPolicy
 metadata:
-  name: MANAGEMENT-NAME-cnrm-system-wi # {"$kpt-set":"cnrm-system-wi"}
+  name: MANAGEMENT-NAME-cnrm-system-wi # kpt-set: ${name}-cnrm-system-wi
 spec:
   resourceRef:
     apiVersion: iam.cnrm.cloud.google.com/v1alpha1
     kind: IAMServiceAccount
-    name: MANAGEMENT-NAME-cnrm-system # {"$kpt-set":"cnrm-system-sa"}
+    name: MANAGEMENT-NAME-cnrm-system # kpt-set: ${name}-cnrm-system
   bindings:
   - role: roles/iam.workloadIdentityUser
     members:
-    - serviceAccount:PROJECT.svc.id.goog[cnrm-system/cnrm-controller-manager] # {"$kpt-set":"cnrm-wi"}
+    - serviceAccount:PROJECT.svc.id.goog[cnrm-system/cnrm-controller-manager] # kpt-set: serviceAccount:${gcloud.core.project}.svc.id.goog[cnrm-system/cnrm-controller-manager]
