@@ -17,13 +17,13 @@
 # When calling this makefile from a different directory, this should be
 # overriden to relative path from working directory.
 PACKAGE_DIR?=.
-BUILD_DIR?=build
+BUILD_DIR?=manifests/build
 # Specific package dirs can be overriden with ./instance/xxxx paths, so that
 # users can add kustomize overlays on top of the base package.
-PACKAGE_CLUSTER_DIR?=$(PACKAGE_DIR)/cluster
-PACKAGE_CNRM_SERVICES_DIR?=$(PACKAGE_DIR)/cnrm-install/services
-PACKAGE_CNRM_IAM_DIR?=$(PACKAGE_DIR)/cnrm-install/iam
-PACKAGE_CNRM_SYSTEM_DIR?=$(PACKAGE_DIR)/cnrm-install/install-system
+PACKAGE_CLUSTER_DIR?=$(PACKAGE_DIR)/manifests/cluster
+PACKAGE_CNRM_SERVICES_DIR?=$(PACKAGE_DIR)/manifests/cnrm-install/services
+PACKAGE_CNRM_IAM_DIR?=$(PACKAGE_DIR)/manifests/cnrm-install/iam
+PACKAGE_CNRM_SYSTEM_DIR?=$(PACKAGE_DIR)/manifests/cnrm-install/install-system
 
 # If MGMTCTXT kubecontext is defined, then let's use the context argument for
 # kubectl commands.
@@ -34,9 +34,9 @@ else
 endif
 
 # The values you set via `kpt cfg set` will be stored in Kptfile.
-NAME=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
-LOCATION=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
-PROJECT=$(shell yq r $(PACKAGE_DIR)/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
+NAME=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data.name')
+LOCATION=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data.location')
+PROJECT=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-cnrm-system must be a valid service account name, so $NAME should be no
