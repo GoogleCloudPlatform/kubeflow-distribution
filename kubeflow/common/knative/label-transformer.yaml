@@ -1,0 +1,11 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: knativeLabel
+labels:
+  kustomize.component: knative
+  app.kubernetes.io/component: knative-serving-install
+  app.kubernetes.io/name: knative-serving-install
+fieldSpecs:
+- path: metadata/labels
+  create: true
