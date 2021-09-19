@@ -38,10 +38,6 @@ images:
 - name: public.ecr.aws/j1r0q0g6/notebooks/access-management
   newName: public.ecr.aws/j1r0q0g6/notebooks/access-management
   newTag: v1.3.0-rc.1
-# Added for dynamic namespace label change
-- name: public.ecr.aws/j1r0q0g6/notebooks/profile-controller
-  newName: gcr.io/kubeflow-images-public/profile-controller
-  newTag: v1.3.0-gcp
 # Below is copied from packages/
 configMapGenerator:
 # We need the name to be unique without the suffix because the original name is what
