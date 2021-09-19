@@ -16,8 +16,6 @@ resources:
 # - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/overlays/istio/virtual-service.yaml
 # - ../../../kubeflow/upstream/manifests/apps/profiles/upstream/overlays/application/application.yaml
 
-commonLabels:
-  kustomize.component: profiles
 patchesStrategicMerge:
 - patches/manager.yaml
 - patches/profiles-config.yaml
@@ -51,3 +49,5 @@ configMapGenerator:
   behavior: replace
   files:
   - patches/namespace-labels.yaml
+transformers:
+- label-transformer.yaml

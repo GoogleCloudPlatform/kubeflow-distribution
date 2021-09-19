@@ -1,0 +1,9 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: profiles-label
+labels:
+  kustomize.component: profiles
+fieldSpecs:
+- path: metadata/labels
+  create: true
