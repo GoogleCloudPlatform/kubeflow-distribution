@@ -1,5 +1,6 @@
 build_dir?=./build
-NAME=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.name')
+PACKAGE_DIR?=$(shell pwd)/../..
+NAME=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.name' kptconfig/kpt-setter-config.yaml)
 # The kubectl context for your Kubeflow cluster
 KFCTXT=$(NAME)
 

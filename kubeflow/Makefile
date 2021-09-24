@@ -1,12 +1,12 @@
+PACKAGE_DIR?=$(shell pwd)
 
 # The name of the context for the management cluster
-# These are read using yq from the Kptfile.
-MGMTCTXT=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
+MGMTCTXT=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.mgmt-ctxt' kptconfig/kpt-setter-config.yaml)
 
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.name')
-LOCATION=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.location')
-PROJECT=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
+NAME=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.name' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.location' kptconfig/kpt-setter-config.yaml)
+PROJECT=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
 
 KFCTXT=$(NAME)
 
@@ -48,7 +48,8 @@ check-name:
 
 
 # Load components to deploy from config.yaml
-components=$(shell yq r config.yaml 'components.*')
+components=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.components[]' config.yaml)
+
 
 .PHONY: clean-build
 clean-build:

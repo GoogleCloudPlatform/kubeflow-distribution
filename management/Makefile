@@ -16,7 +16,7 @@
 # Directory where manifests live. Defaults to current directory.
 # When calling this makefile from a different directory, this should be
 # overriden to relative path from working directory.
-PACKAGE_DIR?=.
+PACKAGE_DIR?=$(PWD)
 BUILD_DIR?=manifests/build
 # Specific package dirs can be overriden with ./instance/xxxx paths, so that
 # users can add kustomize overlays on top of the base package.
@@ -34,9 +34,10 @@ else
 endif
 
 # The values you set via `kpt cfg set` will be stored in Kptfile.
-NAME=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data.name')
-LOCATION=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data.location')
-PROJECT=$(shell yq r $(PACKAGE_DIR)/kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
+NAME=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.name' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.location' kptconfig/kpt-setter-config.yaml)
+PROJECT=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
+
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-cnrm-system must be a valid service account name, so $NAME should be no
