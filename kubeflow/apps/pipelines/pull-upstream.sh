@@ -19,8 +19,8 @@ set -ex
 # TODO(Bobgy): use KFP 1.6.1 when https://github.com/kubeflow/pipelines/pull/5750 is released.
 # export KUBEFLOW_PIPELINES_VERSION=1.7.0
 # export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
-export KUBEFLOW_PIPELINES_VERSION=krmignore # kubeflow14
-export KUBEFLOW_PIPELINES_REPO=https://github.com/zijianjoy/manifests.git
+export KUBEFLOW_PIPELINES_VERSION=upgradekpt # krmignore # kubeflow14
+export KUBEFLOW_PIPELINES_REPO=https://github.com/zijianjoy/pipelines.git
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
 cd "${DIR}"
@@ -28,6 +28,7 @@ if [ -d upstream ]; then
     rm -rf upstream
 fi
 # mkdir -p upstream
-kpt pkg get "${ZIJIANJOY_MANIFESTS_REPO}/apps/pipeline/upstream/@krmignore" .
+kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" upstream
+rm upstream/Kptfile
 # kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/@${KUBEFLOW_PIPELINES_VERSION}" upstream
 # mv upstream/kustomize/* upstream
