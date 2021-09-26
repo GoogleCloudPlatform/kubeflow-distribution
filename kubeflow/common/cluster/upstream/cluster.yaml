@@ -52,8 +52,7 @@ spec:
   # knative requires Kubernetes version to be 1.18+. Therefore we set 
   # master version below. We need to make sure reviewing this for future release.
   # Autopilot mode will enforce automatic node upgrade.
-  minMasterVersion: '1.18'
-  nodeVersion: '1.18'
+  # minMasterVersion: '1.18'
   location: LOCATION # kpt-set: ${location}
   workloadIdentityConfig:
     identityNamespace: PROJECT.svc.id.goog # kpt-set: ${gcloud.core.project}.svc.id.goog
@@ -61,10 +60,6 @@ spec:
   monitoringService: monitoring.googleapis.com/kubernetes
   nodeConfig:
     machineType: e2-standard-8
-    # To avoid issue with Kubernetes 1.19 or above: https://github.com/kubeflow/pipelines/issues/5714.
-    # Set the image type be Container-Optimized OS with Docker (cos):
-    # https://cloud.google.com/kubernetes-engine/docs/concepts/node-images
-    imageType: cos
     metadata:
       disable-legacy-endpoints: "true"
     oauthScopes:
