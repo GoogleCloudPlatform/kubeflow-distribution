@@ -8,9 +8,13 @@ INSTALL_ASM_SCRIPT_VERSION=install_asm_1.10.4-asm.6-config2
 # ASM Upgrade Guide: Check out README.md of the same directory.
 
 # The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data.name')
-LOCATION=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data.location')
-PROJECT=$(shell yq r ../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
+PACKAGE_DIR?=$(shell pwd)/..
+
+YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
+NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
+PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
+
 UPSTREAM=upstream
 
 .PHONY: download-install-asm-script

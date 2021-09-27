@@ -94,4 +94,4 @@ kpt fn eval --image gcr.io/kpt-fn/apply-setters:v0.1 ./common --fn-config ./kptc
 
 # Limitation on setting non-kRM yaml: https://github.com/GoogleContainerTools/kpt/issues/1218
 # TODO: Use kpt fn instead of yq.
-yq write -i apps/profiles/patches/namespace-labels.yaml '"istio.io/rev"' "${ASM_LABEL}"
+docker run --rm -e ASM_LABEL=${ASM_LABEL} -v "${PWD}/":/workdir mikefarah/yq:4 eval '."istio.io/rev" = strenv(ASM_LABEL)' apps/profiles/patches/namespace-labels.yaml 

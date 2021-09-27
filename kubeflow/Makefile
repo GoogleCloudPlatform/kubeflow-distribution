@@ -1,12 +1,13 @@
+PACKAGE_DIR?=$(shell pwd)
 
+YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
 # The name of the context for the management cluster
-# These are read using yq from the Kptfile.
-MGMTCTXT=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
+MGMTCTXT=$(shell $(YQ) e '.data.mgmt-ctxt' kptconfig/kpt-setter-config.yaml)
 
-# The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.name')
-LOCATION=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data.location')
-PROJECT=$(shell yq r ./kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
+# # The name of the context for your Kubeflow cluster
+NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
+PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
 
 KFCTXT=$(NAME)
 
@@ -14,6 +15,7 @@ KFCTXT=$(NAME)
 # Using a subdirectory fo the current directory breaks our ability to run kpt set .
 # So as a hack we use a $(BUILD_DIR)/ directory in the parent directory.
 BUILD_DIR=./build
+
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
 # $NAME-admin must be a valid service account name, so $NAME should be no
@@ -48,7 +50,8 @@ check-name:
 
 
 # Load components to deploy from config.yaml
-components=$(shell yq r config.yaml 'components.*')
+components=$(shell $(YQ) e '.components[]' config.yaml)
+
 
 .PHONY: clean-build
 clean-build:
