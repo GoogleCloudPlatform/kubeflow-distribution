@@ -34,9 +34,10 @@ else
 endif
 
 # The values you set via `kpt cfg set` will be stored in Kptfile.
-NAME=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.name' kptconfig/kpt-setter-config.yaml)
-LOCATION=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data.location' kptconfig/kpt-setter-config.yaml)
-PROJECT=$(shell docker run --rm -v "${PACKAGE_DIR}/":/workdir mikefarah/yq:4 e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
+YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
+NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
+PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
 
 
 # All Google Cloud resources must have a valid name, the most strict requirement is
