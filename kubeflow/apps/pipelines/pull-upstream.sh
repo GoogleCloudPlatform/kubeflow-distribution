@@ -16,7 +16,7 @@
 
 set -ex
 
-# TODO(Bobgy): use KFP 1.6.1 when https://github.com/kubeflow/pipelines/pull/5750 is released.
+# TODO: Use kubeflow/pipelines once https://github.com/kubeflow/pipelines/pull/6595 is resolved.
 # export KUBEFLOW_PIPELINES_VERSION=1.7.0
 # export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
 export KUBEFLOW_PIPELINES_VERSION=upgradekpt # krmignore # kubeflow14
