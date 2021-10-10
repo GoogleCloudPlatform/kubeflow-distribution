@@ -16,7 +16,7 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.4.0-rc.1
+export KUBEFLOW_MANIFESTS_VERSION=v1.4.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
 # Pull Kubeflow Pipelines upstream manifests.
@@ -57,12 +57,11 @@ fi
 mkdir -p apps/profiles
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/profiles/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/profiles
 
-# TODO: use the versioned upstream instead of master: https://github.com/kubeflow/gcp-blueprints/issues/317
 if [ -d apps/training-operator/upstream ]; then
     rm -rf apps/training-operator/upstream
 fi
 mkdir -p apps/training-operator
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/training-operator/upstream@master" apps/training-operator
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/training-operator/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/training-operator
 
 if [ -d apps/kfserving/upstream ]; then
     rm -rf apps/kfserving/upstream
