@@ -9,33 +9,12 @@ Install the necessary tools if not already.
 1. Install gcloud SDK and deployment tools:
 
 ```bash
-gcloud components install kubectl kpt beta
+gcloud components install kubectl kustomize kpt anthoscli beta
 gcloud components update
 ```
 
-2. Install Kustomize:
+Note: Starting from Kubeflow 1.4, it requires `kpt v1.0.0-beta.6` or above to operate in `kubeflow/gcp-blueprints` repository. gcloud hasn't caught up with this kpt version yet, [install kpt](https://kpt.dev/installation/) separately from https://github.com/GoogleContainerTools/kpt/tags for now. Note that kpt requires docker to be installed.
 
-```bash
-# Detect your OS and download corresponding latest Kustomize binary
-curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-
-# Add the kustomize package to your $PATH env variable
-sudo mv ./kustomize /usr/local/bin/kustomize
-```
-
-3. Install yq v3
-
-Follow the yq v3 [installation instruction](https://github.com/mikefarah/yq#install). For example, if using wget, you can run following commands: 
-
-```bash
-sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
-```
-
-4. Install jq https://stedolan.github.io/jq/, for example, we can run the following command on Linux:
-
-```bash
-sudo apt install jq
-```
 
 ### Fetch packages
 
