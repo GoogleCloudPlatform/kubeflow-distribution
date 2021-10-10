@@ -1,9 +1,11 @@
 
 # The name of the context for your Kubeflow cluster
-MGMTCTXT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
-NAME=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.name')
-LOCATION=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.location')
-PROJECT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
+PACKAGE_DIR?=$(shell pwd)/../..
+YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
+NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
+LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
+KF_PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
+MGMTCTXT=$(shell $(YQ) e '.data.mgmt-ctxt' kptconfig/kpt-setter-config.yaml)
 build_dir?=./build
 
 # You may override the variable by env var if you customized the deployment
@@ -18,7 +20,7 @@ wait-gcp:
 	for resource in $(GCP_RESOURCE_TYPES_TO_CHECK); \
 	do \
 		echo "Waiting for $$resource resources..."; \
-		kubectl --context=$(MGMTCTXT) --namespace=$(PROJECT) wait --for=condition=Ready --timeout=600s "$${resource}" -l kf-name=$(NAME)  \
+		kubectl --context=$(MGMTCTXT) --namespace=$(KF_PROJECT) wait --for=condition=Ready --timeout=600s "$${resource}" -l kf-name=$(NAME)  \
 		|| (echo "Error: waiting for $${resource} ready timed out."; \
 			echo "To troubleshoot, you can run:"; \
 			echo "kubectl --context=$(MGMTCTXT) describe $${resource} -l kf-name=$(NAME)"; \
@@ -28,7 +30,7 @@ wait-gcp:
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
 create-ctxt:
-	PROJECT=$(PROJECT) \
+	PROJECT=$(KF_PROJECT) \
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ../../hack/create_context.sh
 

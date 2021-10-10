@@ -46,3 +46,4 @@ patchesStrategicMerge:
 - patches/workload-identity-binding.yaml
 - gcs/pipeline-install-config-patch.yaml
 - cloudsql/pipeline-install-config-patch.yaml
+- upstream/env/platform-agnostic-multi-user-emissary/workflow-controller-configmap-patch.yaml

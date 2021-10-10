@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-KF_PROJECT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data."gcloud.core.project"')
-# The kubectl context for your management cluster
-MGMTCTXT=$(shell yq r ../../kptconfig/kpt-setter-config.yaml 'data.mgmt-ctxt')
+PACKAGE_DIR?=$(shell pwd)/../..
+YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
+KF_PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
+MGMTCTXT=$(shell $(YQ) e '.data.mgmt-ctxt' kptconfig/kpt-setter-config.yaml)
+
 build_dir?=./build
 
 .PHONY: hydrate
