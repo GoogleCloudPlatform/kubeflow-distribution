@@ -1,4 +1,4 @@
-# Kubeflow Blueprint On Google Cloud
+# Google Cloud distribution of Kubeflow
 
 Follow the instruction to deploy full fledged Kubeflow on Google Cloud Kubernetes cluster. 
 
