@@ -3,19 +3,19 @@
 
 # The KF_PROJECT env var contains the Google Cloud project ID where Kubeflow
 # cluster will be deployed to.
-export KF_PROJECT=<google-cloud-project-id>
+export KF_PROJECT=cmp-development
 # You can get your project number by running this command
 # (replace ${KF_PROJECT} with the actual project ID):
 # gcloud projects describe --format='value(projectNumber)' "${KF_PROJECT}"
-export KF_PROJECT_NUMBER=<google-cloud-project-number>
+export KF_PROJECT_NUMBER=cmp-development
 # ADMIN_EMAIL env var is the Kubeflow admin's email address, it should be
 # consistent with login email on Google Cloud.
 # Example: admin@gmail.com
-export ADMIN_EMAIL=<administrator-full-email-address>
+export ADMIN_EMAIL=r.akylzhanov@competera.net
 # The MGMT_NAME env var contains the name of your management cluster created in
 # management cluster setup:
 # https://www.kubeflow.org/docs/distributions/gke/deploy/management-setup/
-export MGMT_NAME=<management-cluster-name>
+export MGMT_NAME=cmp-development
 # The MGMTCTXT env var contains a kubectl context that connects to the management
 # cluster. By default, management cluster setup creates a context named
 # ${MGMT_NAME} for you.
@@ -46,10 +46,10 @@ export BUCKET_NAME="${KF_PROJECT}-kfp"
 # Kubeflow cluster is a zonal cluster or a regional cluster.
 # Specify LOCATION as a region like the following line to create a regional Kubeflow cluster.
 # export LOCATION=us-central1
-export LOCATION=us-central1-c
+export LOCATION=europe-west1-b
 # REGION should match the region part of LOCATION.
-export REGION=us-central1
+export REGION=europe-west4
 # Preferred zone of Cloud SQL. Note, ZONE should be in REGION.
-export ZONE=us-central1-c
+export ZONE=europe-west1-b
 # Anthos Service Mesh version label
 export ASM_LABEL=asm-1104-6

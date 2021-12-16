@@ -7,9 +7,9 @@
 #
 # You can set these values by
 # ```
-# kpt cfg set . name NAME
-# kpt cfg set . location LOCATION
-# kpt cfg set . gcloud.core.project PROJECT
+# kpt cfg set . name deployment_cluster
+# kpt cfg set . location europe-west1-b
+# kpt cfg set . gcloud.core.project cmp-development
 # ```
 # The values you set will be stored in ./Kptfile, so they will be preserved.
 
