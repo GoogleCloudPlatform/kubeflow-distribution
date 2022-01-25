@@ -27,7 +27,7 @@ For more information about packages refer to the [kpt packages guide](https://go
 
 ## Sample material
 
-To get a sense of how each Kubeflow component is used together for ML workflow, try a basic example [kubeflow-e2e-mnist.ipynb](https://github.com/kubeflow/pipelines/blob/master/samples/contrib/kubeflow-e2e-mnist/kubeflow-e2e-mnist.ipynb) using Notebook in Kubeflow. It will make use of Notebook, Volume, Pipelines, AutoML, KServe components.
+To get a sense of how each Kubeflow components are used together for ML workflow, try a basic example [kubeflow-e2e-mnist.ipynb](https://github.com/kubeflow/pipelines/blob/master/samples/contrib/kubeflow-e2e-mnist/kubeflow-e2e-mnist.ipynb) using Notebook in Kubeflow. It will make use of Notebook, Volume, Pipelines, AutoML, KServe components.
 
 ### Test Grid
 
