@@ -94,7 +94,6 @@ delete:
 
 .PHONY: apply-kcc
 apply-kcc: validate-kcc-values
-	kubectl config use-context $(MGMT_NAME)
-	kubectl create namespace ${KF_PROJECT} --dry-run=client -o yaml | kubectl apply -f -
+	kubectl create namespace ${KF_PROJECT} --dry-run=client -o yaml | kubectl --context=$(MGMTCTXT) apply -f -
 	./kcc/kpt-set.sh
 	kubectl --context=$(MGMTCTXT) apply -f ./kcc/kcc-namespace
