@@ -15,11 +15,11 @@ set -ex
 kubectl config delete-context ${NAME} || echo "Context ${NAME} will be created."
 
 # Get the context
-gcloud --project=${PROJECT} container clusters get-credentials \
-	   --region=${REGION} ${NAME}
+gcloud anthos config controller get-credentials ${NAME} --location=${LOCATION}
 
 # Rename the context
 kubectl config rename-context $(kubectl config current-context) ${NAME}
 
+# No need after migration to Config Controller.
 # Set the namespace to the host project
-kubectl config set-context --current --namespace=cnrm-system
+# kubectl config set-context --current --namespace=cnrm-system

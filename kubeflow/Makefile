@@ -43,6 +43,19 @@ ifeq ($(shell test "$(PROJECT)"  =  PROJECT  &&  printf "true"), true)
 	$(error PROJECT values not set)
 endif
 
+
+.PHONY: validate-kcc-values
+validate-kcc-values:
+ifndef MGMT_NAME
+	$(error MGMT_NAME needs to be set)
+endif
+ifndef MGMT_PROJECT
+	$(error MGMT_PROJECT needs to be set)
+endif
+ifndef KF_PROJECT
+	$(error KF_PROJECT needs to be set)
+endif
+
 # Make sure the name isn't too long.
 .PHONY: check-name
 check-name:
@@ -77,3 +90,11 @@ apply: validate-values check-name
 delete:
 	# Delete gcp resources except managed storage
 	BUILD_DIR=$(BUILD_DIR) MGMTCTXT=$(MGMTCTXT) ./hack/delete_gcp.sh
+
+
+.PHONY: apply-kcc
+apply-kcc: validate-kcc-values
+	kubectl config use-context $(MGMT_NAME)
+	kubectl create namespace ${KF_PROJECT} --dry-run=client -o yaml | kubectl apply -f -
+	./kcc/kpt-set.sh
+	kubectl --context=$(MGMTCTXT) apply -f ./kcc/kcc-namespace
