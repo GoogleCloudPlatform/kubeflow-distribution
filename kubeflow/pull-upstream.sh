@@ -16,7 +16,7 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.4.1
+export KUBEFLOW_MANIFESTS_VERSION=v1.5.0-rc.1
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
 # Pull Kubeflow Pipelines upstream manifests.
