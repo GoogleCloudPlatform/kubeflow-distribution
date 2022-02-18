@@ -154,3 +154,16 @@ fi
 mkdir -p contrib/metacontroller
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/metacontroller/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/metacontroller/upstream/
 rm contrib/metacontroller/upstream/Kptfile
+
+if [ -d contrib/kserve/models-web-app/upstream ]; then
+    rm -rf contrib/kserve/models-web-app/upstream
+fi
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/models-web-app/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/models-web-app/upstream
+rm contrib/kserve/models-web-app/upstream/Kptfile
+
+
+if [ -d contrib/kserve/kserve/upstream ]; then
+    rm -rf contrib/kserve/kserve/upstream
+fi
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/kserve/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/kserve/upstream
+rm contrib/kserve/kserve/upstream/Kptfile

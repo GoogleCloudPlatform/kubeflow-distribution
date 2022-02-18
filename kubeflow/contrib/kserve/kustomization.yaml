@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubeflow
+# Labels to add to all resources and selectors.
+commonLabels:
+  app: kserve
+  app.kubernetes.io/name: kserve
+resources:
+- models-web-app
+- kserve/upstream
+- cluster-role.yaml
+# - web-app-authorization-policy.yaml
+patchesStrategicMerge:
+- patches/statefulset.yaml
+- patches/namespace.yaml
+- patches/web-app-sidecar.yaml
+- web-app-authorization-policy.yaml
+patchesJson6902:
+- target:
+    group: networking.istio.io
+    version: v1beta1
+    kind: VirtualService
+    name: kserve-models-web-app
+    namespace: kserve
+  path: patches/web-app-vsvc.yaml
+- target:
+    version: v1
+    kind: ConfigMap
+    name: kserve-config
+    namespace: kserve
+  path: patches/config-param.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+# To make namespace for standalone installation kustomizable,
+# variabalize ingress gateway, webhook service name and
+# kserve namespace in webhook configurations
+configMapGenerator:
+# Copied from kfserving, but converted to patches/config-param.yaml
+# becuase it cannot detect the kserve-config file by kustomize.
+# - name: kserve-config
+#   behavior: replace
+#   literals:
+#   - ingressGateway=kubeflow/kubeflow-gateway
+- name: kserve-models-web-app-config
+  behavior: replace
+  literals:
+  - USERID_HEADER=kubeflow-userid
+configurations:
+- params.yaml
+- kserve-params.yaml
+vars:
+- name: ingressGateway
+  objref:
+    kind: ConfigMap
+    name: kserve-config
+    apiVersion: v1
+  fieldref:
+    fieldpath: data.ingressGateway
