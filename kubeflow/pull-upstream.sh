@@ -158,6 +158,7 @@ rm contrib/metacontroller/upstream/Kptfile
 if [ -d contrib/kserve/models-web-app/upstream ]; then
     rm -rf contrib/kserve/models-web-app/upstream
 fi
+mkdir -p contrib/kserve/models-web-app/upstream
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/models-web-app/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/models-web-app/upstream
 rm contrib/kserve/models-web-app/upstream/Kptfile
 
@@ -165,5 +166,6 @@ rm contrib/kserve/models-web-app/upstream/Kptfile
 if [ -d contrib/kserve/kserve/upstream ]; then
     rm -rf contrib/kserve/kserve/upstream
 fi
+mkdir -p contrib/kserve/kserve/upstream
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/kserve/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/kserve/upstream
 rm contrib/kserve/kserve/upstream/Kptfile
