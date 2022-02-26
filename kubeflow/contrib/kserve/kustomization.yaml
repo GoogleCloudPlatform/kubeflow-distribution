@@ -7,12 +7,12 @@ commonLabels:
   app.kubernetes.io/name: kserve
 resources:
 - models-web-app
-- kserve/upstream
-- cluster-role.yaml
+- kserve/upstream/kserve_kubeflow.yaml
+# - cluster-role.yaml
 # - web-app-authorization-policy.yaml
 patchesStrategicMerge:
 - patches/statefulset.yaml
-- patches/namespace.yaml
+# - patches/namespace.yaml
 - patches/web-app-sidecar.yaml
 - web-app-authorization-policy.yaml
 patchesJson6902:
@@ -21,13 +21,20 @@ patchesJson6902:
     version: v1beta1
     kind: VirtualService
     name: kserve-models-web-app
-    namespace: kserve
+    namespace: kubeflow
   path: patches/web-app-vsvc.yaml
+- target:
+    group: cert-manager.io
+    version: v1alpha2
+    kind: Certificate
+    name: serving-cert
+    namespace: kubeflow
+  path: patches/webhook-certificate.yaml
 - target:
     version: v1
     kind: ConfigMap
     name: kserve-config
-    namespace: kserve
+    namespace: kubeflow
   path: patches/config-param.yaml
 generatorOptions:
   disableNameSuffixHash: true

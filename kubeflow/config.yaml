@@ -116,11 +116,13 @@ components:
 - common/knative
 
 # KFServing
+# Migrated from KFServing to KServe since Kubeflow 1.5
+# Don't install both KFServing and KServe, it will cause problems using either one.
 # dependencies: [ common/knative ]
-- apps/kfserving
+# - apps/kfserving
 
 # KServe
-# dependencies: [ common/knative, apps/kfserving ]
+# dependencies: [ common/knative ]
 - contrib/kserve
 
 # Katib
