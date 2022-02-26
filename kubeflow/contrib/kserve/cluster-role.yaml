@@ -19,7 +19,7 @@ metadata: # kpt-merge: /kubeflow-kserve-edit
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-kfserving-admin: "true"
 rules:
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - inferenceservices
   verbs:
@@ -60,7 +60,7 @@ metadata: # kpt-merge: /kubeflow-kserve-view
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
 rules:
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - inferenceservices
   verbs:
