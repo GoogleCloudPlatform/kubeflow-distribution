@@ -41,17 +41,17 @@ generatorOptions:
 # To make namespace for standalone installation kustomizable,
 # variabalize ingress gateway, webhook service name and
 # kserve namespace in webhook configurations
-configMapGenerator:
+# configMapGenerator:
 # Copied from kfserving, but converted to patches/config-param.yaml
 # becuase it cannot detect the kserve-config file by kustomize.
 # - name: kserve-config
 #   behavior: replace
 #   literals:
 #   - ingressGateway=kubeflow/kubeflow-gateway
-- name: kserve-models-web-app-config
-  behavior: replace
-  literals:
-  - USERID_HEADER=kubeflow-userid
+# - name: kserve-models-web-app-config
+#   behavior: replace
+#   literals:
+#   - USERID_HEADER=kubeflow-userid
 configurations:
 - params.yaml
 - kserve-params.yaml
