@@ -165,5 +165,6 @@ rm contrib/kserve/models-web-app/upstream/Kptfile
 if [ -d contrib/kserve/kserve/upstream ]; then
     rm -rf contrib/kserve/kserve/upstream
 fi
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/kserve/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/kserve/upstream
+mkdir -p contrib/kserve/kserve
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/kserve/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/kserve/upstream/
 rm contrib/kserve/kserve/upstream/Kptfile
