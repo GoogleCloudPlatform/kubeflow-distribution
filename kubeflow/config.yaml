@@ -118,6 +118,7 @@ components:
 # KFServing
 # Migrated from KFServing to KServe since Kubeflow 1.5
 # Don't install both KFServing and KServe, it will cause problems using either one.
+# If you want to use KFServing, also checkout the kubeflow/apps/centraldashboard/kustomization.yaml file for instruction.
 # dependencies: [ common/knative ]
 # - apps/kfserving
 
