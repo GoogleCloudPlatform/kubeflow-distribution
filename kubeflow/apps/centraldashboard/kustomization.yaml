@@ -2,9 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kubeflow
 resources:
-  # Uncomment this line for kfserving
-  # - upstream/overlays/istio
-  # Uncomment this line for kserve
-  - upstream/overlays/kserve
+# Uncomment this line for kfserving
+# - upstream/overlays/istio
+# Uncomment this line for kserve
+- upstream/overlays/kserve
 patchesStrategicMerge:
-  - deployment-patch.yaml
+- deployment-patch.yaml
