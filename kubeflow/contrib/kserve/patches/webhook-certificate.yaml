@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/commonName
+  value: kserve-webhook-server-service.kubeflow.svc
+- op: replace
+  path: /spec/dnsNames/0
+  value: kserve-webhook-server-service.kubeflow.svc

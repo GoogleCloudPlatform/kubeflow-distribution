@@ -24,8 +24,8 @@ images:
 - name: gcr.io/kubeflow-images-public/ingress-setup
   newName: gcr.io/kubeflow-images-public/ingress-setup
   newTag: latest
-- name: gcr.io/cloud-solutions-group/esp-sample-app
-  newName: gcr.io/cloud-solutions-group/esp-sample-app
+- name: gcr.io/ml-pipeline/cloud-solutions-group/esp-sample-app
+  newName: gcr.io/ml-pipeline/cloud-solutions-group/esp-sample-app
   newTag: 1.0.0
 # TODO(Bobgy): migrate kustomize vars to kpt setters?
 vars:

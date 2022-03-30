@@ -12,7 +12,7 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - image: gcr.io/cloud-solutions-group/cloud-endpoints-controller:0.2.1
+      - image: gcr.io/ml-pipeline/cloud-solutions-group/cloud-endpoints-controller:0.2.1
         imagePullPolicy: Always
         name: cloud-endpoints-controller
         readinessProbe:

@@ -1,4 +1,4 @@
-# Kubeflow Blueprint On Google Cloud
+# Google Cloud distribution of Kubeflow
 
 Follow the instruction to deploy full fledged Kubeflow on Google Cloud Kubernetes cluster. 
 
@@ -24,6 +24,10 @@ For more information about packages refer to the [kpt packages guide](https://go
 1. Use the [kubeflow](./kubeflow/README.md) blueprint to create a Kubeflow deployment.
 
 ## Development
+
+## Sample material
+
+To get a sense of how each Kubeflow components are used together for ML workflow, try a basic example [kubeflow-e2e-mnist.ipynb](https://github.com/kubeflow/pipelines/blob/master/samples/contrib/kubeflow-e2e-mnist/kubeflow-e2e-mnist.ipynb) using Notebook in Kubeflow. It will make use of Notebook, Volume, Pipelines, AutoML, KServe components.
 
 ### Test Grid
 

@@ -11,10 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-apiVersion: iam.cnrm.cloud.google.com/v1beta1
-kind: IAMServiceAccount
+# Create namespace in the Kubernetes cluster to manage KCC resources in this project
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: KUBEFLOW-NAME-sql # kpt-set: ${name}-sql
-spec:
-  description: Kubeflow Pipelines CloudSQL proxy Google service account
+  name: project-id # kpt-set: ${project-id}
+  annotations:
+    cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}

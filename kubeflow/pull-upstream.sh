@@ -16,7 +16,7 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.4.0
+export KUBEFLOW_MANIFESTS_VERSION=v1.5.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 
 # Pull Kubeflow Pipelines upstream manifests.
@@ -154,3 +154,17 @@ fi
 mkdir -p contrib/metacontroller
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/metacontroller/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/metacontroller/upstream/
 rm contrib/metacontroller/upstream/Kptfile
+
+if [ -d contrib/kserve/models-web-app/upstream ]; then
+    rm -rf contrib/kserve/models-web-app/upstream
+fi
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/models-web-app/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/models-web-app/upstream
+rm contrib/kserve/models-web-app/upstream/Kptfile
+
+
+if [ -d contrib/kserve/kserve/upstream ]; then
+    rm -rf contrib/kserve/kserve/upstream
+fi
+mkdir -p contrib/kserve/kserve
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/kserve/kserve/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/kserve/kserve/upstream/
+rm contrib/kserve/kserve/upstream/Kptfile

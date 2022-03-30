@@ -59,6 +59,7 @@ ifeq ($(shell test "$(NAME)"     =  NAME  -o  \
 	$(error Either of NAME, LOCATION, PROJECT values not set. Please set them via command `kpt cfg set`.)
 endif
 
+# This is for self-service management cluster only.
 .PHONY: hydrate-cluster
 hydrate-cluster: validate-values
 	# Delete the directory so any resources that have been removed
@@ -67,6 +68,7 @@ hydrate-cluster: validate-values
 	mkdir -p $(BUILD_DIR)/cluster
 	kustomize build $(PACKAGE_CLUSTER_DIR) -o $(BUILD_DIR)/cluster
 
+# This is for self-service management cluster only.
 .PHONY: apply-cluster
 apply-cluster: hydrate-cluster
 	# Create the cluster
@@ -79,6 +81,7 @@ create-context: validate-values
 	   REGION=$(LOCATION) \
 	   NAME=$(NAME) $(PACKAGE_DIR)/hack/create_context.sh
 
+# This is for self-service management cluster only.
 .PHONY: hydrate-kcc
 hydrate-kcc: validate-values
 	rm -rf ./$(BUILD_DIR)/cnrm-install-services
@@ -91,6 +94,7 @@ hydrate-kcc: validate-values
 	kustomize build -o ./$(BUILD_DIR)/cnrm-install-iam $(PACKAGE_CNRM_IAM_DIR)
 	kustomize build -o ./$(BUILD_DIR)/cnrm-install-system $(PACKAGE_CNRM_SYSTEM_DIR)
 
+# This is for self-service management cluster only.
 .PHONY: apply-kcc
 apply-kcc: hydrate-kcc
 	# The following steps install the config connector according to
@@ -115,6 +119,7 @@ apply-kcc: hydrate-kcc
 	# Wait until config connector pods are ready
 	kubectl $(CTXT_ARG) wait -n cnrm-system --for=condition=Ready pod --all --timeout 5m
 
+# This is for self-service management cluster only.
 .PHONY: uninstall-kcc
 uninstall-kcc:
 	# Uninstall config connector and all cnrm resources in the cluster.
@@ -124,15 +129,32 @@ uninstall-kcc:
 	# You cannot use it to uninstall the old config connector installed with Kubeflow v1.1.
 	kubectl $(CTXT_ARG) delete configconnector --all
 
+# This is for self-service management cluster only.
+# .PHONY: delete-cluster
+# delete-cluster: validate-values
+# 	# Deletes management cluster GCP resources.
+# 	# Similar to uninstall-kcc, all Google Cloud resources managed by this
+# 	# management cluster will be kept.
+# 	-gcloud --project=${PROJECT} iam service-accounts delete \
+# 		${NAME}-cnrm-system@${PROJECT}.iam.gserviceaccount.com
+# 	-gcloud --project=${PROJECT} container clusters delete \
+# 		--region=${LOCATION} ${NAME}
+
+.PHONY: create-cluster
+create-cluster: validate-values
+	gcloud services enable krmapihosting.googleapis.com \
+		container.googleapis.com \
+		cloudresourcemanager.googleapis.com
+	gcloud anthos config controller create ${NAME} --location=${LOCATION}
+
+
+.PHONY: grant-owner-permission
+grant-owner-permission: 
+	MGMT_PROJECT=${PROJECT} $(PACKAGE_DIR)/hack/grant_owner_permission.sh
+
 .PHONY: delete-cluster
 delete-cluster: validate-values
-	# Deletes management cluster GCP resources.
-	# Similar to uninstall-kcc, all Google Cloud resources managed by this
-	# management cluster will be kept.
-	-gcloud --project=${PROJECT} iam service-accounts delete \
-		${NAME}-cnrm-system@${PROJECT}.iam.gserviceaccount.com
-	-gcloud --project=${PROJECT} container clusters delete \
-		--region=${LOCATION} ${NAME}
+	MGMT_PROJECT=${PROJECT} MGMTCTXT=${NAME} LOCATION=${LOCATION} ./hack/delete_management_cluster.sh
 
 .PHONY: clean
 clean:
