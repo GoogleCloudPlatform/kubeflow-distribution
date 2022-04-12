@@ -103,7 +103,7 @@ data:
 
       JWT_AUDIENCE="/projects/${PROJECT_NUM}/global/backendServices/${BACKEND_ID}"
       echo "Upsert RequestAuthentication with JWT audience: ${JWT_AUDIENCE}"
-      sed "s|TO_BE_PATCHED|${JWT_AUDIENCE}|" ${__dir}/policy.yaml | kubectl apply -n ${NAMESPACE} -f -
+      sed "s|JWT_AUDIENCE|${JWT_AUDIENCE}|" ${__dir}/policy.yaml | kubectl apply -n ${NAMESPACE} -f -
 
       echo "Clearing lock on service annotation"
       kubectl patch svc "${SERVICE}" -n istio-system -p "{\"metadata\": { \"annotations\": {\"backendlock\": \"\" }}}"
