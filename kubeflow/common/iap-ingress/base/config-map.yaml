@@ -181,22 +181,6 @@ data:
       echo "Backend updated successfully. Waiting 1 hour before updating again."
       sleep 3600
     done
-  policy.yaml: |
-    apiVersion: security.istio.io/v1beta1
-    kind: RequestAuthentication
-    metadata:
-      name: ingress-jwt
-    spec:
-      selector:
-        matchLabels:
-          app: istio-ingressgateway
-      jwtRules:
-      - audiences:
-        - TO_BE_PATCHED
-        issuer: https://cloud.google.com/iap
-        jwksUri: https://www.gstatic.com/iap/verify/public_key-jwk
-        fromHeaders:
-        - name: x-goog-iap-jwt-assertion  
 kind: ConfigMap
 metadata:
   name: envoy-config
