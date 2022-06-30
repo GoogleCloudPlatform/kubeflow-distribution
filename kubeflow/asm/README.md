@@ -6,11 +6,12 @@
 
 ### Documentations
 
-* [Kubeflow upgrade ASM guide](https://www.kubeflow.org/docs/distributions/gke/deploy/upgrade/#upgrade-asm-anthos-service-mesh)
-* [Official ASM instalation guide with install_asm approach](https://cloud.google.com/service-mesh/docs/scripted-install/gke-install)
-* [Integrate ASM with IAP](https://cloud.google.com/service-mesh/docs/iap-integration )
+* [Official guide to upgrade ASM](https://cloud.google.com/service-mesh/docs/upgrade-path-old-versions-gke)
+* [Kubeflow guide to upgreade ASM](https://www.kubeflow.org/docs/distributions/gke/deploy/upgrade/#upgrade-asm-anthos-service-mesh)
+* [Official ASM instalation guide](https://cloud.google.com/service-mesh/docs/scripted-install/gke-install)
+* [Integrate ASM with IAP](https://cloud.google.com/service-mesh/docs/iap-integration)
 
-### Upgrade steps
+### Upgrade steps for legacy ASM installation approach
 
 You can upgrade ASM by first installing ASM tools' package, and installing new ASM to cluster. Migrate existing workload to new ASM, then deprecate the old ASM:
 

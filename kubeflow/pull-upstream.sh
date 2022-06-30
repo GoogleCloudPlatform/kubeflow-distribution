@@ -109,7 +109,7 @@ if [ -d common/istio/upstream/ ]; then
     rm -rf common/istio/upstream/
 fi
 mkdir -p common/istio
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-9/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-13/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
 rm common/istio/upstream/Kptfile
 
 if [ -d common/cert-manager/upstream/ ]; then
