@@ -9,13 +9,12 @@ INSTALL_ASM_SCRIPT_VERSION=asmcli_1.13
 
 # Use of older versions of ASM is not recommended and will not be supported 
 # in the future: https://istio.io/latest/docs/releases/supported-releases/#support-status-of-istio-releases
+# ASM Upgrade Guide: Check out README.md of the same directory.
 # Get a list of stable versions prior to v1.12 of install_asm and config by running this command
 # curl https://storage.googleapis.com/csm-artifacts/asm/STABLE_VERSIONS
 # For example: 1.9.2-asm.1+config4:install_asm_1.9.2-asm.1-config4
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for INSTALL_ASM_SCRIPT_VERSION.
-# ASM Upgrade Guide: Check out README.md of the same directory.
-# curl https://storage.googleapis.com/csm-artifacts/asm/STABLE_VERSIONS
 
 # The name of the context for your Kubeflow cluster
 PACKAGE_DIR?=$(shell pwd)/..
