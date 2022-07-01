@@ -7,7 +7,7 @@
 ### Documentations
 
 * [Official guide to upgrade ASM](https://cloud.google.com/service-mesh/docs/upgrade-path-old-versions-gke)
-* [Kubeflow guide to upgreade ASM](https://www.kubeflow.org/docs/distributions/gke/deploy/upgrade/#upgrade-asm-anthos-service-mesh)
+* [Kubeflow guide to upgrade ASM](https://www.kubeflow.org/docs/distributions/gke/deploy/upgrade/#upgrade-asm-anthos-service-mes)
 * [Official ASM instalation guide](https://cloud.google.com/service-mesh/docs/scripted-install/gke-install)
 * [Integrate ASM with IAP](https://cloud.google.com/service-mesh/docs/iap-integration)
 
