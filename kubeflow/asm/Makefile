@@ -42,7 +42,7 @@ download-asm-package:
 	tar -xf asm.tar.gz --strip-components=1 -C package 
 
 .PHONY: install-asm
-install-asm-legacy: download-asmcli download-asm-package
+install-asm: download-asmcli download-asm-package
 	./asmcli install \
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
