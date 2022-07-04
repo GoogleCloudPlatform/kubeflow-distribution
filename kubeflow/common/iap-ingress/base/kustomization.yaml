@@ -10,7 +10,6 @@ resources:
 - deployment.yaml
 - iap-ingress-config.yaml
 - ingress.yaml
-- policy.yaml
 - service-account.yaml
 - service.yaml
 - stateful-set.yaml
@@ -27,6 +26,11 @@ images:
 - name: gcr.io/ml-pipeline/cloud-solutions-group/esp-sample-app
   newName: gcr.io/ml-pipeline/cloud-solutions-group/esp-sample-app
   newTag: 1.0.0
+configMapGenerator:
+  - name: envoy-config
+    behavior: merge
+    files:
+      - policy.yaml
 # TODO(Bobgy): migrate kustomize vars to kpt setters?
 vars:
 - name: appName
