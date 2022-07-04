@@ -55,6 +55,8 @@ data:
     [ -z ${SERVICE} ] && echo Error SERVICE must be set && exit 1
     [ -z ${INGRESS_NAME} ] && echo Error INGRESS_NAME must be set && exit 1
 
+    __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
     PROJECT=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/project/project-id)
     if [ -z ${PROJECT} ]; then
       echo Error unable to fetch PROJECT from compute metadata
@@ -100,10 +102,8 @@ data:
       echo BACKEND_ID=${BACKEND_ID}
 
       JWT_AUDIENCE="/projects/${PROJECT_NUM}/global/backendServices/${BACKEND_ID}"
-      
-      # Use kubectl patch.
-      echo patch JWT audience: ${JWT_AUDIENCE}
-      kubectl patch RequestAuthentication ingress-jwt -n ${NAMESPACE} --type json -p '[{"op": "replace", "path": "/spec/jwtRules/0/audiences/0", "value": "'${JWT_AUDIENCE}'"}]'
+      echo "Upsert RequestAuthentication with JWT audience: ${JWT_AUDIENCE}"
+      sed "s|JWT_AUDIENCE|${JWT_AUDIENCE}|" ${__dir}/policy.yaml | kubectl apply -n ${NAMESPACE} -f -
 
       echo "Clearing lock on service annotation"
       kubectl patch svc "${SERVICE}" -n istio-system -p "{\"metadata\": { \"annotations\": {\"backendlock\": \"\" }}}"
