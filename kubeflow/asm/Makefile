@@ -3,15 +3,15 @@
 # https://cloud.google.com/service-mesh/docs/unified-install/anthos-service-mesh-prerequisites
 # To upgrade your current ASM instance, please follow instructions:
 # https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade
-# 
+#
 # Get a list of stable versions of asmcli and config by running this command
 # curl https://storage.googleapis.com/csm-artifacts/asm/ASMCLI_VERSIONS
-# For example: 1.13.4-asm.4+config2:install_asm_1.13.4-asm.4-config2
+# For example: 1.13.4-asm.4+config2:asmcli
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for ASMCLI_SCRIPT_VERSION.
 
 ASM_PACKAGE_VERSION=1.13.4-asm.4+config2
-ASMCLI_SCRIPT_VERSION=asmcli_1.13.4-asm.4-confi2
+ASMCLI_SCRIPT_VERSION=asmcli
 
 # The name of the context for your Kubeflow cluster
 PACKAGE_DIR?=$(shell pwd)/..
@@ -38,7 +38,7 @@ download-asm-package:
 	tar -xf asm.tar.gz --strip-components=1 -C package 
 
 .PHONY: install-asm
-install-asm:
+install-asm: download-asmcli download-asm-package
 	./asmcli install \
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
@@ -52,7 +52,7 @@ install-asm:
 	--verbose
 
 .PHONY: apply
-apply: hydrate install-asm
+apply: install-asm
 
 .PHONY: hydrate
 hydrate: download-asmcli download-asm-package asmcli-validate asmcli-precheck
@@ -72,7 +72,7 @@ asmcli-validate:
 
 .PHONY: asmcli-precheck
 asmcli-precheck:
-	pushd $(UPSTREAM) && ./istioctl experimental precheck && popd
+	pushd ${UPSTREAM} && ./istioctl experimental precheck && popd
 # Note about install gateways
 # https://cloud.google.com/service-mesh/docs/unified-install/install#install_gateways
 
