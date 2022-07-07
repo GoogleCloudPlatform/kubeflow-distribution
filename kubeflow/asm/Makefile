@@ -1,11 +1,17 @@
-# Get a list of stable versions of install_asm and config by running this command
-# curl https://storage.googleapis.com/csm-artifacts/asm/STABLE_VERSIONS
-# For example: 1.9.2-asm.1+config4:install_asm_1.9.2-asm.1-config4
+# ASM was upgraded to v1.13 in Kubeflow for GCP v1.5.1
+# ASM changed the installation process begining v1.12. See details:
+# https://cloud.google.com/service-mesh/docs/unified-install/anthos-service-mesh-prerequisites
+# To upgrade your current ASM instance, please follow instructions:
+# https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade
+#
+# Get a list of stable versions of asmcli and config by running this command
+# curl https://storage.googleapis.com/csm-artifacts/asm/ASMCLI_VERSIONS
+# For example: 1.13.2-asm.5+config2:asmcli_1.13.2-asm.5-config2
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
-# The part after colon symbol should be used for INSTALL_ASM_SCRIPT_VERSION.
-ASM_PACKAGE_VERSION=1.10.4-asm.6+config2
-INSTALL_ASM_SCRIPT_VERSION=install_asm_1.10.4-asm.6-config2
-# ASM Upgrade Guide: Check out README.md of the same directory.
+# The part after colon symbol should be used for ASMCLI_SCRIPT_VERSION.
+
+ASM_PACKAGE_VERSION=1.13.2-asm.5+config2
+ASMCLI_SCRIPT_VERSION=asmcli_1.13.2-asm.5-config2
 
 # The name of the context for your Kubeflow cluster
 PACKAGE_DIR?=$(shell pwd)/..
@@ -17,18 +23,10 @@ LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
 
 UPSTREAM=upstream
 
-.PHONY: download-install-asm-script
-download-install-asm-script:
-	curl https://storage.googleapis.com/csm-artifacts/asm/$(INSTALL_ASM_SCRIPT_VERSION) > install_asm;
-	chmod +x install_asm
-# Official documentation of downloading install_asm: https://cloud.google.com/service-mesh/docs/scripted-install/asm-onboarding#downloading_the_script
-# It cannot control the patch version so we won't use this approach for now.
-# cd ./asm && { \
-# 	curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9 > install_asm; \
-# 	curl https://storage.googleapis.com/csm-artifacts/asm/install_asm_1.9.sha256 > install_asm.sha256; \
-# 	sha256sum -c --ignore-missing install_asm.sha256; \
-# 	chmod +x install_asm; \
-# 	cd -;}
+.PHONY: download-asmcli
+download-asmcli: 
+	curl https://storage.googleapis.com/csm-artifacts/asm/$(ASMCLI_SCRIPT_VERSION) > asmcli;
+	chmod +x asmcli
 
 .PHONY: download-asm-package
 download-asm-package:
@@ -40,34 +38,24 @@ download-asm-package:
 	tar -xf asm.tar.gz --strip-components=1 -C package 
 
 .PHONY: install-asm
-install-asm: download-install-asm-script download-asm-package
-	./install_asm \
+install-asm: download-asmcli download-asm-package
+	./asmcli install \
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
 	--cluster_location $(LOCATION) \
-	--mode install \
+	--output_dir $(UPSTREAM) \
 	--enable_all \
+	--ca mesh_ca \
 	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
-	--custom_overlay ./options/ingressgateway-iap.yaml
-
+	--custom_overlay ./options/ingressgateway-iap.yaml \
+	--option legacy-default-ingressgateway \
+	--verbose
 
 .PHONY: apply
 apply: install-asm
 
 .PHONY: hydrate
-hydrate: # download-asmcli asmcli-validate asmcli-precheck
-# There is no hydration for ASM, it is taken care by install_asm/asmcli. 
-# In the future, we will migrate to use asmcli, you can validate readiness using following commands.
-# make asmcli-validate 
-# make asmcli-precheck
-# Note: Require existence of a cluster before running the commands above.
-
-# Commands below are for asmcli, asmcli is in alpha state, we plan to migrate from install_asm to asmcli when ready.
-.PHONY: download-asmcli
-download-asmcli: 
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha > asmcli
-	curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_alpha.sha256 > asmcli.sha256
-	chmod +x asmcli
+hydrate: download-asmcli download-asm-package asmcli-validate asmcli-precheck
 
 .PHONY: asmcli-validate
 asmcli-validate:
@@ -77,30 +65,14 @@ asmcli-validate:
 	--cluster_location $(LOCATION) \
 	--output_dir $(UPSTREAM) \
 	--ca mesh_ca \
-	--custom_overlay ./$(UPSTREAM)/asm/istio/options/iap-operator.yaml \
-	--custom_overlay ./options/ingressgateway-iap.yaml \
-	--option legacy-default-ingressgateway \
-	--verbose
-
-
-.PHONY: asmcli-install
-asmcli-install: download-asmcli
-# --fleet_id is optional. If not specified, use project_id
-	./asmcli install \
-	--project_id $(PROJECT) \
-	--cluster_name $(NAME) \
-	--cluster_location $(LOCATION) \
-	--output_dir $(UPSTREAM) \
-	--enable_all \
-	--ca mesh_ca \
-	--custom_overlay ./$(UPSTREAM)/asm/istio/options/iap-operator.yaml \
+	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml \
 	--option legacy-default-ingressgateway \
 	--verbose
 
 .PHONY: asmcli-precheck
 asmcli-precheck:
-	pushd $(UPSTREAM) && ./istioctl experimental precheck && popd
-
+	pushd ${UPSTREAM} && ./istioctl experimental precheck && popd
 # Note about install gateways
 # https://cloud.google.com/service-mesh/docs/unified-install/install#install_gateways
+
