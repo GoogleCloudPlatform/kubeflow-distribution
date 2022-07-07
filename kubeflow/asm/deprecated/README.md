@@ -4,6 +4,11 @@
 
 ## Upgrade ASM
 
+> **Note**
+> Use of `asmcli` is recommended for versions above v1.10. Begining v1.12
+> `install_asm` is no longer supported. Please, [upgrade
+> instructions](https://cloud.google.com/service-mesh/docs/upgrade-path-old-versions-gke).
+
 ### Documentations
 
 * [Kubeflow upgrade ASM guide](https://www.kubeflow.org/docs/distributions/gke/deploy/upgrade/#upgrade-asm-anthos-service-mesh)
