@@ -6,12 +6,12 @@
 #
 # Get a list of stable versions of asmcli and config by running this command
 # curl https://storage.googleapis.com/csm-artifacts/asm/ASMCLI_VERSIONS
-# For example: 1.13.4-asm.4+config2:asmcli
+# For example: 1.13.2-asm.5+config2:asmcli_1.13.2-asm.5-config2
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for ASMCLI_SCRIPT_VERSION.
 
-ASM_PACKAGE_VERSION=1.13.4-asm.4+config2
-ASMCLI_SCRIPT_VERSION=asmcli
+ASM_PACKAGE_VERSION=1.13.2-asm.5+config2
+ASMCLI_SCRIPT_VERSION=asmcli_1.13.2-asm.5-config2
 
 # The name of the context for your Kubeflow cluster
 PACKAGE_DIR?=$(shell pwd)/..

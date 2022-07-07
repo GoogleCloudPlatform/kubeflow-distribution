@@ -21,7 +21,7 @@ You can upgrade ASM by first installing ASM tools' package, and installing new A
     curl https://storage.googleapis.com/csm-artifacts/asm/ASMCLI_VERSIONS
     ```
 
-    For example: `1.13.4-asm.4+config2:asmcli`. The part before colon symbol (1.13.4-asm.4+config2) should be used for `ASM_PACKAGE_VERSION` in Makefile of current directory. The part after colon symbol (asmcli) should be used for `ASMCLI_SCRIPT_VERSION`.
+    For example: `1.13.2-asm.5+config2:asmcli_1.13.2-asm.5-config2`. The part before colon symbol (1.13.2-asm.5+config2) should be used for `ASM_PACKAGE_VERSION` in Makefile of current directory. The part after colon symbol (asmcli_1.13.2-asm.5-config2) should be used for `ASMCLI_SCRIPT_VERSION`.
 
 * Determine the ASM version you want to upgrade, follow the instruction above to update `ASM_PACKAGE_VERSION` and `ASMCLI_SCRIPT_VERSION` in Makefile. Then run the following command under `kubeflow/common/asm` to install new ASM version.
 
@@ -29,9 +29,9 @@ You can upgrade ASM by first installing ASM tools' package, and installing new A
     make install-asm
     ```
 
-* Update `kubeflow/env.sh` for the ASM version, this looks like format: **asm-1134-4**, and you can find the exact value in istiod pod's label as well.
+* Update `kubeflow/env.sh` for the ASM version, this looks like format: **asm-1132-5**, and you can find the exact value in istiod pod's label as well.
     
-    For example: You can find label `istio.io/rev: asm-1134-4` in istiod-asm-1134-4 service. Then run `source env.sh` under `kubeflow/` folder.
+    For example: You can find label `istio.io/rev: asm-1132-5` in istiod-asm-1132-5 service. Then run `source env.sh` under `kubeflow/` folder.
 
 * Configure kpt setter value under `kubeflow/` for all Kubeflow components which require to set ASM namespace label:
 
