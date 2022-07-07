@@ -40,9 +40,9 @@ The following steps explain how to install a newer version of ASM, migrate Kubef
     ASMCLI_SCRIPT_VERSION=asmcli_1.13.2-asm.5-config2
     ```
     
-    You need to set these variable in the [Makefile](./Makefile) inside **`kubeflow/asm/`** directory.
+    You need to set these variable in the **[Makefile](./Makefile)** inside **`kubeflow/asm/`** directory.
 
-2. After updating `ASM_PACKAGE_VERSION` and `ASMCLI_SCRIPT_VERSION` variables in the [Makefile](./Makefile), run the following command in **`kubeflow/asm/`** directory to install the chosen new ASM version:
+2. After updating `ASM_PACKAGE_VERSION` and `ASMCLI_SCRIPT_VERSION` variables in the **[Makefile](./Makefile)**, run the following command in **`kubeflow/asm/`** directory to install the chosen new ASM version:
 
     ```
     make install-asm
