@@ -52,4 +52,4 @@ export REGION=us-central1
 # Preferred zone of Cloud SQL. Note, ZONE should be in REGION.
 export ZONE=us-central1-c
 # Anthos Service Mesh version label
-export ASM_LABEL=asm-1134-4
+export ASM_LABEL=asm-1132-5
