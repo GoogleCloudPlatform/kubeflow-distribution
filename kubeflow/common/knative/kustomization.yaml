@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ./knative-0-22-0/serving-core.yaml
-- ./knative-0-22-0/net-istio.yaml
+- ./knative-1-2-5/serving-core.yaml
+- ./knative-1-2-5/net-istio.yaml
 patches:
 - path: patches/namespace-patch.yaml
 transformers:
