@@ -4,6 +4,51 @@ The Kubeflow on Google Cloud distribution versioning is following the versioning
 
 ### Unreleased
 
+### v1.6.0
+
+* Upgrade cert-manger to v1.5.0 (#372)
+* Upgrade knative to v1.2 (#373)
+* Update CHANGELOG.md (#)
+* Fix ASM/istio ingress gateway issue (#371)
+
+### v1.5.1
+
+* Upgrade ASM to v1.13 (#369)
+* Fixed KServe issues with dashboard (#362) and directory(#361).
+* Increased the maximum length of Kubeflow cluster name (#359).
+* Moved RequestAuthentication policy creation to iap-enabler to improve GitOps friendliness (#364).
+* Renamed `${name}-kfp-cloudsql` service account into `${name}-sql` to fix the name length restriction (#358)
+
+### v1.5.0
+
+* Upgrade Kubeflow components versions as listed in components versions table
+* Integrated with Config Controller, simplified management cluster maintenance cost, there is no need to manually upgrade Config Connector CRD.
+* Switch from kfserving to KServe as default serving component, you can switch back to kfserving in config.yaml.
+* Fixed cloudsqlproxy issue with livenessProbe configuration.
+
+### v1.4.1
+
+* Upgrade: Integrate with Kubeflow 1.4.1 manifests (kubeflow/manifests#2084)
+* Fix: Change cloud endpoint images destination (#343)
+* Fix: Use yq4 in iap-ingress Makefile.
+
+### v1.4.0
+
+* Upgrade Kubeflow components versions as listed in components versions table
+* Removed GKE 1.18 image version and k8s runtime pin, now GKE version is default to Stable channel.
+* Set Emissary Executor as default Argo Workflow executor for Kubeflow Pipelines.
+* Upgraded kpt versions from 0.X.X to 1.0.0-beta.6.
+* Upgraded yq from v3 to v4.
+* Upgraded ASM(Anthos Service Mesh) to 1.10.4-asm.6.
+* Unblocked KFSserving usage by removing commonLabels from kustomization patch #298 #324.
+* Integrated with KFServing Web App UI.
+* Integrated with unified operator: training-operator.
+* Simplified deployment: Removed requirement for independent installation of yq, jq, kustomize, kpt.
+
+### v1.3.1
+
+* Change folder name istio-1-9-0 to istio-1-9
+
 ### v1.3.0
 
 *  Refactor manifest organizing approach and abandon `instance` folder structure.
