@@ -26,7 +26,7 @@ check-iap:
 pod-reset:
 	# Kick the IAP pod because we will reset the policy and need to patch it.
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
-	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+	kubectl --context=$(KFCTXT) -n istio-system delete deployment iap-enabler
 	# Kick the backend updater pod, because information might be outdated after the apply.
 	# https://github.com/kubeflow/gcp-blueprints/issues/160
-	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=backend-updater
+	kubectl --context=$(KFCTXT) -n istio-system delete statefulset backend-updater
