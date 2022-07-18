@@ -1,6 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # Official knative installation instructions recommend applying serving-crds.yaml 
+  # before serving-core.yaml due to existing dependencies. However, serving-core.yaml
+  # includes all required CRDs. Therefore, we only build serving-core.yaml here and then 
+  # we enforce the required order by setting it in the Makefile. For your reference we 
+  # include serving-crds.yaml in the folder.
+  #
+  # knative YAML: https://knative.dev/docs/install/yaml-install/serving/serving-installation-files/
+  # Reference issue: https://github.com/knative/serving/issues/9945
 - ./knative-1-2-5/serving-core.yaml
 - ./knative-1-2-5/net-istio.yaml
 patches:
