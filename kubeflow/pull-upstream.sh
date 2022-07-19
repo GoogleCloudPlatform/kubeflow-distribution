@@ -63,13 +63,6 @@ fi
 mkdir -p apps/training-operator
 kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/training-operator/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/training-operator
 
-if [ -d apps/kfserving/upstream ]; then
-    rm -rf apps/kfserving/upstream
-fi
-mkdir -p apps/kfserving
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/apps/kfserving/upstream@${KUBEFLOW_MANIFESTS_VERSION}" apps/kfserving
-rm apps/kfserving/upstream/Kptfile
-
 if [ -d apps/katib/upstream ]; then
     rm -rf apps/katib/upstream
 fi

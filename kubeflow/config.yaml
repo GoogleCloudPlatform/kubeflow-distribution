@@ -115,14 +115,9 @@ components:
 # dependencies: [ common/cert-manager ]
 - common/knative
 
-# KFServing
-# Migrated from KFServing to KServe since Kubeflow 1.5
-# Don't install both KFServing and KServe, it will cause problems using either one.
-# If you want to use KFServing, also checkout the kubeflow/apps/centraldashboard/kustomization.yaml file for instruction.
-# dependencies: [ common/knative ]
-# - apps/kfserving
-
 # KServe
+# We deprecated KFServing in favor of KServe beginning Kubeflow 1.6
+# How to migrate: https://www.kubeflow.org/docs/external-add-ons/kserve/migration/
 # dependencies: [ common/knative ]
 - contrib/kserve
 
