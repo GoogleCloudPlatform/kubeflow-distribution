@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.allow-http: "false" 
+    kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.global-static-ip-name: $(ipName)
     networking.gke.io/managed-certificates: gke-certificate
   name: envoy-ingress
@@ -22,5 +22,4 @@ spec:
             port:
               number: 80
         path: /*
-        pathType: Prefix
-
+        pathType: ImplementationSpecific
