@@ -4,11 +4,12 @@ The Kubeflow on Google Cloud distribution versioning is following the versioning
 
 ### Unreleased
 
-### v1.6.0
-
+* Update CHANGELOG (#360)
 * Upgrade cert-manger to v1.5.0 (#372)
 * Upgrade knative to v1.2 (#373)
 * Fix ASM/istio ingress gateway issue (#371)
+* Migrate deprecated API calls (#349)
+* Remove deprecated KFServing (#375)
 
 ### v1.5.1
 
