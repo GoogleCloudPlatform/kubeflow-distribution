@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
 - backend-config.yaml
 - cert.yaml
-# - cloud-endpoint.yaml
 - cluster-role-binding.yaml
 - cluster-role.yaml
 - config-map.yaml
