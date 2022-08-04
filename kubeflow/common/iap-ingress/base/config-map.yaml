@@ -182,7 +182,7 @@ data:
   setup_cloudendpoints.sh: |
     #!/usr/bin/env bash
     #
-    # A simple shell script to configure the JWT audience used with ISTIO
+    # A simple shell script to configure a cloud endpoint
     set -x
     [ -z ${NAMESPACE} ] && echo Error NAMESPACE must be set && exit 1
     [ -z ${SERVICE} ] && echo Error SERVICE must be set && exit 1
@@ -216,41 +216,44 @@ data:
 
     set_endpoint () {
       NODE_PORT=$(kubectl --namespace=${NAMESPACE} get svc ${SERVICE} -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
-      echo "node port is ${NODE_PORT}"
+      echo "[DEBUG] node port is ${NODE_PORT}"
 
       BACKEND_NAME=""
       while [[ -z ${BACKEND_NAME} ]]; do
         BACKENDS=$(kubectl --namespace=${NAMESPACE} get ingress ${INGRESS_NAME} -o jsonpath='{.metadata.annotations.ingress\.kubernetes\.io/backends}')
-        echo "fetching backends info with ${INGRESS_NAME}: ${BACKENDS}"
+        echo "[DEBUG] fetching backends info with ${INGRESS_NAME}: ${BACKENDS}"
         BACKEND_NAME=$(echo $BACKENDS | grep -o "k8s-be-${NODE_PORT}--[0-9a-z]\+")
-        echo "backend name is ${BACKEND_NAME}"
+        echo "[DEBUG] backend name is ${BACKEND_NAME}"
         sleep 2
       done
 
       BACKEND_ID=""
       while [[ -z ${BACKEND_ID} ]]; do
         BACKEND_ID=$(gcloud compute --project=${PROJECT} backend-services list --filter=name~${BACKEND_NAME} --format='value(id)')
-        echo "Waiting for backend id PROJECT=${PROJECT} NAMESPACE=${NAMESPACE} SERVICE=${SERVICE} filter=name~${BACKEND_NAME}"
+        echo "[DEBUG] Waiting for backend id PROJECT=${PROJECT} NAMESPACE=${NAMESPACE} SERVICE=${SERVICE} filter=name~${BACKEND_NAME}"
         sleep 2
       done
       echo BACKEND_ID=${BACKEND_ID}
 
       JWT_AUDIENCE="/projects/${PROJECT_NUM}/global/backendServices/${BACKEND_ID}"
       INGRESS_TARGET_IP=$(kubectl get ingress --all-namespaces | grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
-      echo "ENDPOINT_NAME = ${ENDPOINT_NAME}"
-      echo "INGRESS_TARGET_IP = ${INGRESS_TARGET_IP}"
-      echo "JWT_AUDIENCE = ${JWT_AUDIENCE}"
-      sed "s|JWT_AUDIENCE|${JWT_AUDIENCE}|;s|ENDPOINT_NAME|${ENDPOINT_NAME}|;s|INGRESS_TARGET_IP|${INGRESS_TARGET_IP}|" swagger_template.yaml > openapi.yaml
+      echo "[DEBUG] ENDPOINT_NAME = ${ENDPOINT_NAME}"
+      echo "[DEBUG] INGRESS_TARGET_IP = ${INGRESS_TARGET_IP}"
+      echo "[DEBUG] JWT_AUDIENCE = ${JWT_AUDIENCE}"
+      sed "s|JWT_AUDIENCE|${JWT_AUDIENCE}|;s|ENDPOINT_NAME|${ENDPOINT_NAME}|;s|INGRESS_TARGET_IP|${INGRESS_TARGET_IP}|" /var/envoy-config/swagger_template.yaml > openapi.yaml
       
       gcloud endpoints services deploy openapi.yaml
-      gcloud services list
+
       gcloud services enable servicemanagement.googleapis.com
       gcloud services enable servicecontrol.googleapis.com
       gcloud services enable endpoints.googleapis.com
+
       gcloud services enable ${ENDPOINT_NAME}
+
       gcloud endpoints services add-iam-policy-binding ${ENDPOINT_NAME} \
           --member serviceAccount:${SERVICE_ACCOUNTNAME} \
           --role roles/servicemanagement.serviceController
+
       gcloud projects add-iam-policy-binding ${PROJECT} \
           --member serviceAccount:${SERVICE_ACCOUNTNAME} \
           --role roles/cloudtrace.agent
@@ -258,12 +261,8 @@ data:
 
     while true; do
       set_endpoint
-      # Every 5 minutes recheck the JWT policy and reset it if the backend has changed for some reason.
-      # This follows Kubernetes level based design.
-      # We have at least one report see 
-      # https://github.com/kubeflow/kubeflow/issues/4342#issuecomment-544653657
-      # of the backend id changing over time.
-      sleep 300
+      echo "Sleeping 30 seconds..."
+      sleep 30
     done
 kind: ConfigMap
 metadata:
