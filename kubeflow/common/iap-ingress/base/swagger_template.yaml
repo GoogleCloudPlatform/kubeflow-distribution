@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  description: "wildcard config for any HTTP service."
+  title: "General HTTP Service."
+  version: "1.0.0"
+host: "ENDPOINT_NAME"
+x-google-endpoints:
+- name: "ENDPOINT_NAME"
+  target: "INGRESS_TARGET_IP"
+basePath: "/"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "http"
+- "https"
+paths:
+  "/**":
+    get:
+      operationId: Get
+      responses:
+        '200':
+          description: Get
+        default:
+          description: Error
+    delete:
+      operationId: Delete
+      responses:
+        '204':
+          description: Delete
+        default:
+          description: Error
+    patch:
+      operationId: Patch
+      responses:
+        '200':
+          description: Patch
+        default:
+          description: Error
+    post:
+      operationId: Post
+      responses:
+        '200':
+          description: Post
+        default:
+          description: Error
+    put:
+      operationId: Put
+      responses:
+        '200':
+          description: Put
+        default:
+          description: Error
+security:
+- google_jwt: []
+securityDefinitions:
+  google_jwt:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://cloud.google.com/iap"
+    x-google-jwks_uri: "https://www.gstatic.com/iap/verify/public_key-jwk"
+    x-google-audiences: "JWT_AUDIENCE"

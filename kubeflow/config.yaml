@@ -57,7 +57,7 @@ components:
 
 # Cloud Endpoints Controller
 # https://github.com/danisla/cloud-endpoints-controller
-- common/cloud-endpoints
+# - common/cloud-endpoints
 
 # Resources to deploy a Cloud Endpoint + IAP ingress.
 # dependencies: [ common/cloud-endpoints ]

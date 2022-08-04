@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - backend-config.yaml
 - cert.yaml
-- cloud-endpoint.yaml
+# - cloud-endpoint.yaml
 - cluster-role-binding.yaml
 - cluster-role.yaml
 - config-map.yaml
@@ -27,10 +27,11 @@ images:
   newName: gcr.io/ml-pipeline/cloud-solutions-group/esp-sample-app
   newTag: 1.0.0
 configMapGenerator:
-  - name: envoy-config
-    behavior: merge
-    files:
-      - policy.yaml
+- name: envoy-config
+  behavior: merge
+  files:
+  - policy.yaml
+  - swagger_template.yaml
 # TODO(Bobgy): migrate kustomize vars to kpt setters?
 vars:
 - name: appName
