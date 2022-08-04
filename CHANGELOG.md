@@ -2,7 +2,7 @@
 
 The Kubeflow on Google Cloud distribution versioning is following the versioning of [kubeflow/manifests](https://github.com/kubeflow/manifests).
 
-### Unreleased
+### v1.6.0-rc.1
 
 * Update CHANGELOG (#360)
 * Upgrade cert-manger to v1.5.0 (#372)
@@ -10,6 +10,7 @@ The Kubeflow on Google Cloud distribution versioning is following the versioning
 * Fix ASM/istio ingress gateway issue (#371)
 * Migrate deprecated API calls (#349)
 * Remove deprecated KFServing (#375)
+* Remove deprecated cloud-endpoints-controller (#377)
 
 ### v1.5.1
 
