@@ -180,7 +180,7 @@ data:
       sleep 3600
     done
   setup_cloudendpoints.sh: |
-    #!/usr/bin/env bash
+    #!/bin/bash
     #
     # A simple shell script to configure a cloud endpoint
     set -x
@@ -236,24 +236,25 @@ data:
       echo BACKEND_ID=${BACKEND_ID}
 
       JWT_AUDIENCE="/projects/${PROJECT_NUM}/global/backendServices/${BACKEND_ID}"
+      
+      # We use a regular expression to obtain the IP address of the target Ingress, assuming IPv4 standard.
       INGRESS_TARGET_IP=$(kubectl get ingress --all-namespaces | grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
+      
       echo "[DEBUG] ENDPOINT_NAME = ${ENDPOINT_NAME}"
       echo "[DEBUG] INGRESS_TARGET_IP = ${INGRESS_TARGET_IP}"
       echo "[DEBUG] JWT_AUDIENCE = ${JWT_AUDIENCE}"
+      
+      # Create OpenAPI specification for the RESTful Cloud Endpoint
       sed "s|JWT_AUDIENCE|${JWT_AUDIENCE}|;s|ENDPOINT_NAME|${ENDPOINT_NAME}|;s|INGRESS_TARGET_IP|${INGRESS_TARGET_IP}|" /var/envoy-config/swagger_template.yaml > openapi.yaml
       
+      # Deploy and enable the endpoint
       gcloud endpoints services deploy openapi.yaml
-
-      gcloud services enable servicemanagement.googleapis.com
-      gcloud services enable servicecontrol.googleapis.com
-      gcloud services enable endpoints.googleapis.com
-
       gcloud services enable ${ENDPOINT_NAME}
 
+      # Create IAM resources used by the endpoint
       gcloud endpoints services add-iam-policy-binding ${ENDPOINT_NAME} \
           --member serviceAccount:${SERVICE_ACCOUNTNAME} \
           --role roles/servicemanagement.serviceController
-
       gcloud projects add-iam-policy-binding ${PROJECT} \
           --member serviceAccount:${SERVICE_ACCOUNTNAME} \
           --role roles/cloudtrace.agent
