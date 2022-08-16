@@ -30,3 +30,5 @@ pod-reset:
 	# Kick the backend updater pod, because information might be outdated after the apply.
 	# https://github.com/kubeflow/gcp-blueprints/issues/160
 	kubectl --context=$(KFCTXT) -n istio-system delete statefulset backend-updater
+	# Kick the cloud-endpoints-enabler deployment
+	kubectl --context=$(KFCTXT) -n istio-system delete deployment cloud-endpoints-enabler

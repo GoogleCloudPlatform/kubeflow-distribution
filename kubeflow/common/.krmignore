@@ -7,3 +7,4 @@ istio/upstream/profile-overlay.yaml
 istio/upstream/profile.yaml
 user-namespace/upstream/base/params.yaml
 knative/upstream/knative-eventing-post-install-jobs/base/eventing-post-install-jobs.yaml
+iap-ingress/base/swagger_template.yaml
