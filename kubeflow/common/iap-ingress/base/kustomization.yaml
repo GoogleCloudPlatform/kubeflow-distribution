@@ -33,6 +33,7 @@ configMapGenerator:
   - swagger_template.yaml
   - setup_backend.sh
   - update_backend.sh
+  - setup_cloudendpoints.sh
 # TODO(Bobgy): migrate kustomize vars to kpt setters?
 vars:
 - name: appName
