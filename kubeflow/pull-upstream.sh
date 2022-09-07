@@ -136,13 +136,6 @@ kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/user-namespace/@${KUBEFLOW_MANIFE
 rm common/user-namespace/upstream/Kptfile
 
 # contrib/ related manifest
-if [ -d contrib/application/upstream/ ]; then
-    rm -rf contrib/application/upstream/
-fi
-mkdir -p contrib/application
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/application/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/application/upstream/
-rm contrib/application/upstream/Kptfile
-
 if [ -d contrib/metacontroller/upstream/ ]; then
     rm -rf contrib/metacontroller/upstream/
 fi
