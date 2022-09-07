@@ -22,7 +22,7 @@ export KUBEFLOW_PIPELINES_VERSION=2.0.0-alpha.4
 export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
 
 # Pull Kubeflow Pipelines upstream manifests.
-./apps/pipelines/pull-upstream.sh
+./apps/pipelines/pull-upstream.sh ${KUBEFLOW_PIPELINES_REPO} ${KUBEFLOW_PIPELINES_VERSION}
 # TODO: kpt get strategy: --strategy force-delete-replace
 
 # apps/ related manifest

@@ -17,8 +17,8 @@
 set -ex
 
 # TODO: Use kubeflow/pipelines once https://github.com/kubeflow/pipelines/pull/6595 is resolved.
-export KUBEFLOW_PIPELINES_VERSION=2.0.0-alpha.4
-export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
+export KUBEFLOW_PIPELINES_VERSION=$2
+export KUBEFLOW_PIPELINES_REPO=$1
 # export KUBEFLOW_PIPELINES_VERSION=upgradekpt # Other attempted branches: krmignore, kubeflow14
 # export KUBEFLOW_PIPELINES_REPO=https://github.com/zijianjoy/pipelines.git
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
