@@ -140,7 +140,7 @@ if [ -d contrib/metacontroller/upstream/ ]; then
     rm -rf contrib/metacontroller/upstream/
 fi
 mkdir -p contrib/metacontroller
-kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/third-party/metacontroller/@${KUBEFLOW_PIPELINES_REPO}" contrib/metacontroller/upstream/
+kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/third-party/metacontroller/@${KUBEFLOW_PIPELINES_VERSION}" contrib/metacontroller/upstream/
 rm contrib/metacontroller/upstream/Kptfile
 
 if [ -d contrib/kserve/models-web-app/upstream ]; then
