@@ -16,11 +16,13 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.6.0-rc.1
+export KUBEFLOW_MANIFESTS_VERSION=v1.6.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
+export KUBEFLOW_PIPELINES_VERSION=2.0.0-alpha.4
+export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
 
 # Pull Kubeflow Pipelines upstream manifests.
-./apps/pipelines/pull-upstream.sh
+./apps/pipelines/pull-upstream.sh ${KUBEFLOW_PIPELINES_REPO} ${KUBEFLOW_PIPELINES_VERSION}
 # TODO: kpt get strategy: --strategy force-delete-replace
 
 # apps/ related manifest
@@ -134,18 +136,11 @@ kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/user-namespace/@${KUBEFLOW_MANIFE
 rm common/user-namespace/upstream/Kptfile
 
 # contrib/ related manifest
-if [ -d contrib/application/upstream/ ]; then
-    rm -rf contrib/application/upstream/
-fi
-mkdir -p contrib/application
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/application/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/application/upstream/
-rm contrib/application/upstream/Kptfile
-
 if [ -d contrib/metacontroller/upstream/ ]; then
     rm -rf contrib/metacontroller/upstream/
 fi
 mkdir -p contrib/metacontroller
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/contrib/metacontroller/@${KUBEFLOW_MANIFESTS_VERSION}" contrib/metacontroller/upstream/
+kpt pkg get "${KUBEFLOW_PIPELINES_REPO}/manifests/kustomize/third-party/metacontroller/@${KUBEFLOW_PIPELINES_VERSION}" contrib/metacontroller/upstream/
 rm contrib/metacontroller/upstream/Kptfile
 
 if [ -d contrib/kserve/models-web-app/upstream ]; then

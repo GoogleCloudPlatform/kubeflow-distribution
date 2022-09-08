@@ -9,8 +9,19 @@ KFCTXT=$(NAME)
 
 .PHONY: apply
 apply: hydrate
-# Apply App kserve
+	# Apply App kserve
+	# To resolve https://github.com/kubeflow/gcp-blueprints/issues/384,
+	# we apply runtime manifests after the corresponding CRDs become available
+	# 1. Move runtime manifests into a separate subdirectory
+	mkdir $(build_dir)/runtimes
+	mv $(build_dir)/serving*clusterservingruntime* $(build_dir)/runtimes/
+	# 2. Apply the remaining manifests
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)
+	# 3. Wait until CRDs become available or exit in 30s
+	kubectl wait --for condition=established --timeout=30s crd/clusterservingruntimes.serving.kserve.io
+	# 4. Apply runtime manifests
+	kubectl --context=$(KFCTXT) apply -f $(build_dir)/runtimes
+	# Patch knative configmap
 	kubectl --context=$(KFCTXT) patch cm config-domain --namespace knative-serving --type merge -p '{"data":{"$(NAME).endpoints.$(PROJECT).cloud.goog": ""}}'
 
 .PHONY: hydrate
