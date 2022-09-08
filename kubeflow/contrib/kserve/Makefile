@@ -10,7 +10,11 @@ KFCTXT=$(NAME)
 .PHONY: apply
 apply: hydrate
 # Apply App kserve
+	mkdir $(build_dir)/runtimes
+	mv $(build_dir)/*clusterservingruntime* $(build_dir)/runtimes/
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)
+	kubectl wait --for condition=established --timeout=30s crd/clusterservingruntimes.serving.kserve.io
+	kubectl --context=$(KFCTXT) apply -f $(build_dir)/runtimes
 	kubectl --context=$(KFCTXT) patch cm config-domain --namespace knative-serving --type merge -p '{"data":{"$(NAME).endpoints.$(PROJECT).cloud.goog": ""}}'
 
 .PHONY: hydrate
