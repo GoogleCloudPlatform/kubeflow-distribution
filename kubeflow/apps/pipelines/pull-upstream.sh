@@ -22,7 +22,7 @@
 #   Print messages for debugging
 set -ex
 
-if [ $# -eq 2 ]
+if [ $# -ne 2 ]
   then
     echo "Provide input values for KUBEFLOW_PIPELINES_REPO and KUBEFLOW_PIPELINES_VERSION.
     E.g. ./apps/pipelines/pull_upstream.sh https://github.com/kubeflow/pipelines.git 2.0.0-alpha.4"
