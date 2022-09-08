@@ -24,6 +24,10 @@ check-iap:
 
 .PHONY: pod-reset
 pod-reset:
+	kubectl wait deployments/iap-enabler --for=condition=available --timeout=30s
+	kubectl wait deployments/cloud-endpoints-enabler --for=condition=available --timeout=30s
+	kubectl rollout status --watch --timeout=30s statefulset/backend-updater
+	timeout 30
 	# Kick the IAP pod because we will reset the policy and need to patch it.
 	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
 	kubectl --context=$(KFCTXT) -n istio-system delete deployment iap-enabler
