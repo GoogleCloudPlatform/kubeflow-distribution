@@ -2,15 +2,26 @@
 
 The Kubeflow on Google Cloud distribution versioning is following the versioning of [kubeflow/manifests](https://github.com/kubeflow/manifests).
 
-### v1.6.0-rc.1
+### v1.6.1-rc.0
+
+* Upgrade MySQL version to 8.0 (#391)
+* Upgrade KFP to v2.0.0-alpha.5
+* Fix ASM bash issues (#389)
+
+### v1.6.0
 
 * Update CHANGELOG (#360)
+* Migrate deprecated API calls (#349)
 * Upgrade cert-manger to v1.5.0 (#372)
 * Upgrade knative to v1.2 (#373)
+* Upgrade ASM to v1.14 (#385)
+* Upgrade KFP to v2.0.0-alpha.4
 * Fix ASM/istio ingress gateway issue (#371)
-* Migrate deprecated API calls (#349)
+* Fix race condition in Kserve (#384)
+* Fix deployment flakiness (#386)
 * Remove deprecated KFServing (#375)
 * Remove deprecated cloud-endpoints-controller (#377)
+* Remove deprecated contrib/application
 
 ### v1.5.1
 
