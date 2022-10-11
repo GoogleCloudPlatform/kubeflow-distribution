@@ -2,9 +2,9 @@
 
 The Kubeflow on Google Cloud distribution versioning is following the versioning of [kubeflow/manifests](https://github.com/kubeflow/manifests).
 
-### v1.6.1-rc.0
+### v1.6.1
 
-* Upgrade MySQL version to 8.0 (#391)
+* Upgrade CloudSQL to MySQL 8.0 (#391)
 * Upgrade KFP to v2.0.0-alpha.5
 * Fix ASM bash issues (#389)
 
