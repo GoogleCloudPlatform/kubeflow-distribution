@@ -43,7 +43,7 @@ install-asm: download-asmcli download-asm-package
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
 	--cluster_location $(LOCATION) \
-	--output_dir $(UPSTREAM) \
+	--output_dir ./package \
 	--enable_all \
 	--ca mesh_ca \
 	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
@@ -63,7 +63,7 @@ asmcli-validate:
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
 	--cluster_location $(LOCATION) \
-	--output_dir $(UPSTREAM) \
+	--output_dir ./package \
 	--ca mesh_ca \
 	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml \
