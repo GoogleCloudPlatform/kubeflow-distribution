@@ -5,7 +5,7 @@ The Kubeflow on Google Cloud distribution versioning is following the versioning
 ### v1.6.1
 
 * Upgrade CloudSQL to MySQL 8.0 (#391)
-* Upgrade KFP to v2.0.0-alpha.5
+* Upgrade KFP to v2.0.0-alpha.6
 * Fix ASM bash issues (#389)
 
 ### v1.6.0
