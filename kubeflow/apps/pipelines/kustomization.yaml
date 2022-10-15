@@ -23,7 +23,7 @@ resources:
 # recommended, use cloud sql for easier maintenance
 # CloudSQL was upgrade to MySQL 8.0 in Kubeflow 1.6.1 release
 - cloudsql/proxy
-# Alternatively, use in-cluster mysql 5.7 by:
+# Alternatively, use in-cluster mysql by:
 # 1. remove gcs/pipeline-install-config-patch.yaml from patchesStrategicMerge
 # 2. remove ../cloudsql/cnrm from ./cnrm/kustomization.yaml
 # 3. comment cloudsql/proxy above, and uncomment the following line
