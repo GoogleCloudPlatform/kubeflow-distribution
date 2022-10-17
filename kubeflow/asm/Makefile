@@ -21,7 +21,7 @@ NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
 PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
 LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
 
-UPSTREAM=upstream
+UPSTREAM=package
 
 .PHONY: download-asmcli
 download-asmcli: 
@@ -33,9 +33,9 @@ download-asm-package:
 	rm -rf asm.tar.gz
 	curl -LJ https://github.com/GoogleCloudPlatform/anthos-service-mesh-packages/archive/refs/tags/$(ASM_PACKAGE_VERSION).tar.gz -o asm.tar.gz 
 	
-	rm -rf ./package
-	mkdir package
-	tar -xf asm.tar.gz --strip-components=1 -C package 
+	rm -rf $(UPSTREAM)
+	mkdir $(UPSTREAM)
+	tar -xf asm.tar.gz --strip-components=1 -C $(UPSTREAM) 
 
 .PHONY: install-asm
 install-asm: download-asmcli download-asm-package
@@ -43,10 +43,10 @@ install-asm: download-asmcli download-asm-package
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
 	--cluster_location $(LOCATION) \
-	--output_dir ./package \
+	--output_dir $(UPSTREAM) \
 	--enable_all \
 	--ca mesh_ca \
-	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
+	--custom_overlay $(UPSTREAM)/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml \
 	--option legacy-default-ingressgateway \
 	--verbose
@@ -63,16 +63,16 @@ asmcli-validate:
 	--project_id $(PROJECT) \
 	--cluster_name $(NAME) \
 	--cluster_location $(LOCATION) \
-	--output_dir ./package \
+	--output_dir $(UPSTREAM) \
 	--ca mesh_ca \
-	--custom_overlay ./package/asm/istio/options/iap-operator.yaml \
+	--custom_overlay $(UPSTREAM)/asm/istio/options/iap-operator.yaml \
 	--custom_overlay ./options/ingressgateway-iap.yaml \
 	--option legacy-default-ingressgateway \
 	--verbose
 
 .PHONY: asmcli-precheck
 asmcli-precheck:
-	pushd ./package && ./istioctl experimental precheck && popd
+	pushd $(UPSTREAM) && ./istioctl experimental precheck && popd
 # Note about install gateways
 # https://cloud.google.com/service-mesh/docs/unified-install/install#install_gateways
 
