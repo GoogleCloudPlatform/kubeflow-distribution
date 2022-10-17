@@ -21,7 +21,7 @@ NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
 PROJECT=$(shell $(YQ) e '.data."gcloud.core.project"' kptconfig/kpt-setter-config.yaml)
 LOCATION=$(shell $(YQ) e '.data.location' kptconfig/kpt-setter-config.yaml)
 
-UPSTREAM=package
+UPSTREAM=./package
 
 .PHONY: download-asmcli
 download-asmcli: 
