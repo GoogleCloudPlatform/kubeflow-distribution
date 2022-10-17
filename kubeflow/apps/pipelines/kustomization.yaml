@@ -21,8 +21,9 @@ resources:
 - upstream/third-party/minio/options/istio
 # ==== Database ====
 # recommended, use cloud sql for easier maintenance
+# CloudSQL was upgrade to MySQL 8.0 in Kubeflow 1.6.1 release
 - cloudsql/proxy
-# Altenatively, use in-cluster mysql by:
+# Alternatively, use in-cluster mysql by:
 # 1. remove gcs/pipeline-install-config-patch.yaml from patchesStrategicMerge
 # 2. remove ../cloudsql/cnrm from ./cnrm/kustomization.yaml
 # 3. comment cloudsql/proxy above, and uncomment the following line
