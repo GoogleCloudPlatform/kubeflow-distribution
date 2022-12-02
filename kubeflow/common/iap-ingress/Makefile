@@ -4,6 +4,7 @@ YQ=docker run --rm -v "$(PACKAGE_DIR)/":/workdir mikefarah/yq:4
 NAME=$(shell $(YQ) e '.data.name' kptconfig/kpt-setter-config.yaml)
 # The kubectl context for your Kubeflow cluster
 KFCTXT=$(NAME)
+OAUTH_NAME=$(KFCTXT)
 
 .PHONY: hydrate
 hydrate:
@@ -15,8 +16,7 @@ apply: hydrate iap-secret
 	kubectl --context=$(KFCTXT) apply -f $(build_dir)
 
 .PHONY: iap-secret
-iap-secret: check-iap
-	kubectl --context=$(KFCTXT) -n istio-system create secret generic kubeflow-oauth --from-literal=client_id=$(CLIENT_ID) --from-literal=client_secret=$(CLIENT_SECRET) --dry-run -o yaml | kubectl apply -f -
+iap-secret: ../../hack/setup_iap_ingress.sh
 
 .PHONY: check-iap
 check-iap:
