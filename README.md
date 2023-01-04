@@ -1,6 +1,8 @@
 # Google Cloud distribution of Kubeflow
 
-Follow the instruction to deploy full fledged Kubeflow on Google Cloud Kubernetes cluster. 
+The official documentation is available [here](https://googlecloudplatform.github.io/kubeflow-gke-docs/).
+
+To deploy a full-fledged Kubeflow on Google Cloud Kubernetes cluster, follow steps below. 
 
 Kubeflow is deployed as follows
 
