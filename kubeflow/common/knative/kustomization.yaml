@@ -9,8 +9,8 @@ resources:
   #
   # knative YAML: https://knative.dev/docs/install/yaml-install/serving/serving-installation-files/
   # Reference issue: https://github.com/knative/serving/issues/9945
-- ./knative-1-2-5/serving-core.yaml
-- ./knative-1-2-5/net-istio.yaml
+- ./knative-1-8-5/serving-core.yaml
+- ./knative-1-8-5/net-istio.yaml
 patches:
 - path: patches/namespace-patch.yaml
 transformers:
