@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata: # kpt-merge: kserve/kserve-controller-manager
   name: kserve-controller-manager
   namespace: kubeflow

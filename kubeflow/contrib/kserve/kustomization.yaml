@@ -11,7 +11,7 @@ resources:
 # - cluster-role.yaml
 # - web-app-authorization-policy.yaml
 patchesStrategicMerge:
-- patches/statefulset.yaml
+- patches/deployment.yaml
 # - patches/namespace.yaml
 - patches/web-app-sidecar.yaml
 - web-app-authorization-policy.yaml
@@ -23,12 +23,12 @@ patchesJson6902:
     name: serving-cert
     namespace: kubeflow
   path: patches/webhook-certificate.yaml
-- target:
-    version: v1
-    kind: ConfigMap
-    name: kserve-config
-    namespace: kubeflow
-  path: patches/config-param.yaml
+# - target:
+#     version: v1
+#     kind: ConfigMap
+#     name: kserve-config
+#     namespace: kubeflow
+#   path: patches/config-param.yaml
 generatorOptions:
   disableNameSuffixHash: true
 # To make namespace for standalone installation kustomizable,
@@ -48,11 +48,11 @@ generatorOptions:
 configurations:
 - params.yaml
 - kserve-params.yaml
-vars:
-- name: ingressGateway
-  objref:
-    kind: ConfigMap
-    name: kserve-config
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.ingressGateway
+# vars:
+# - name: ingressGateway
+#   objref:
+#     kind: ConfigMap
+#     name: kserve-config
+#     apiVersion: v1
+#   fieldref:
+#     fieldpath: data.ingressGateway
