@@ -10,8 +10,8 @@
 # The part before colon symbol should be used for ASM_PACKAGE_VERSION.
 # The part after colon symbol should be used for ASMCLI_SCRIPT_VERSION.
 SHELL := /bin/bash
-ASM_PACKAGE_VERSION=1.14.1-asm.3+config6
-ASMCLI_SCRIPT_VERSION=asmcli_1.14.1-asm.3-config6
+ASM_PACKAGE_VERSION=1.16.2-asm.2+config1
+ASMCLI_SCRIPT_VERSION=asmcli_1.16.2-asm.2-config1
 
 # The name of the context for your Kubeflow cluster
 PACKAGE_DIR?=$(shell pwd)/..
