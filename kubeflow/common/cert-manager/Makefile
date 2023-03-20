@@ -12,7 +12,7 @@ hydrate:
 	mkdir -p $(build_dir)/cert-manager
 	mkdir -p $(build_dir)/kubeflow-issuer
 	kustomize build -o $(build_dir)/cert-manager ./
-	kustomize build -o $(build_dir)/kubeflow-issuer ./cert-manager-1-5/cert-manager/kubeflow-issuer
+	kustomize build -o $(build_dir)/kubeflow-issuer ./cert-manager/kubeflow-issuer
 
 .PHONY: apply
 apply: hydrate
