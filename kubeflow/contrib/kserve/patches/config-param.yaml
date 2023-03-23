@@ -1,4 +1,0 @@
-- op: replace
-  path: /data
-  value:
-    ingressGateway: kubeflow/kubeflow-gateway
