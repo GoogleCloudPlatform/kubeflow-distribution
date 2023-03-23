@@ -1,6 +1,6 @@
 asm
 cert-manager/upstream/cert-manager/base/patches/crd-preserve-unknown-fields.yaml
-cert-manager/cert-manager-1-10/cert-manager/overlays/letsencrypt/params.yaml
+cert-manager/cert-manager/overlays/letsencrypt/params.yaml
 cloud-endpoints/base/params.yaml
 iap-ingress/base/params.yaml
 istio/upstream/profile-overlay.yaml
