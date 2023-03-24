@@ -8,11 +8,9 @@ commonLabels:
 resources:
 - models-web-app
 - kserve/upstream/kserve_kubeflow.yaml
-# - cluster-role.yaml
-# - web-app-authorization-policy.yaml
+- kserve/upstream/kserve-runtimes.yaml
 patchesStrategicMerge:
-- patches/statefulset.yaml
-# - patches/namespace.yaml
+- patches/deployment.yaml
 - patches/web-app-sidecar.yaml
 - web-app-authorization-policy.yaml
 patchesJson6902:
@@ -23,36 +21,8 @@ patchesJson6902:
     name: serving-cert
     namespace: kubeflow
   path: patches/webhook-certificate.yaml
-- target:
-    version: v1
-    kind: ConfigMap
-    name: kserve-config
-    namespace: kubeflow
-  path: patches/config-param.yaml
 generatorOptions:
   disableNameSuffixHash: true
-# To make namespace for standalone installation kustomizable,
-# variabalize ingress gateway, webhook service name and
-# kserve namespace in webhook configurations
-# configMapGenerator:
-# Copied from kfserving, but converted to patches/config-param.yaml
-# becuase it cannot detect the kserve-config file by kustomize.
-# - name: kserve-config
-#   behavior: replace
-#   literals:
-#   - ingressGateway=kubeflow/kubeflow-gateway
-# - name: kserve-models-web-app-config
-#   behavior: replace
-#   literals:
-#   - USERID_HEADER=kubeflow-userid
 configurations:
 - params.yaml
 - kserve-params.yaml
-vars:
-- name: ingressGateway
-  objref:
-    kind: ConfigMap
-    name: kserve-config
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.ingressGateway

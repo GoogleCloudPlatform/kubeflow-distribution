@@ -16,9 +16,9 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.6.1
+export KUBEFLOW_MANIFESTS_VERSION=v1.7.0-rc.2
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
-export KUBEFLOW_PIPELINES_VERSION=2.0.0-alpha.6
+export KUBEFLOW_PIPELINES_VERSION=2.0.0-alpha.7
 export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
 
 # Pull Kubeflow Pipelines upstream manifests.
@@ -104,7 +104,7 @@ if [ -d common/istio/upstream/ ]; then
     rm -rf common/istio/upstream/
 fi
 mkdir -p common/istio
-kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-14/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
+kpt pkg get "${KUBEFLOW_MANIFESTS_REPO}/common/istio-1-16/@${KUBEFLOW_MANIFESTS_VERSION}" common/istio/upstream/
 rm common/istio/upstream/Kptfile
 
 if [ -d common/cert-manager/upstream/ ]; then
