@@ -17,7 +17,6 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerCluster
 metadata:
-  clusterName: "PROJECT/LOCATION/KUBEFLOW-NAME" # kpt-set: ${gcloud.core.project}/${location}/${name}
   labels:
     mesh_id: "proj-PROJECT_NUMBER" # kpt-set: proj-${gcloud.project.projectNumber}
   name: KUBEFLOW-NAME # kpt-set: ${name}
