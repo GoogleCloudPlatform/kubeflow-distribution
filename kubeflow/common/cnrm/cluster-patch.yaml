@@ -27,3 +27,5 @@ spec:
   # Add any fields here to override default cluster spec
   # Refer to https://cloud.google.com/config-connector/docs/reference/resource-docs/container/containercluster
   # for detailed fields and documentation.
+  # nodeConfig:
+  #  machineType: n1-standard-8
