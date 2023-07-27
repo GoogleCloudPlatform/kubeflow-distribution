@@ -36,7 +36,7 @@ spec:
     metadata:
       disable-legacy-endpoints: "true"
     serviceAccountRef:
-      name: KUBEFLOW-NAME-vm # kpt-set: ${name}-vm    
+      name: KUBEFLOW-NAME-vm # kpt-set: ${name}-vm
     workloadMetadataConfig:
       nodeMetadata: GKE_METADATA_SERVER
   clusterRef:
