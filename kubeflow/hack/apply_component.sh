@@ -35,6 +35,11 @@ main() {
       component_build_dir="./$COMPONENT_PATH/$BUILD_DIR"
       rm -rf "$component_build_dir" && mkdir -p "$component_build_dir"
       kustomize build -o "$component_build_dir" "./$COMPONENT_PATH"
+      # Remove lines containing `creationTimestamp: "null"`.
+      # Kustomize generates files with it, but it is not recognized by kubectl.
+      # Reference:
+      # https://github.com/kubernetes-sigs/kustomize/issues/5031
+      find ./$component_build_dir -type f -exec sed -i '/creationTimestamp: "null"/d' {} \;
       if [ $HYDRATE_ONLY -ne 1 ]; then
         kubectl --context=$KFCTXT apply -f $component_build_dir
       fi
