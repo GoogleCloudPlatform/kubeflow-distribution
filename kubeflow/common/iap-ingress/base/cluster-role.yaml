@@ -9,6 +9,7 @@ rules:
   - services
   - configmaps
   - secrets
+  - pods
   verbs:
   - get
   - list
