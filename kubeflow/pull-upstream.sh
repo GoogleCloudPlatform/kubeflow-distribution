@@ -16,7 +16,7 @@
 
 set -ex
 
-export KUBEFLOW_MANIFESTS_VERSION=v1.8
+export KUBEFLOW_MANIFESTS_VERSION=v1.8.0
 export KUBEFLOW_MANIFESTS_REPO=https://github.com/kubeflow/manifests.git
 export KUBEFLOW_PIPELINES_VERSION=2.0.3
 export KUBEFLOW_PIPELINES_REPO=https://github.com/kubeflow/pipelines.git
